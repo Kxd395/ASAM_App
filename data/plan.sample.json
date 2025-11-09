@@ -1,0 +1,38 @@
+{
+  "id": "pln_01HV7A4Q",
+  "patientFullName": "Demo Patient",
+  "mrn": "D-0001",
+  "levelOfCare": "L2_1_IOP",
+  "diagnoses": [
+    {
+      "system": "ICD-10-CM",
+      "code": "F11.20"
+    }
+  ],
+  "problems": [
+    {
+      "id": "p1",
+      "statement": "I want to reduce opioid use",
+      "goal": "14 days abstinent",
+      "objectives": []
+    },
+    {
+      "id": "p2",
+      "statement": "Housing instability",
+      "goal": "Find recovery housing",
+      "objectives": []
+    }
+  ],
+  "signatures": {
+    "patient": {
+      "signedAt": null,
+      "planHashAtSigning": null
+    },
+    "clinician": {
+      "signedAt": null,
+      "planHashAtSigning": null
+    }
+  },
+  "version": 1,
+  "lastChanged": "2025-11-08T19:00:00Z"
+}

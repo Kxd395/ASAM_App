@@ -1,0 +1,14 @@
+{
+  "patient_name": "patientFullName",
+  "mrn": "mrn",
+  "level_of_care": "levelOfCare",
+  "initial_plan_date": "initialPlanDate",
+  "problem1_statement": "problem1_statement",
+  "problem1_goal": "problem1_goal",
+  "problem2_statement": "problem2_statement",
+  "problem2_goal": "problem2_goal",
+  "problem3_statement": "problem3_statement",
+  "problem3_goal": "problem3_goal",
+  "problem4_statement": "problem4_statement",
+  "problem4_goal": "problem4_goal"
+}

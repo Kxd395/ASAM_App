@@ -1,0 +1,5 @@
+Place the official ASAM Treatment Plan PDF here and name it:
+ASAM_TreatmentPlan_Template.pdf
+
+This file is a placeholder to remind you where to drop the form. The real PDF
+is not included in this package.

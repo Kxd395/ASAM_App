@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Agent: Scaffold",
+      "type": "shell",
+      "command": "python3 agent/asm.py scaffold"
+    },
+    {
+      "label": "Agent: Plan Hash",
+      "type": "shell",
+      "command": "python3 agent/asm.py plan.hash --in data/plan.sample.json"
+    },
+    {
+      "label": "Agent: Validate",
+      "type": "shell",
+      "command": "python3 agent/asm.py plan.validate --in data/plan.sample.json"
+    },
+    {
+      "label": "Agent: Build pdf_export",
+      "type": "shell",
+      "command": "bash scripts/build-swift-cli.sh"
+    },
+    {
+      "label": "Agent: Export PDF",
+      "type": "shell",
+      "dependsOn": "Agent: Build pdf_export",
+      "command": "python3 agent/asm.py pdf.export --plan data/plan.sample.json --pdf assets/ASAM_TreatmentPlan_Template.pdf --sig assets/sample_signature.png --out out/ASAMPlan_$(python3 agent/asm.py rand.id).pdf"
+    }
+  ]
+}

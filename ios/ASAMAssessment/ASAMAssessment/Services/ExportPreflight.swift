@@ -44,6 +44,7 @@ struct ExportPreflight {
     
     /// Perform all preflight checks before export
     /// FIX #2: Hard gate requiring healthy rules state and valid provenance
+    /// COMPILE FIX #2: Updated signature with typed ComplianceMode
     ///
     /// - Parameters:
     ///   - assessment: The assessment to validate
@@ -55,11 +56,12 @@ struct ExportPreflight {
         assessment: Assessment,
         rulesService: RulesServiceWrapper,
         provenance: RulesProvenance?,
-        complianceMode: String,
+        complianceMode: ComplianceMode,
         templatePath: String? = nil
     ) -> Result<Void, ExportError> {
         // FIX #2: Rule 1 - Rules must be HEALTHY (not just available)
         // Fallback LOC of 2.1 must not bypass this gate
+        // COMPILE FIX #3: Check rulesState enum
         if rulesService.rulesState != .healthy {
             let message = "Rules engine is degraded. Cannot export with fallback LOC."
             return .failure(.rulesUnavailable(message))
@@ -114,12 +116,13 @@ struct ExportPreflight {
     // FIX #9: Compliance template validation
     /// Checks if template path is allowed in current compliance mode
     /// Returns violation message if template is banned, nil if OK
-    private static func checkComplianceTemplate(templatePath: String, complianceMode: String) -> String? {
+    /// COMPILE FIX #5: Use typed ComplianceMode enum
+    private static func checkComplianceTemplate(templatePath: String, complianceMode: ComplianceMode) -> String? {
         let lowercasePath = templatePath.lowercased()
         let bannedTokens = ["asam", "continuum", "co-triage", "cotriage"]
         
         // In internal_neutral mode, block any official ASAM templates
-        if complianceMode == "internal_neutral" {
+        if complianceMode == .internal_neutral {
             for token in bannedTokens {
                 if lowercasePath.contains(token) {
                     return "Cannot use official ASAM template '\(templatePath)' in internal_neutral mode. Use a neutral template."
@@ -131,9 +134,17 @@ struct ExportPreflight {
     }
     
     /// Quick check - returns true if export is allowed
+    /// COMPILE FIX #2: Wire provenance and complianceMode from globals
     static func canExport(assessment: Assessment, rulesService: RulesServiceWrapper) -> Bool {
-        // TODO: Update to use new signature with provenance check
-        switch check(assessment: assessment, rulesService: rulesService, provenance: nil, complianceMode: "internal_neutral") {
+        let provenance = RulesProvenanceTracker.shared.provenanceForExport()
+        let complianceMode = ComplianceConfig.shared.mode
+        
+        switch check(
+            assessment: assessment,
+            rulesService: rulesService,
+            provenance: provenance,
+            complianceMode: complianceMode
+        ) {
         case .success:
             return true
         case .failure:

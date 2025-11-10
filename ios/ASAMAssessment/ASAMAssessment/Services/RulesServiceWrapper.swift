@@ -72,11 +72,18 @@ enum ASAMVersion: String, CaseIterable {
 
 // MARK: - Rules Service Wrapper
 
+/// COMPILE FIX #3: Rules state enum for preflight checks
+enum RulesState: Equatable {
+    case healthy
+    case degraded(String)
+}
+
 @MainActor
 final class RulesServiceWrapper: ObservableObject {
     @Published var isAvailable = false
     @Published var errorMessage: String?
     @Published var checksum: RulesChecksum?
+    @Published var rulesState: RulesState = .degraded("Uninitialized")  // COMPILE FIX #3
 
     @AppStorage("asam_version") var asamVersion: ASAMVersion = .v4
 
@@ -105,6 +112,7 @@ final class RulesServiceWrapper: ObservableObject {
                 )
                 self.isAvailable = true
                 self.errorMessage = nil
+                self.rulesState = .healthy  // COMPILE FIX #3
                 self.checksum = RulesChecksum.compute(bundle: bundle)
 
                 if let checksum = self.checksum {
@@ -114,12 +122,14 @@ final class RulesServiceWrapper: ObservableObject {
             } catch {
                 self.isAvailable = false
                 self.errorMessage = error.localizedDescription
+                self.rulesState = .degraded(error.localizedDescription)  // COMPILE FIX #3
                 print("❌ Rules engine failed: \(error.localizedDescription)")
             }
 
         case .degraded(let message):
             self.isAvailable = false
             self.errorMessage = message
+            self.rulesState = .degraded(message)  // COMPILE FIX #3
             print("⚠️ Rules engine degraded: \(message)")
         }
     }

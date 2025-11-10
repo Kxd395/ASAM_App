@@ -1,8 +1,26 @@
 # MASTER_TODO
 This document is generated from `docs/TODO_INDEX.json`. Do not edit by hand.
 
-Updated: 2025-11-10T20:00:00.000000
-Open: 28  |  Done: 13 (T-0024 merged into T-0029)
+Updated: 2025-11-10T21:00:00.000000
+Open: 32  |  Done: 13 (T-0024 merged into T-0029)
+
+## ⚠️ CRITICAL: Compile Breakers Fixed
+
+**COMMIT 2519513 + FOLLOW-UP**: Critical compilation + logic fixes
+- ✅ FIX #1: PDFKit import + NSFont→PlatformFont + arity mismatch (3 params)
+- ✅ FIX #3: Added RulesState enum to RulesServiceWrapper (.healthy vs .degraded)
+- ✅ FIX #2: Updated ExportPreflight.check() signature + wired provenance/complianceMode
+- ✅ FIX #5: Created ComplianceConfig with typed ComplianceMode enum
+- ✅ FIX #7: Fixed WM vs LOC code space mixup (check WM candidates, not LOC string)
+- ✅ FIX #9: Externalized clinical thresholds to clinical_thresholds.json
+
+**Remaining Critical Fixes** (P1):
+- T-0037: Wire clinical thresholds JSON loader to ReconciliationChecks
+- T-0038: PDF flatten service + embed provenance in PDF Info dict
+- T-0039: Deterministic target membership CI check (replace grep)
+- T-0040: Canonical hash with 5 files + manifest (64-char SHA256)
+
+---
 
 ## ⚠️ CRITICAL FIXES IN PROGRESS
 
@@ -72,6 +90,10 @@ See: `agent_ops/docs/ASAM_IP_COMPLIANCE_ENFORCEMENT.md`
 | **T-0034** | **open** | **P3** | **Add build phase rules validation script** | **agent** |  |
 | **T-0035** | **open** | **P1** | **Add reverse WM guard requiring D1 evidence for LOC 3.7 or 4.0** | **agent** |  |
 | **T-0036** | **open** | **P1** | **Add reconciliation checks between flags, COWS/CIWA, and D1 severity** | **agent** |  |
+| **T-0037** | **open** | **P1** | **Externalize clinical thresholds to rules/clinical_thresholds.json** | **agent** |  |
+| **T-0038** | **open** | **P1** | **PDF flatten service + embed provenance in PDF Info dict** | **agent** |  |
+| **T-0039** | **open** | **P1** | **Replace grep with deterministic target-membership check in CI** | **agent** |  |
+| **T-0040** | **open** | **P1** | **Implement canonical hash with 5 files + manifest (64-char SHA256)** | **agent** |  |
 
 ## Checklist
 - [x] T-0001  Implement NavigationSplitView shell and screens (P1)
@@ -110,3 +132,7 @@ See: `agent_ops/docs/ASAM_IP_COMPLIANCE_ENFORCEMENT.md`
 - [ ] **T-0034  Add build phase rules validation script (P3)**
 - [ ] **T-0035  Add reverse WM guard requiring D1 evidence for LOC 3.7 or 4.0 (P1)**
 - [ ] **T-0036  Add reconciliation checks between flags, COWS/CIWA, and D1 severity (P1)**
+- [ ] **T-0037  Externalize clinical thresholds to rules/clinical_thresholds.json (P1)**
+- [ ] **T-0038  PDF flatten service + embed provenance in PDF Info dict (P1)**
+- [ ] **T-0039  Replace grep with deterministic target-membership check in CI (P1)**
+- [ ] **T-0040  Implement canonical hash with 5 files + manifest (64-char SHA256) (P1)**

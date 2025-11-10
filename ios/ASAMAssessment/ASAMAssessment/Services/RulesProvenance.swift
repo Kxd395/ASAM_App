@@ -8,6 +8,15 @@
 
 import Foundation
 import CryptoKit
+import PDFKit  // COMPILE FIX #1: Required for PDFDocument extension
+
+#if canImport(UIKit)
+import UIKit   // iOS
+typealias PlatformFont = UIFont
+#elseif canImport(AppKit)
+import AppKit  // macOS
+typealias PlatformFont = NSFont
+#endif
 
 /// Rules provenance information for audit trail
 /// FIX #1: Canonical provenance with exact footer format
@@ -85,11 +94,18 @@ class RulesProvenanceTracker {
 extension PDFDocument {
     /// Add rules provenance footer to all pages
     /// T-0029: Required for compliance audit trail
+    /// COMPILE FIX #1: Corrected signature to match pdfFooterText(planId:planHash:complianceMode:)
     func stampProvenanceFooter(
+        planId: String,
         planHash: String,
+        complianceMode: String,
         rulesProvenance: RulesProvenance
     ) {
-        let footerText = rulesProvenance.pdfFooterText(planHash: planHash)
+        let footerText = rulesProvenance.pdfFooterText(
+            planId: planId,
+            planHash: planHash,
+            complianceMode: complianceMode
+        )
         let timestamp = ISO8601DateFormatter().string(from: Date())
         
         for pageIndex in 0..<pageCount {
@@ -108,7 +124,8 @@ extension PDFDocument {
                 forType: .freeText,
                 withProperties: nil
             )
-            provenanceAnnotation.font = NSFont.monospacedSystemFont(ofSize: 7, weight: .regular)
+            // COMPILE FIX #1: NSFont→UIFont for iOS
+            provenanceAnnotation.font = PlatformFont.monospacedSystemFont(ofSize: 7, weight: .regular)
             provenanceAnnotation.fontColor = .lightGray
             provenanceAnnotation.alignment = .right
             provenanceAnnotation.contents = footerText
@@ -128,7 +145,8 @@ extension PDFDocument {
                 forType: .freeText,
                 withProperties: nil
             )
-            timestampAnnotation.font = NSFont.monospacedSystemFont(ofSize: 7, weight: .regular)
+            // COMPILE FIX #1: NSFont→UIFont for iOS
+            timestampAnnotation.font = PlatformFont.monospacedSystemFont(ofSize: 7, weight: .regular)
             timestampAnnotation.fontColor = .lightGray
             timestampAnnotation.alignment = .left
             timestampAnnotation.contents = "Generated: \(timestamp)"

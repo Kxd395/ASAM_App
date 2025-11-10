@@ -92,21 +92,35 @@ struct ReconciliationValidator {
     }
     
     /// FIX #4: Validate that unstable vitals block ambulatory WM recommendations
+    /// CLINICAL LOGIC FIX #7: Check WM candidate list, not LOC string
+    /// WM candidates depend on ASAM edition:
+    ///   - v3: 1-WM, 2-WM, 3.2-WM, 3.7-WM, 4-WM
+    ///   - v4 integrated: 1.7, 2.7, 3.7, 4.0 (with WM capability)
     static func validateVitalsStableForAmbulatoryWM(
         flags: ClinicalFlags,
-        locRecommendation: String?
+        wmCandidates: [String],  // FIXED: Accept WM candidates, not LOC string
+        asamVersion: ASAMVersion = .v4
     ) -> [ReconciliationCheck] {
         var checks: [ReconciliationCheck] = []
         
-        // Block ambulatory WM levels if vitals unstable
+        // Define ambulatory WM levels by edition
+        let ambulatoryWMLevels: [String]
+        switch asamVersion {
+        case .v3:
+            ambulatoryWMLevels = ["1-WM", "2-WM", "3.2-WM"]  // v3 non-residential WM
+        case .v4:
+            ambulatoryWMLevels = ["1.7", "2.7"]  // v4 integrated ambulatory WM
+        }
+        
+        // Block ambulatory WM if vitals unstable
         if flags.vitalsUnstable {
-            let ambulatoryWMLevels = ["3.7-WM", "2.5-WM", "2.1-WM", "1-WM"]
+            let unsafeWMMatches = wmCandidates.filter { ambulatoryWMLevels.contains($0) }
             
-            if let loc = locRecommendation, ambulatoryWMLevels.contains(loc) {
+            if !unsafeWMMatches.isEmpty {
                 checks.append(ReconciliationCheck(
                     id: "unstable_vitals_ambulatory_wm",
                     severity: .blocker,
-                    message: "Cannot recommend ambulatory WM level '\(loc)' with unstable vitals",
+                    message: "Cannot recommend ambulatory WM levels \(unsafeWMMatches.joined(separator: ", ")) with unstable vitals. Patient requires medically managed setting (3.7 or 4.0).",
                     suggestedFix: nil  // Must be medically managed
                 ))
             }

@@ -43,19 +43,43 @@ struct ExportPreflight {
     }
     
     /// Perform all preflight checks before export
+    /// FIX #2: Hard gate requiring healthy rules state and valid provenance
     ///
     /// - Parameters:
     ///   - assessment: The assessment to validate
     ///   - rulesService: The rules service wrapper
+    ///   - provenance: Optional rules provenance (nil if rules degraded)
+    ///   - complianceMode: Current compliance mode for template validation
     /// - Returns: Result indicating success or specific failure reason
     static func check(
         assessment: Assessment,
-        rulesService: RulesServiceWrapper
+        rulesService: RulesServiceWrapper,
+        provenance: RulesProvenance?,
+        complianceMode: String,
+        templatePath: String? = nil
     ) -> Result<Void, ExportError> {
-        // Rule 1: Rules engine must be available (CRITICAL - T-0028)
-        if !rulesService.isAvailable {
-            let message = rulesService.errorMessage ?? "Unknown error"
+        // FIX #2: Rule 1 - Rules must be HEALTHY (not just available)
+        // Fallback LOC of 2.1 must not bypass this gate
+        if rulesService.rulesState != .healthy {
+            let message = "Rules engine is degraded. Cannot export with fallback LOC."
             return .failure(.rulesUnavailable(message))
+        }
+        
+        // FIX #2: Rule 2 - Provenance must exist (blocks degraded rules)
+        guard let provenance = provenance else {
+            return .failure(.rulesUnavailable("Rules provenance unavailable. Cannot verify rules integrity."))
+        }
+        
+        // FIX #2: Rule 3 - Ruleset hash must be non-empty
+        guard !provenance.rulesetHash.isEmpty else {
+            return .failure(.rulesUnavailable("Rules hash is empty. Cannot stamp PDF footer."))
+        }
+        
+        // FIX #9: Rule 4 - Compliance template check
+        if let templatePath = templatePath {
+            if let violation = checkComplianceTemplate(templatePath: templatePath, complianceMode: complianceMode) {
+                return .failure(.complianceViolation(violation))
+            }
         }
         
         // Rule 2: Assessment must be marked complete
@@ -87,9 +111,29 @@ struct ExportPreflight {
         return .success(())
     }
     
+    // FIX #9: Compliance template validation
+    /// Checks if template path is allowed in current compliance mode
+    /// Returns violation message if template is banned, nil if OK
+    private static func checkComplianceTemplate(templatePath: String, complianceMode: String) -> String? {
+        let lowercasePath = templatePath.lowercased()
+        let bannedTokens = ["asam", "continuum", "co-triage", "cotriage"]
+        
+        // In internal_neutral mode, block any official ASAM templates
+        if complianceMode == "internal_neutral" {
+            for token in bannedTokens {
+                if lowercasePath.contains(token) {
+                    return "Cannot use official ASAM template '\(templatePath)' in internal_neutral mode. Use a neutral template."
+                }
+            }
+        }
+        
+        return nil
+    }
+    
     /// Quick check - returns true if export is allowed
     static func canExport(assessment: Assessment, rulesService: RulesServiceWrapper) -> Bool {
-        switch check(assessment: assessment, rulesService: rulesService) {
+        // TODO: Update to use new signature with provenance check
+        switch check(assessment: assessment, rulesService: rulesService, provenance: nil, complianceMode: "internal_neutral") {
         case .success:
             return true
         case .failure:

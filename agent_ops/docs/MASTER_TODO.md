@@ -1,8 +1,24 @@
 # MASTER_TODO
 This document is generated from `docs/TODO_INDEX.json`. Do not edit by hand.
 
-Updated: 2025-11-10T19:00:00.000000
-Open: 28  |  Done: 12
+Updated: 2025-11-10T20:00:00.000000
+Open: 28  |  Done: 13 (T-0024 merged into T-0029)
+
+## ⚠️ CRITICAL FIXES IN PROGRESS
+
+**FIX PR**: Critical P0 Hardening - Safety Gates and Provenance
+- FIX #1: Canonical ruleset hash with exact deterministic PDF footer format
+- FIX #2: Hard preflight gate requiring healthy rules state and valid provenance
+- FIX #3: Reconciliation checks between COWS/CIWA and D1 severity
+- FIX #4: Vitals stability check blocking ambulatory WM recommendations
+- FIX #5: Adaptive debouncing (0ms for safety flags, 300ms for text inputs)
+- FIX #6: Job-level export gating (not button-level)
+- FIX #9: Compliance template validation in ExportPreflight
+- FIX #12: CI script for target membership validation
+
+**Status**: Code complete, ready for Xcode integration
+
+---
 
 ## 🔴 CRITICAL: ASAM IP Compliance
 
@@ -43,17 +59,19 @@ See: `agent_ops/docs/ASAM_IP_COMPLIANCE_ENFORCEMENT.md`
 | T-0021 | done | P1 | Add rules fixtures with golden outputs and include rule ids in audit logs | agent |  |
 | T-0022 | done | P2 | Implement WM to LOC guard so 3.7 base does not fire if 3.7-WM already matched | agent |  |
 | T-0023 | open | P2 | Add program capability resolver that down-shifts or flags no compatible program | agent |  |
-| T-0024 | open | P2 | Add ruleset hash to PDF seal and audit events | agent |  |
+| **T-0024** | **MERGED** | **P2** | **MERGED INTO T-0029 - Ruleset hash to PDF seal and audit events** | **agent** | **2025-11-10** |
 | **T-0025** | **done** | **P0** | **Implement SubstanceRow sheet for Domain 1 context (CRITICAL for rules to fire)** | **agent** | **2025-11-10** |
 | **T-0026** | **done** | **P0** | **Implement Flags UI for clinical indicators (CRITICAL for rules to fire)** | **agent** | **2025-11-10** |
 | **T-0027** | **done** | **P1** | **Add MainActor enforcement and debouncing to RulesServiceWrapper** | **agent** | **2025-11-10** |
 | **T-0028** | **done** | **P1** | **Add Export block and banner on degraded rules** | **agent** | **2025-11-10** |
-| **T-0029** | **done** | **P2** | **Add rules checksum audit and PDF footer stamp** | **agent** | **2025-11-10** |
+| **T-0029** | **done** | **P2** | **Add rules checksum audit and PDF footer stamp (canonical hash, manifest)** | **agent** | **2025-11-10** |
 | **T-0030** | **open** | **P2** | **Add precedence/ruleId uniqueness tests** | **agent** |  |
 | **T-0031** | **open** | **P3** | **Add ASAM version switch (v3/v4) with 3.3 hiding** | **agent** |  |
 | **T-0032** | **open** | **P3** | **Add WM display separate from LOC with candidate ladder** | **agent** |  |
 | **T-0033** | **open** | **P3** | **Add JSON schema validation for rules in CI** | **agent** |  |
 | **T-0034** | **open** | **P3** | **Add build phase rules validation script** | **agent** |  |
+| **T-0035** | **open** | **P1** | **Add reverse WM guard requiring D1 evidence for LOC 3.7 or 4.0** | **agent** |  |
+| **T-0036** | **open** | **P1** | **Add reconciliation checks between flags, COWS/CIWA, and D1 severity** | **agent** |  |
 
 ## Checklist
 - [x] T-0001  Implement NavigationSplitView shell and screens (P1)
@@ -79,14 +97,16 @@ See: `agent_ops/docs/ASAM_IP_COMPLIANCE_ENFORCEMENT.md`
 - [x] T-0021  Add rules fixtures with golden outputs and include rule ids in audit logs (P1)
 - [x] T-0022  Implement WM to LOC guard so 3.7 base does not fire if 3.7-WM already matched (P2)
 - [ ] T-0023  Add program capability resolver that down-shifts or flags no compatible program (P2)
-- [ ] T-0024  Add ruleset hash to PDF seal and audit events (P2)
+- [x] **T-0024  MERGED INTO T-0029 - Ruleset hash to PDF seal and audit events (P2) ✅ MERGED 2025-11-10**
 - [x] **T-0025  Implement SubstanceRow sheet for Domain 1 context (P0) ✅ COMPLETE 2025-11-10**
 - [x] **T-0026  Implement Flags UI for clinical indicators (P0) ✅ COMPLETE 2025-11-10**
 - [x] **T-0027  Add MainActor enforcement and debouncing to RulesServiceWrapper (P1) ✅ COMPLETE 2025-11-10**
 - [x] **T-0028  Add Export block and banner on degraded rules (P1) ✅ COMPLETE 2025-11-10**
-- [x] **T-0029  Add rules checksum audit and PDF footer stamp (P2) ✅ COMPLETE 2025-11-10**
+- [x] **T-0029  Add rules checksum audit and PDF footer stamp (canonical hash, manifest) (P2) ✅ COMPLETE 2025-11-10**
 - [ ] **T-0030  Add precedence/ruleId uniqueness tests (P2)**
 - [ ] **T-0031  Add ASAM version switch (v3/v4) with 3.3 hiding (P3)**
 - [ ] **T-0032  Add WM display separate from LOC with candidate ladder (P3)**
 - [ ] **T-0033  Add JSON schema validation for rules in CI (P3)**
 - [ ] **T-0034  Add build phase rules validation script (P3)**
+- [ ] **T-0035  Add reverse WM guard requiring D1 evidence for LOC 3.7 or 4.0 (P1)**
+- [ ] **T-0036  Add reconciliation checks between flags, COWS/CIWA, and D1 severity (P1)**

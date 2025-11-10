@@ -124,10 +124,19 @@ final class RulesServiceWrapper: ObservableObject {
         }
     }
 
-    // MARK: - LOC Calculation with Debouncing
+    // MARK: - LOC Calculation with Adaptive Debouncing
 
-    /// Evaluate WM and LOC for an assessment (with debouncing)
-    func evaluate(_ assessment: Assessment) -> (wm: WMOutcome, loc: LOCOutcome)? {
+    /// FIX #5: Evaluate WM and LOC with adaptive debouncing
+    /// Safety-critical changes (flags, severity chips) bypass debounce
+    /// - Parameters:
+    ///   - assessment: Assessment to evaluate
+    ///   - bypassDebounce: If true, evaluates immediately (for safety flags)
+    func evaluate(_ assessment: Assessment, bypassDebounce: Bool = false) -> (wm: WMOutcome, loc: LOCOutcome)? {
+        // FIX #5: Immediate evaluation for safety-critical changes
+        if bypassDebounce {
+            return performCalculation(assessment)
+        }
+        
         // Cancel previous debounce
         debounceTask?.cancel()
 
@@ -144,7 +153,7 @@ final class RulesServiceWrapper: ObservableObject {
 
     private func scheduleCalculation(_ assessment: Assessment) {
         debounceTask = Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 300_000_000) // 300ms debounce (T-0027)
+            try? await Task.sleep(nanoseconds: 300_000_000) // 300ms debounce for text inputs
 
             guard !Task.isCancelled else { return }
 

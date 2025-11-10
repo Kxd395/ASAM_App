@@ -10,27 +10,29 @@ import Foundation
 import CryptoKit
 
 /// Rules provenance information for audit trail
+/// FIX #1: Canonical provenance with exact footer format
 struct RulesProvenance: Codable {
-    let rulesHash: String  // 12-char SHA256 prefix
-    let rulesVersion: String
+    let rulesetHash: String  // Full SHA256 (64 hex chars)
+    let rulesManifest: String  // JSON: [{"file": "anchors.json", "hash": "..."}]
+    let rulesVersion: String  // e.g., "v4"
     let timestamp: Date
     let legalNoticeVersion: String
     
-    /// Short hash for PDF footer (first 12 chars)
-    var shortHash: String {
-        String(rulesHash.prefix(12))
-    }
-    
-    /// Format for PDF footer
-    /// Example: "Plan: 7f9c2a1b | Rules: 9c3a1b4d2e5f | Legal: v1.0"
-    func pdfFooterText(planHash: String) -> String {
-        "Plan: \(planHash.prefix(8)) | Rules: \(shortHash) | Legal: v\(legalNoticeVersion)"
+    /// Deterministic PDF footer with uppercase hex
+    /// Format: "Plan <8> | Seal <12> | Rules <12> | Legal v1.0 | Mode <mode>"
+    /// Example: "Plan 7F9C2A1B | Seal A3B2C1D4E5F6 | Rules 9C3A1B4D2E5F | Legal v1.0 | Mode internal_neutral"
+    func pdfFooterText(planId: String, planHash: String, complianceMode: String) -> String {
+        let planIdShort = String(planId.prefix(8)).uppercased()
+        let planHashShort = String(planHash.prefix(12)).uppercased()
+        let rulesHashShort = String(rulesetHash.prefix(12)).uppercased()
+        return "Plan \(planIdShort) | Seal \(planHashShort) | Rules \(rulesHashShort) | Legal v\(legalNoticeVersion) | Mode \(complianceMode)"
     }
     
     /// Format for audit event
     func auditEventPayload() -> [String: Any] {
         [
-            "rules_hash": rulesHash,
+            "ruleset_hash": rulesetHash,
+            "rules_manifest": rulesManifest,
             "rules_version": rulesVersion,
             "rules_timestamp": ISO8601DateFormatter().string(from: timestamp),
             "legal_notice_version": legalNoticeVersion
@@ -42,7 +44,8 @@ extension RulesChecksum {
     /// Convert to provenance record
     func toProvenance(legalVersion: String = "1.0") -> RulesProvenance {
         RulesProvenance(
-            rulesHash: self.sha256,
+            rulesetHash: self.sha256,  // Full 64-char hash
+            rulesManifest: self.manifest,  // JSON manifest
             rulesVersion: self.version,
             timestamp: self.timestamp,
             legalNoticeVersion: legalVersion

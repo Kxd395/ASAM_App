@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# pre-push: block pushes if anchors↔︎mapping missing or iOS tests fail
+# Runs strict anchors check + xcodebuild test with -DSTRICT_ANCHORS
+# Skip locally with: SKIP_PREPUSH=1 git push
+
+set -euo pipefail
+
+# ---------- Fast exits ----------
+[[ "${CI:-}" == "true" ]] && exit 0
+[[ "${SKIP_PREPUSH:-}" == "1" ]] && { echo "⏭️  pre-push skipped (SKIP_PREPUSH=1)"; exit 0; }
+
+# Only run if relevant paths changed vs upstream
+current_branch="$(git rev-parse --abbrev-ref HEAD)"
+upstream_ref="$(git rev-parse --abbrev-ref --symbolic-full-name @{upstream} 2>/dev/null || true)"
+if [[ -n "$upstream_ref" ]]; then
+  base="$(git merge-base HEAD "$upstream_ref")"
+  changed="$(git diff --name-only "$base"...HEAD)"
+else
+  # No upstream set (new repo/branch) → run conservatively
+  changed="$(git diff --name-only HEAD~1..HEAD 2>/dev/null || git ls-files)"
+fi
+
+if ! echo "$changed" | grep -E '^(ios/|rules/|mapping/|scripts/)' >/dev/null; then
+  echo "🟡 No relevant changes for iOS/rules; skipping pre-push tests."
+  exit 0
+fi
+
+# ---------- Preconditions ----------
+command -v xcodebuild >/dev/null || { echo "❌ xcodebuild not found (install Xcode CLT)"; exit 1; }
+command -v xcrun >/dev/null || { echo "❌ xcrun not found"; exit 1; }
+
+# ---------- Optional linters (only if present) ----------
+if [[ -x "scripts/check-anchors-vs-map.py" ]]; then
+  echo "� Running anchors ↔ field map check (strict)…"
+  python3 scripts/check-anchors-vs-map.py
+fi
+
+if [[ -x "scripts/check-target-membership.sh" ]]; then
+  echo "📦 Verifying Xcode target membership…"
+  ./scripts/check-target-membership.sh
+fi
+
+# ---------- Project constants ----------
+PROJ="ios/ASAMAssessment/ASAMAssessment/ASAMAssessment.xcodeproj"
+SCHEME="ASAMAssessment"
+
+[[ -d "$PROJ" ]] || { echo "❌ Project not found at $PROJ"; exit 1; }
+
+# ---------- Pick a Simulator ----------
+echo "📱 Resolving iOS Simulator…"
+RUNTIME=$(xcrun simctl list runtimes | sed -nE 's/.*iOS ([0-9.]+).*/\1/p' | sort -V | tail -1)
+DEVICE=$(xcrun simctl list devices "iOS $RUNTIME" available 2>/dev/null | awk -F '[()]' '/iPhone/{print $1; exit}' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+[[ -z "$DEVICE" ]] && DEVICE="iPhone 15"
+DEST="platform=iOS Simulator,name=${DEVICE},OS=${RUNTIME}"
+
+echo "🧪 Running tests with STRICT_ANCHORS…"
+echo "   Device: $DEVICE"
+echo "   Runtime: iOS $RUNTIME"
+
+# Compile tests with -DSTRICT_ANCHORS so guard assertions are enforced
+xcodebuild \
+  -project "$PROJ" \
+  -scheme "$SCHEME" \
+  -destination "$DEST" \
+  -enableCodeCoverage YES \
+  OTHER_SWIFT_FLAGS="\$(inherited) -DSTRICT_ANCHORS" \
+  test | xcpretty 2>/dev/null || xcodebuild \
+  -project "$PROJ" \
+  -scheme "$SCHEME" \
+  -destination "$DEST" \
+  -enableCodeCoverage YES \
+  OTHER_SWIFT_FLAGS="\$(inherited) -DSTRICT_ANCHORS" \
+  test
+
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+  echo "❌ Tests failed (STRICT_ANCHORS enabled)."
+  exit 1
+fi
+
+echo "✅ Pre-push checks passed."

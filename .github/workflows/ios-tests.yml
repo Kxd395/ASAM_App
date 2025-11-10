@@ -1,0 +1,69 @@
+name: iOS Strict Tests
+
+on:
+  pull_request:
+    paths:
+      - 'ios/**'
+      - 'rules/**'
+      - 'mapping/**'
+      - 'scripts/**'
+  push:
+    branches:
+      - main
+      - master
+      - dev
+
+jobs:
+  tests:
+    runs-on: macos-14
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+      
+      - name: Show Xcode version
+        run: xcodebuild -version
+      
+      - name: List available simulators
+        run: xcrun simctl list devices available
+      
+      - name: Resolve iOS Runtime
+        id: runtime
+        run: |
+          RUNTIME=$(xcrun simctl list runtimes | sed -nE 's/.*iOS ([0-9.]+).*/\1/p' | sort -V | tail -1)
+          echo "runtime=$RUNTIME" >> $GITHUB_OUTPUT
+          echo "Using iOS Runtime: $RUNTIME"
+      
+      - name: Build & Test with STRICT_ANCHORS
+        env:
+          RUNTIME: ${{ steps.runtime.outputs.runtime }}
+        run: |
+          DEVICE="iPhone 15"
+          DEST="platform=iOS Simulator,name=${DEVICE},OS=${RUNTIME}"
+          
+          xcodebuild \
+            -project ios/ASAMAssessment/ASAMAssessment/ASAMAssessment.xcodeproj \
+            -scheme ASAMAssessment \
+            -destination "$DEST" \
+            -enableCodeCoverage YES \
+            OTHER_SWIFT_FLAGS="\$(inherited) -DSTRICT_ANCHORS" \
+            test | xcpretty || xcodebuild \
+            -project ios/ASAMAssessment/ASAMAssessment/ASAMAssessment.xcodeproj \
+            -scheme ASAMAssessment \
+            -destination "$DEST" \
+            -enableCodeCoverage YES \
+            OTHER_SWIFT_FLAGS="\$(inherited) -DSTRICT_ANCHORS" \
+            test
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            ios/ASAMAssessment/DerivedData/Logs/Test/*.xcresult
+          retention-days: 7

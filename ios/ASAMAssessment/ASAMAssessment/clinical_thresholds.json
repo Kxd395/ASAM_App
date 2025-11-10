@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ASAM Clinical Thresholds",
+  "description": "Externalized clinical thresholds for reconciliation checks. Prevents hardcoded drift from rules engine.",
+  "version": "1.0.0",
+  "edition": "v4",
+  "thresholds": {
+    "cows_to_d1_severity": {
+      "description": "Map COWS score ranges to minimum Domain A (Intoxication/Withdrawal) severity",
+      "source": "Clinical Opiate Withdrawal Scale (COWS)",
+      "ranges": [
+        {
+          "cows_min": 0,
+          "cows_max": 4,
+          "d1_min": 1,
+          "label": "Minimal withdrawal"
+        },
+        {
+          "cows_min": 5,
+          "cows_max": 12,
+          "d1_min": 2,
+          "label": "Mild-moderate withdrawal"
+        },
+        {
+          "cows_min": 13,
+          "cows_max": 24,
+          "d1_min": 3,
+          "label": "Moderate withdrawal (WM indicated)"
+        },
+        {
+          "cows_min": 25,
+          "cows_max": 36,
+          "d1_min": 3,
+          "label": "Moderately severe withdrawal"
+        },
+        {
+          "cows_min": 37,
+          "cows_max": 48,
+          "d1_min": 4,
+          "label": "Severe withdrawal (medically managed WM required)"
+        }
+      ]
+    },
+    "ciwa_to_d1_severity": {
+      "description": "Map CIWA-Ar score ranges to minimum Domain A severity",
+      "source": "Clinical Institute Withdrawal Assessment for Alcohol (CIWA-Ar)",
+      "ranges": [
+        {
+          "ciwa_min": 0,
+          "ciwa_max": 7,
+          "d1_min": 1,
+          "label": "Minimal withdrawal"
+        },
+        {
+          "ciwa_min": 8,
+          "ciwa_max": 15,
+          "d1_min": 2,
+          "label": "Mild-moderate withdrawal"
+        },
+        {
+          "ciwa_min": 16,
+          "ciwa_max": 20,
+          "d1_min": 3,
+          "label": "Moderate withdrawal (monitoring required)"
+        },
+        {
+          "ciwa_min": 21,
+          "ciwa_max": 67,
+          "d1_min": 3,
+          "label": "Severe withdrawal (inpatient recommended)"
+        }
+      ]
+    },
+    "wm_vocabulary": {
+      "description": "Withdrawal Management level codes by ASAM edition",
+      "v3": {
+        "ambulatory": ["1-WM", "2-WM", "3.2-WM"],
+        "residential": ["3.7-WM"],
+        "inpatient": ["4-WM"]
+      },
+      "v4_integrated": {
+        "ambulatory": ["1.7", "2.7"],
+        "residential": ["3.7"],
+        "inpatient": ["4.0"]
+      }
+    },
+    "loc_descriptions": {
+      "description": "Level of Care descriptions by edition",
+      "v3": {
+        "3.7": "3.7 Medically Monitored Intensive Inpatient",
+        "4.0": "4.0 Medically Managed Intensive Inpatient"
+      },
+      "v4": {
+        "1.7": "1.7 Ambulatory Withdrawal Management (with extended on-site monitoring)",
+        "2.7": "2.7 Ambulatory Withdrawal Management (with extended on-site monitoring)",
+        "3.7": "3.7 Medically Managed Residential Withdrawal Management",
+        "4.0": "4.0 Medically Managed Inpatient Withdrawal Management"
+      }
+    }
+  },
+  "notes": [
+    "COWS max score is 48 (11 items, most scored 0-4, pulse rate 0-4)",
+    "CIWA-Ar max score is 67 (10 items, most scored 0-7)",
+    "D1 severity scale: 0=none, 1=minimal, 2=moderate, 3=severe, 4=catastrophic",
+    "v4 integrated WM: No separate -WM suffix, WM capability embedded in LOC",
+    "Ambulatory WM requires stable vitals and no acute medical complications"
+  ]
+}

@@ -1,0 +1,583 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		807C8DC52EC25BC300F7AE37 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 807C8DAD2EC25BC100F7AE37 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 807C8DB42EC25BC100F7AE37;
+			remoteInfo = RecoveryCompass;
+		};
+		807C8DCF2EC25BC300F7AE37 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 807C8DAD2EC25BC100F7AE37 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 807C8DB42EC25BC100F7AE37;
+			remoteInfo = RecoveryCompass;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		807C8DB52EC25BC100F7AE37 /* RecoveryCompass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecoveryCompass.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		807C8DC42EC25BC300F7AE37 /* RecoveryCompassTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecoveryCompassTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		807C8DCE2EC25BC300F7AE37 /* RecoveryCompassUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecoveryCompassUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		807C8DB72EC25BC100F7AE37 /* RecoveryCompass */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = RecoveryCompass;
+			sourceTree = "<group>";
+		};
+		807C8DC72EC25BC300F7AE37 /* RecoveryCompassTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = RecoveryCompassTests;
+			sourceTree = "<group>";
+		};
+		807C8DD12EC25BC300F7AE37 /* RecoveryCompassUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = RecoveryCompassUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		807C8DB22EC25BC100F7AE37 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		807C8DC12EC25BC300F7AE37 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		807C8DCB2EC25BC300F7AE37 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		807C8DAC2EC25BC100F7AE37 = {
+			isa = PBXGroup;
+			children = (
+				807C8DB72EC25BC100F7AE37 /* RecoveryCompass */,
+				807C8DC72EC25BC300F7AE37 /* RecoveryCompassTests */,
+				807C8DD12EC25BC300F7AE37 /* RecoveryCompassUITests */,
+				807C8DB62EC25BC100F7AE37 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		807C8DB62EC25BC100F7AE37 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				807C8DB52EC25BC100F7AE37 /* RecoveryCompass.app */,
+				807C8DC42EC25BC300F7AE37 /* RecoveryCompassTests.xctest */,
+				807C8DCE2EC25BC300F7AE37 /* RecoveryCompassUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		807C8DB42EC25BC100F7AE37 /* RecoveryCompass */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 807C8DD82EC25BC300F7AE37 /* Build configuration list for PBXNativeTarget "RecoveryCompass" */;
+			buildPhases = (
+				807C8DB12EC25BC100F7AE37 /* Sources */,
+				807C8DB22EC25BC100F7AE37 /* Frameworks */,
+				807C8DB32EC25BC100F7AE37 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				807C8DB72EC25BC100F7AE37 /* RecoveryCompass */,
+			);
+			name = RecoveryCompass;
+			packageProductDependencies = (
+			);
+			productName = RecoveryCompass;
+			productReference = 807C8DB52EC25BC100F7AE37 /* RecoveryCompass.app */;
+			productType = "com.apple.product-type.application";
+		};
+		807C8DC32EC25BC300F7AE37 /* RecoveryCompassTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 807C8DDB2EC25BC300F7AE37 /* Build configuration list for PBXNativeTarget "RecoveryCompassTests" */;
+			buildPhases = (
+				807C8DC02EC25BC300F7AE37 /* Sources */,
+				807C8DC12EC25BC300F7AE37 /* Frameworks */,
+				807C8DC22EC25BC300F7AE37 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				807C8DC62EC25BC300F7AE37 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				807C8DC72EC25BC300F7AE37 /* RecoveryCompassTests */,
+			);
+			name = RecoveryCompassTests;
+			packageProductDependencies = (
+			);
+			productName = RecoveryCompassTests;
+			productReference = 807C8DC42EC25BC300F7AE37 /* RecoveryCompassTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		807C8DCD2EC25BC300F7AE37 /* RecoveryCompassUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 807C8DDE2EC25BC300F7AE37 /* Build configuration list for PBXNativeTarget "RecoveryCompassUITests" */;
+			buildPhases = (
+				807C8DCA2EC25BC300F7AE37 /* Sources */,
+				807C8DCB2EC25BC300F7AE37 /* Frameworks */,
+				807C8DCC2EC25BC300F7AE37 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				807C8DD02EC25BC300F7AE37 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				807C8DD12EC25BC300F7AE37 /* RecoveryCompassUITests */,
+			);
+			name = RecoveryCompassUITests;
+			packageProductDependencies = (
+			);
+			productName = RecoveryCompassUITests;
+			productReference = 807C8DCE2EC25BC300F7AE37 /* RecoveryCompassUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		807C8DAD2EC25BC100F7AE37 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2610;
+				LastUpgradeCheck = 2610;
+				TargetAttributes = {
+					807C8DB42EC25BC100F7AE37 = {
+						CreatedOnToolsVersion = 26.1;
+					};
+					807C8DC32EC25BC300F7AE37 = {
+						CreatedOnToolsVersion = 26.1;
+						TestTargetID = 807C8DB42EC25BC100F7AE37;
+					};
+					807C8DCD2EC25BC300F7AE37 = {
+						CreatedOnToolsVersion = 26.1;
+						TestTargetID = 807C8DB42EC25BC100F7AE37;
+					};
+				};
+			};
+			buildConfigurationList = 807C8DB02EC25BC100F7AE37 /* Build configuration list for PBXProject "RecoveryCompass" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 807C8DAC2EC25BC100F7AE37;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 807C8DB62EC25BC100F7AE37 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				807C8DB42EC25BC100F7AE37 /* RecoveryCompass */,
+				807C8DC32EC25BC300F7AE37 /* RecoveryCompassTests */,
+				807C8DCD2EC25BC300F7AE37 /* RecoveryCompassUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		807C8DB32EC25BC100F7AE37 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		807C8DC22EC25BC300F7AE37 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		807C8DCC2EC25BC300F7AE37 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		807C8DB12EC25BC100F7AE37 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		807C8DC02EC25BC300F7AE37 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		807C8DCA2EC25BC300F7AE37 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		807C8DC62EC25BC300F7AE37 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 807C8DB42EC25BC100F7AE37 /* RecoveryCompass */;
+			targetProxy = 807C8DC52EC25BC300F7AE37 /* PBXContainerItemProxy */;
+		};
+		807C8DD02EC25BC300F7AE37 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 807C8DB42EC25BC100F7AE37 /* RecoveryCompass */;
+			targetProxy = 807C8DCF2EC25BC300F7AE37 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		807C8DD62EC25BC300F7AE37 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = PJ487S8PS6;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		807C8DD72EC25BC300F7AE37 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = PJ487S8PS6;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		807C8DD92EC25BC300F7AE37 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PJ487S8PS6;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AxxessPhilly.RecoveryCompass;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		807C8DDA2EC25BC300F7AE37 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PJ487S8PS6;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AxxessPhilly.RecoveryCompass;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		807C8DDC2EC25BC300F7AE37 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PJ487S8PS6;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AxxessPhilly.RecoveryCompassTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RecoveryCompass.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RecoveryCompass";
+			};
+			name = Debug;
+		};
+		807C8DDD2EC25BC300F7AE37 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PJ487S8PS6;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AxxessPhilly.RecoveryCompassTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RecoveryCompass.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RecoveryCompass";
+			};
+			name = Release;
+		};
+		807C8DDF2EC25BC300F7AE37 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PJ487S8PS6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AxxessPhilly.RecoveryCompassUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = RecoveryCompass;
+			};
+			name = Debug;
+		};
+		807C8DE02EC25BC300F7AE37 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PJ487S8PS6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AxxessPhilly.RecoveryCompassUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = RecoveryCompass;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		807C8DB02EC25BC100F7AE37 /* Build configuration list for PBXProject "RecoveryCompass" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				807C8DD62EC25BC300F7AE37 /* Debug */,
+				807C8DD72EC25BC300F7AE37 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		807C8DD82EC25BC300F7AE37 /* Build configuration list for PBXNativeTarget "RecoveryCompass" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				807C8DD92EC25BC300F7AE37 /* Debug */,
+				807C8DDA2EC25BC300F7AE37 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		807C8DDB2EC25BC300F7AE37 /* Build configuration list for PBXNativeTarget "RecoveryCompassTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				807C8DDC2EC25BC300F7AE37 /* Debug */,
+				807C8DDD2EC25BC300F7AE37 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		807C8DDE2EC25BC300F7AE37 /* Build configuration list for PBXNativeTarget "RecoveryCompassUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				807C8DDF2EC25BC300F7AE37 /* Debug */,
+				807C8DE02EC25BC300F7AE37 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 807C8DAD2EC25BC100F7AE37 /* Project object */;
+}

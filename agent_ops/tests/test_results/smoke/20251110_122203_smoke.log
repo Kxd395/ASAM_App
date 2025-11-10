@@ -1,0 +1,25 @@
+🔍 Checking Xcode target membership for P0 files...
+📋 Checking app target files...
+  ❌ MISSING: Views/SubstanceRowSheet.swift
+  ❌ MISSING: Views/ClinicalFlagsSection.swift
+  ❌ MISSING: Services/ExportPreflight.swift
+  ❌ MISSING: Services/RulesProvenance.swift
+  ❌ MISSING: Services/ReconciliationChecks.swift
+  ❌ MISSING: Services/RulesServiceWrapper.swift
+
+🧪 Checking test target files...
+  ❌ MISSING: ASAMAssessmentTests/P0RulesInputTests.swift
+  ❌ MISSING: ASAMAssessmentTests/ExportPreflightTests.swift
+  ❌ MISSING: ASAMAssessmentTests/RulesProvenanceTests.swift
+
+📁 Checking rules/ directory...
+  ⚠️  rules/ directory may not be in targets
+
+❌ Found 9 missing files in Xcode targets
+
+To fix:
+1. Open ASAMAssessment.xcodeproj in Xcode
+2. For each missing file:
+   - Right-click project navigator → Add Files
+   - OR select file → File Inspector → check 'ASAMAssessment' target
+3. Run this script again to verify

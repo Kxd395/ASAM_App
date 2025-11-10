@@ -2,7 +2,7 @@
 This document is generated from `docs/TODO_INDEX.json`. Do not edit by hand.
 
 Updated: 2025-11-10T19:00:00.000000
-Open: 33  |  Done: 7
+Open: 28  |  Done: 12
 
 ## 🔴 CRITICAL: ASAM IP Compliance
 
@@ -44,11 +44,11 @@ See: `agent_ops/docs/ASAM_IP_COMPLIANCE_ENFORCEMENT.md`
 | T-0022 | done | P2 | Implement WM to LOC guard so 3.7 base does not fire if 3.7-WM already matched | agent |  |
 | T-0023 | open | P2 | Add program capability resolver that down-shifts or flags no compatible program | agent |  |
 | T-0024 | open | P2 | Add ruleset hash to PDF seal and audit events | agent |  |
-| **T-0025** | **open** | **P0** | **Implement SubstanceRow sheet for Domain 1 context (CRITICAL for rules to fire)** | **agent** |  |
-| **T-0026** | **open** | **P0** | **Implement Flags UI for clinical indicators (CRITICAL for rules to fire)** | **agent** |  |
-| **T-0027** | **open** | **P1** | **Add MainActor enforcement and debouncing to RulesServiceWrapper** | **agent** |  |
-| **T-0028** | **open** | **P1** | **Add Export block and banner on degraded rules** | **agent** |  |
-| **T-0029** | **open** | **P2** | **Add rules checksum audit and PDF footer stamp** | **agent** |  |
+| **T-0025** | **done** | **P0** | **Implement SubstanceRow sheet for Domain 1 context (CRITICAL for rules to fire)** | **agent** | **2025-11-10** |
+| **T-0026** | **done** | **P0** | **Implement Flags UI for clinical indicators (CRITICAL for rules to fire)** | **agent** | **2025-11-10** |
+| **T-0027** | **done** | **P1** | **Add MainActor enforcement and debouncing to RulesServiceWrapper** | **agent** | **2025-11-10** |
+| **T-0028** | **done** | **P1** | **Add Export block and banner on degraded rules** | **agent** | **2025-11-10** |
+| **T-0029** | **done** | **P2** | **Add rules checksum audit and PDF footer stamp** | **agent** | **2025-11-10** |
 | **T-0030** | **open** | **P2** | **Add precedence/ruleId uniqueness tests** | **agent** |  |
 | **T-0031** | **open** | **P3** | **Add ASAM version switch (v3/v4) with 3.3 hiding** | **agent** |  |
 | **T-0032** | **open** | **P3** | **Add WM display separate from LOC with candidate ladder** | **agent** |  |
@@ -80,11 +80,11 @@ See: `agent_ops/docs/ASAM_IP_COMPLIANCE_ENFORCEMENT.md`
 - [x] T-0022  Implement WM to LOC guard so 3.7 base does not fire if 3.7-WM already matched (P2)
 - [ ] T-0023  Add program capability resolver that down-shifts or flags no compatible program (P2)
 - [ ] T-0024  Add ruleset hash to PDF seal and audit events (P2)
-- [ ] **T-0025  Implement SubstanceRow sheet for Domain 1 context (P0) 🔴 CRITICAL**
-- [ ] **T-0026  Implement Flags UI for clinical indicators (P0) 🔴 CRITICAL**
-- [ ] **T-0027  Add MainActor enforcement and debouncing to RulesServiceWrapper (P1)**
-- [ ] **T-0028  Add Export block and banner on degraded rules (P1)**
-- [ ] **T-0029  Add rules checksum audit and PDF footer stamp (P2)**
+- [x] **T-0025  Implement SubstanceRow sheet for Domain 1 context (P0) ✅ COMPLETE 2025-11-10**
+- [x] **T-0026  Implement Flags UI for clinical indicators (P0) ✅ COMPLETE 2025-11-10**
+- [x] **T-0027  Add MainActor enforcement and debouncing to RulesServiceWrapper (P1) ✅ COMPLETE 2025-11-10**
+- [x] **T-0028  Add Export block and banner on degraded rules (P1) ✅ COMPLETE 2025-11-10**
+- [x] **T-0029  Add rules checksum audit and PDF footer stamp (P2) ✅ COMPLETE 2025-11-10**
 - [ ] **T-0030  Add precedence/ruleId uniqueness tests (P2)**
 - [ ] **T-0031  Add ASAM version switch (v3/v4) with 3.3 hiding (P3)**
 - [ ] **T-0032  Add WM display separate from LOC with candidate ladder (P3)**

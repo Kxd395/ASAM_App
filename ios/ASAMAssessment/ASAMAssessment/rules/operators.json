@@ -1,0 +1,251 @@
+{
+  "edition": "asam3",
+  "version": "1.0.0",
+  "updated": "2025-11-09",
+  "ruleset_hash": "placeholder_compute_on_load",
+  "description": "Deterministic operator definitions for rules evaluation engine. All evaluators must implement these exact semantics.",
+  "comparison_operators": {
+    "==": {
+      "name": "equals",
+      "description": "Exact equality comparison",
+      "examples": [
+        {"expr": "severity_A == 4", "when_true": "Domain A severity is exactly 4"},
+        {"expr": "status == 'signed'", "when_true": "Assessment status string is 'signed'"}
+      ],
+      "semantics": "Returns true if left and right values are identical. For numbers: exact match. For strings: case-sensitive match. For booleans: identity match."
+    },
+    "!=": {
+      "name": "not equals",
+      "description": "Inequality comparison",
+      "examples": [
+        {"expr": "indicated_loc != actual_loc", "when_true": "Indicated and actual LOC codes differ"}
+      ],
+      "semantics": "Returns true if left and right values are not identical. Inverse of ==."
+    },
+    ">=": {
+      "name": "greater than or equal",
+      "description": "Numeric comparison, inclusive on boundary",
+      "examples": [
+        {"expr": "cows_score >= 8", "when_true": "COWS score is 8 or higher"},
+        {"expr": "severity_C >= 2", "when_true": "Domain C severity is 2, 3, or 4"}
+      ],
+      "semantics": "Returns true if left >= right. INCLUSIVE on boundary. Only valid for numeric operands."
+    },
+    "<=": {
+      "name": "less than or equal",
+      "description": "Numeric comparison, inclusive on boundary",
+      "examples": [
+        {"expr": "severity_F <= 2", "when_true": "Domain F severity is 0, 1, or 2"}
+      ],
+      "semantics": "Returns true if left <= right. INCLUSIVE on boundary. Only valid for numeric operands."
+    },
+    ">": {
+      "name": "greater than",
+      "description": "Numeric comparison, exclusive on boundary",
+      "examples": [
+        {"expr": "daily_use_days > 30", "when_true": "Daily use exceeds 30 days (31 or more)"}
+      ],
+      "semantics": "Returns true if left > right. EXCLUSIVE on boundary. Only valid for numeric operands."
+    },
+    "<": {
+      "name": "less than",
+      "description": "Numeric comparison, exclusive on boundary",
+      "examples": [
+        {"expr": "last_use_hours < 24", "when_true": "Last use was within past 24 hours (0-23 hours ago)"}
+      ],
+      "semantics": "Returns true if left < right. EXCLUSIVE on boundary. Only valid for numeric operands."
+    }
+  },
+  "logical_operators": {
+    "and": {
+      "name": "logical AND",
+      "description": "All conditions must be true",
+      "examples": [
+        {"expr": "count_severity_2 >= 2 and severity_F <= 2", "when_true": "At least 2 moderate severities AND stable environment"}
+      ],
+      "semantics": "Returns true only if ALL operands evaluate to true. Short-circuits on first false. Supports nested expressions."
+    },
+    "or": {
+      "name": "logical OR",
+      "description": "At least one condition must be true",
+      "examples": [
+        {"expr": "severity_A == 4 or severity_B == 4", "when_true": "Either acute withdrawal OR biomedical crisis"}
+      ],
+      "semantics": "Returns true if ANY operand evaluates to true. Short-circuits on first true. Supports nested expressions."
+    },
+    "not": {
+      "name": "logical NOT",
+      "description": "Inverts boolean value",
+      "examples": [
+        {"expr": "not wm_indicated", "when_true": "Withdrawal management is NOT indicated"}
+      ],
+      "semantics": "Returns true if operand is false, false if operand is true. Unary operator."
+    },
+    "implies": {
+      "name": "logical implication",
+      "description": "If A then B (material conditional)",
+      "examples": [
+        {"expr": "wm_indicated implies wm_level is not null", "when_true": "If WM is indicated, then WM level must be set"},
+        {"expr": "indicated_loc != actual_loc implies len(discrepancy_reasons) >= 1", "when_true": "If LOCs differ, then reason must be documented"}
+      ],
+      "semantics": "Returns false only if antecedent is true and consequent is false. Truth table: T→T=T, T→F=F, F→T=T, F→F=T. Equivalent to (not A) or B."
+    }
+  },
+  "aggregate_functions": {
+    "count": {
+      "name": "count with filter",
+      "description": "Count items matching a condition",
+      "examples": [
+        {"expr": "count(domains where severity is not null) == 6", "when_true": "All 6 domains have severity ratings"},
+        {"expr": "count(problems) == 0", "when_true": "No problems documented"}
+      ],
+      "semantics": "Evaluates predicate for each item in collection. Returns integer count of items where predicate is true. Empty collection returns 0."
+    },
+    "count_severity_3_or_4": {
+      "name": "count high severity domains",
+      "description": "Count domains with severity >= 3",
+      "examples": [
+        {"expr": "count_severity_3_or_4 >= 3", "when_true": "Three or more domains have severe/extreme needs"}
+      ],
+      "semantics": "Iterate domains A-F. Count where severity >= 3. Returns 0-6. Null severities treated as 0."
+    },
+    "count_severity_3": {
+      "name": "count severe domains",
+      "description": "Count domains with severity exactly 3",
+      "examples": [
+        {"expr": "count_severity_3 >= 2", "when_true": "Two or more domains are at severity level 3"}
+      ],
+      "semantics": "Iterate domains A-F. Count where severity == 3. Returns 0-6. Null severities skipped."
+    },
+    "count_severity_2_or_3": {
+      "name": "count moderate to severe domains",
+      "description": "Count domains with severity >= 2",
+      "examples": [
+        {"expr": "count_severity_2_or_3 >= 2", "when_true": "Two or more domains have moderate or higher needs"}
+      ],
+      "semantics": "Iterate domains A-F. Count where severity >= 2. Returns 0-6. Null severities treated as 0."
+    },
+    "count_severity_2": {
+      "name": "count moderate domains",
+      "description": "Count domains with severity exactly 2",
+      "examples": [
+        {"expr": "count_severity_2 >= 3", "when_true": "Three or more domains are at moderate severity"}
+      ],
+      "semantics": "Iterate domains A-F. Count where severity == 2. Returns 0-6. Null severities skipped."
+    },
+    "count_severity_1": {
+      "name": "count mild domains",
+      "description": "Count domains with severity exactly 1",
+      "examples": [
+        {"expr": "count_severity_1 >= 1", "when_true": "At least one domain has mild severity"}
+      ],
+      "semantics": "Iterate domains A-F. Count where severity == 1. Returns 0-6. Null severities skipped."
+    },
+    "any_severity_4": {
+      "name": "any domain critical",
+      "description": "True if any domain has severity 4",
+      "examples": [
+        {"expr": "any_severity_4 == true", "when_true": "At least one domain is at critical/extreme level"}
+      ],
+      "semantics": "Iterate domains A-F. Returns true if ANY domain has severity == 4. Short-circuits on first match. Null severities skipped."
+    },
+    "all_severity_below": {
+      "name": "all domains below threshold",
+      "description": "True if all domains have severity < threshold",
+      "examples": [
+        {"expr": "all_severity_below 3", "when_true": "All domains have severity 0, 1, or 2 (none are 3 or 4)"},
+        {"expr": "all_severity_below 2", "when_true": "All domains have severity 0 or 1 (none are 2 or higher)"}
+      ],
+      "semantics": "Iterate domains A-F. Returns true only if ALL non-null severities are < threshold. Null severities treated as 0. Threshold is exclusive."
+    },
+    "exists": {
+      "name": "existence check",
+      "description": "True if at least one item matches condition",
+      "examples": [
+        {"expr": "exists problem where goal is blank", "when_true": "At least one problem lacks a treatment goal"},
+        {"expr": "exists domain where completed_ratio < 0.7", "when_true": "At least one domain is less than 70% complete"}
+      ],
+      "semantics": "Evaluates predicate for each item in collection. Returns true if ANY item satisfies predicate. Short-circuits on first match. Empty collection returns false."
+    },
+    "len": {
+      "name": "length/count",
+      "description": "Number of items in collection or string length",
+      "examples": [
+        {"expr": "len(discrepancy_reasons) >= 1", "when_true": "At least one discrepancy reason documented"},
+        {"expr": "len(notes) > overflow_threshold", "when_true": "Notes text exceeds character limit"}
+      ],
+      "semantics": "For arrays/lists: returns integer count of items. For strings: returns character count (not byte count). For null: returns 0."
+    }
+  },
+  "special_operators": {
+    "includes": {
+      "name": "array membership",
+      "description": "Check if array contains value",
+      "examples": [
+        {"expr": "wm_candidate_levels includes '3.7-WM'", "when_true": "3.7-WM is in the list of candidate WM levels"}
+      ],
+      "semantics": "Returns true if value exists in array. Case-sensitive for strings. Works with any type. Returns false for null or non-array operands."
+    },
+    "is null": {
+      "name": "null check",
+      "description": "Check if value is null/undefined",
+      "examples": [
+        {"expr": "wm_level is null", "when_true": "WM level has not been set"},
+        {"expr": "severity is not null", "when_true": "Severity rating exists"}
+      ],
+      "semantics": "Returns true if value is null, undefined, or not present. 'is not null' is the negation."
+    },
+    "is blank": {
+      "name": "empty string check",
+      "description": "Check if string is empty or whitespace only",
+      "examples": [
+        {"expr": "goal is blank", "when_true": "Goal field is empty or contains only spaces"}
+      ],
+      "semantics": "Returns true if string is null, empty (''), or contains only whitespace characters. Trims before checking."
+    }
+  },
+  "evaluation_strategy": {
+    "type_coercion": {
+      "description": "No automatic type coercion. Operators require exact types.",
+      "rules": [
+        "Numeric operators (>, <, >=, <=) require both operands to be numbers",
+        "String comparisons (==, !=) are case-sensitive",
+        "Comparing incompatible types returns false, not error",
+        "Null propagation: any operation with null operand returns false except 'is null'"
+      ]
+    },
+    "short_circuit_evaluation": {
+      "description": "Boolean operators short-circuit",
+      "rules": [
+        "AND: stops on first false, remaining conditions not evaluated",
+        "OR: stops on first true, remaining conditions not evaluated",
+        "This matters for performance and side-effect avoidance"
+      ]
+    },
+    "predicate_evaluation": {
+      "description": "Collection predicates (exists, count) evaluation order",
+      "rules": [
+        "Predicates evaluate items in collection order",
+        "Short-circuit predicates (exists, any) stop on first match",
+        "Count predicates scan entire collection always",
+        "Empty collections: exists→false, count→0, any→false, all→true (vacuous truth)"
+      ]
+    },
+    "null_handling": {
+      "description": "Null safety and propagation rules",
+      "rules": [
+        "Accessing property of null returns null",
+        "Null in numeric comparison returns false",
+        "Null in equality (== null) returns true only for null",
+        "Aggregate functions skip null values unless explicitly handling nulls",
+        "Use 'is null' or 'is not null' for explicit null checks"
+      ]
+    }
+  },
+  "implementation_notes": {
+    "testing": "Each operator must have unit tests with edge cases: nulls, empty collections, boundary values, type mismatches",
+    "error_handling": "Invalid expressions should fail fast at parse time, not evaluation time. Runtime errors should log and return false.",
+    "performance": "Cache parsed expressions. Use short-circuit evaluation. Index collections if used repeatedly in rules.",
+    "audit_trail": "Log which operators fired, intermediate values, and final result for each rule evaluation. Include rule_id in logs."
+  }
+}

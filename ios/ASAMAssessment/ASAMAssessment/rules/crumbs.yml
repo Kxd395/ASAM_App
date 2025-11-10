@@ -1,0 +1,170 @@
+# Breadcrumb Registry
+# Single source of truth for deep-link paths used by Fix buttons and navigation
+
+version: "1.0.0"
+updated: "2025-11-09"
+
+description: |
+  Breadcrumbs are navigable paths into app content. Used by validation Fix buttons,
+  autosave resume, and back-stack navigation. Format: module/resource/{id}/sub-resource
+
+crumbs:
+  # Assessment module
+  - path: "module/assessment/{assessment_id}"
+    description: "Assessment overview page"
+    screen: "AssessmentDetailView"
+    parameters:
+      assessment_id: "UUID"
+    
+  - path: "module/assessment/{assessment_id}/domains"
+    description: "All domains summary view"
+    screen: "DomainsOverviewView"
+    parameters:
+      assessment_id: "UUID"
+    
+  - path: "module/assessment/{assessment_id}/domain/{domain_key}"
+    description: "Specific domain detail (A-F)"
+    screen: "DomainDetailView"
+    parameters:
+      assessment_id: "UUID"
+      domain_key: "String (A|B|C|D|E|F)"
+    
+  - path: "module/assessment/{assessment_id}/domain/{domain_key}/field/{field_id}"
+    description: "Specific field within domain"
+    screen: "DomainDetailView"
+    scroll_to: "field_id"
+    parameters:
+      assessment_id: "UUID"
+      domain_key: "String"
+      field_id: "String"
+  
+  - path: "module/assessment/{assessment_id}/domain/{domain_key}/substances"
+    description: "Substances section within domain (typically Domain A)"
+    screen: "DomainDetailView"
+    scroll_to: "substances"
+    parameters:
+      assessment_id: "UUID"
+      domain_key: "String"
+  
+  - path: "module/assessment/{assessment_id}/domain/A/substances"
+    description: "Substances section in Domain A (Acute Intoxication/Withdrawal)"
+    screen: "DomainDetailView"
+    scroll_to: "substances"
+    parameters:
+      assessment_id: "UUID"
+  
+  - path: "module/assessment/{assessment_id}/domain/E"
+    description: "Domain E (Relapse/Continued Use) detail"
+    screen: "DomainDetailView"
+    parameters:
+      assessment_id: "UUID"
+    
+  - path: "module/assessment/{assessment_id}/safety"
+    description: "Safety review modal"
+    screen: "SafetyBanner"
+    modal: true
+    parameters:
+      assessment_id: "UUID"
+    
+  - path: "module/assessment/{assessment_id}/wm_plan"
+    description: "Withdrawal management planning section"
+    screen: "WMPlanView"
+    parameters:
+      assessment_id: "UUID"
+    
+  - path: "module/assessment/{assessment_id}/loc_discrepancy"
+    description: "LOC discrepancy reason entry"
+    screen: "LOCDiscrepancyView"
+    parameters:
+      assessment_id: "UUID"
+    
+  - path: "module/assessment/{assessment_id}/signature"
+    description: "Signature capture screen"
+    screen: "SignatureView"
+    parameters:
+      assessment_id: "UUID"
+    
+  - path: "module/assessment/{assessment_id}/emr_context"
+    description: "EMR context drawer"
+    screen: "EMRContextDrawer"
+    drawer: true
+    parameters:
+      assessment_id: "UUID"
+    
+  - path: "module/assessment/{assessment_id}/program_selection"
+    description: "Program capability selection"
+    screen: "ProgramSelectionView"
+    parameters:
+      assessment_id: "UUID"
+    
+  # Problems module
+  - path: "module/problems"
+    description: "Problems list (requires assessment context)"
+    screen: "ProblemsListView"
+    context_required: "assessment_id"
+    
+  - path: "module/problems/{problem_id}"
+    description: "Specific problem detail/edit"
+    screen: "ProblemDetailView"
+    parameters:
+      problem_id: "UUID"
+    
+  # Review and validation
+  - path: "module/assessment/{assessment_id}/review"
+    description: "Preflight review page with validation results"
+    screen: "ReviewView"
+    parameters:
+      assessment_id: "UUID"
+    
+  # Export and upload
+  - path: "module/assessment/{assessment_id}/export"
+    description: "Export status and history"
+    screen: "ExportView"
+    parameters:
+      assessment_id: "UUID"
+
+navigation_notes:
+  resolution: |
+    1. Parse crumb string
+    2. Look up pattern in registry
+    3. Extract parameters from placeholders
+    4. Resolve screen and navigate
+    5. If modal/drawer, present appropriately
+    6. If scroll_to specified, scroll to field after load
+  
+  fallback: |
+    If crumb target no longer exists (e.g., deleted problem),
+    navigate to module root and show toast: "Content not found"
+  
+  back_stack: |
+    Maintain in-memory stack of crumbs for Back button.
+    Stack persists during session but not across app restarts.
+    On resume, only use last_crumb from ui_state table.
+
+fix_button_behavior: |
+  When user taps Fix button on validation issue:
+  1. Read crumb from validation rule
+  2. Fill placeholders with actual IDs from context
+  3. Navigate to resolved path
+  4. Optionally highlight/focus the problematic field
+  5. After user makes change, re-run validation
+
+autosave_behavior: |
+  On every significant user edit:
+  1. Determine current crumb from active view
+  2. Update ui_state.last_crumb for current assessment
+  3. On app reopen, read last_crumb and navigate there
+
+examples:
+  - input: "module/assessment/123e4567-e89b-12d3-a456-426614174000/domain/A"
+    resolves_to:
+      screen: "DomainDetailView"
+      parameters:
+        assessment_id: "123e4567-e89b-12d3-a456-426614174000"
+        domain_key: "A"
+  
+  - input: "module/problems/abcd1234-5678-90ef-ghij-klmnopqrstuv"
+    resolves_to:
+      screen: "ProblemDetailView"
+      parameters:
+        problem_id: "abcd1234-5678-90ef-ghij-klmnopqrstuv"

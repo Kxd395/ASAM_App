@@ -1,0 +1,194 @@
+{
+  "edition": "asam3",
+  "version": "1.0.0",
+  "updated": "2025-11-09",
+  "ruleset_hash": "placeholder_compute_on_load",
+  "description": "Severity anchors by domain (A-F). Neutral, internal language only. Licensed content stays in separate asset bundle.",
+  "domains": {
+    "A": {
+      "title": "Acute Intoxication/Withdrawal Potential",
+      "anchors": {
+        "0": [
+          "No current substance use",
+          "No withdrawal risk identified",
+          "Stable vital signs and mental status"
+        ],
+        "1": [
+          "Minimal intoxication",
+          "Low withdrawal risk",
+          "Manageable in outpatient setting"
+        ],
+        "2": [
+          "Moderate intoxication or withdrawal symptoms",
+          "May require monitoring or medication support",
+          "Ambulatory detox appropriate with close follow-up"
+        ],
+        "3": [
+          "Severe intoxication or withdrawal",
+          "Significant medical complications possible",
+          "Requires medically managed environment"
+        ],
+        "4": [
+          "Life-threatening intoxication or withdrawal",
+          "Immediate medical intervention required",
+          "Intensive medical monitoring essential"
+        ]
+      }
+    },
+    "B": {
+      "title": "Biomedical Conditions and Complications",
+      "anchors": {
+        "0": [
+          "No significant medical conditions",
+          "Stable and manageable health status",
+          "No barriers to treatment engagement"
+        ],
+        "1": [
+          "Minor medical issues present",
+          "Conditions stable with routine care",
+          "Minimal impact on treatment planning"
+        ],
+        "2": [
+          "Moderate medical complications",
+          "Requires regular monitoring or treatment",
+          "May affect treatment setting choice"
+        ],
+        "3": [
+          "Serious medical conditions present",
+          "Requires intensive medical oversight",
+          "Medical needs drive level of care decision"
+        ],
+        "4": [
+          "Critical medical condition",
+          "Immediate medical stabilization required",
+          "Cannot engage in SUD treatment until medically stable"
+        ]
+      }
+    },
+    "C": {
+      "title": "Emotional, Behavioral, or Cognitive Conditions",
+      "anchors": {
+        "0": [
+          "No significant mental health concerns",
+          "Stable mood and behavior",
+          "Good coping and impulse control"
+        ],
+        "1": [
+          "Mild mental health symptoms",
+          "Manageable with outpatient support",
+          "Minimal interference with functioning"
+        ],
+        "2": [
+          "Moderate mental health symptoms",
+          "May require structured support or medication",
+          "Some interference with daily functioning"
+        ],
+        "3": [
+          "Severe mental health symptoms",
+          "Significant functional impairment",
+          "Requires intensive psychiatric support"
+        ],
+        "4": [
+          "Acute psychiatric crisis",
+          "Imminent danger to self or others",
+          "Requires psychiatric hospitalization or crisis stabilization"
+        ]
+      }
+    },
+    "D": {
+      "title": "Readiness to Change",
+      "anchors": {
+        "0": [
+          "Motivated and committed to recovery",
+          "Actively engaged in treatment planning",
+          "Good insight into need for change"
+        ],
+        "1": [
+          "Some ambivalence but willing to engage",
+          "Recognizes some problems",
+          "Open to exploring treatment options"
+        ],
+        "2": [
+          "Significant ambivalence about change",
+          "Limited recognition of severity",
+          "May require motivational interventions"
+        ],
+        "3": [
+          "High resistance to change",
+          "Minimal recognition of problems",
+          "Requires intensive engagement strategies"
+        ],
+        "4": [
+          "Actively opposed to treatment",
+          "No recognition of problems",
+          "Coerced or mandated treatment situation"
+        ]
+      }
+    },
+    "E": {
+      "title": "Relapse, Continued Use, or Continued Problem Potential",
+      "anchors": {
+        "0": [
+          "Sustained recovery with strong skills",
+          "Effective coping strategies in place",
+          "Low relapse risk"
+        ],
+        "1": [
+          "Some relapse risk",
+          "Developing coping skills",
+          "Manageable with outpatient support"
+        ],
+        "2": [
+          "Moderate relapse risk",
+          "Limited coping skills or supports",
+          "May benefit from structured environment"
+        ],
+        "3": [
+          "High relapse risk",
+          "Poor impulse control or limited skills",
+          "Requires intensive monitoring and support"
+        ],
+        "4": [
+          "Imminent relapse or active use despite attempts",
+          "Unable to maintain sobriety without intensive support",
+          "Crisis-level intervention needed"
+        ]
+      }
+    },
+    "F": {
+      "title": "Recovery/Living Environment",
+      "anchors": {
+        "0": [
+          "Safe, supportive living environment",
+          "Strong recovery supports available",
+          "No environmental barriers to recovery"
+        ],
+        "1": [
+          "Mostly supportive environment",
+          "Some recovery supports present",
+          "Minor environmental challenges"
+        ],
+        "2": [
+          "Moderately unstable environment",
+          "Limited recovery supports",
+          "Some exposure to triggers or substance use"
+        ],
+        "3": [
+          "High-risk environment",
+          "Significant exposure to substance use",
+          "Minimal or no recovery supports"
+        ],
+        "4": [
+          "Dangerous or severely destabilizing environment",
+          "Active substance use by household members",
+          "Homelessness or imminent housing loss"
+        ]
+      }
+    }
+  },
+  "meta": {
+    "version": "1.0.0",
+    "updated": "2025-11-09",
+    "notes": "Neutral descriptive anchors. Replace with licensed ASAM text in production asset bundle."
+  }
+}

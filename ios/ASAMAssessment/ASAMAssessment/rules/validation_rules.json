@@ -1,0 +1,137 @@
+{
+  "edition": "asam3",
+  "version": "1.0.0",
+  "updated": "2025-11-09",
+  "ruleset_hash": "placeholder_compute_on_load",
+  "description": "Three-tier validation rules: Blocker (prevents export), Gap (review warning), Advisory (suggestion). Each rule carries a crumb for Fix button navigation.",
+  "rules": [
+    {
+      "id": "six_ratings_required",
+      "tier": "blocker",
+      "expr": "count(domains where severity is not null) == 6",
+      "message": "All six domains (A-F) must have severity ratings",
+      "crumb": "module/assessment/{assessment_id}/domains",
+      "fix_hint": "Complete severity ratings for all domains"
+    },
+    {
+      "id": "safety_flag_unresolved",
+      "tier": "blocker",
+      "expr": "safety_flag == true implies safety_resolution exists",
+      "message": "Safety concern flagged but no resolution documented",
+      "crumb": "module/assessment/{assessment_id}/safety",
+      "fix_hint": "Document safety action taken before continuing"
+    },
+    {
+      "id": "wm_indicated_without_plan",
+      "tier": "blocker",
+      "expr": "wm_indicated == true implies (wm_level is not null and wm_rationale is not null)",
+      "message": "Withdrawal management indicated but no WM level or rationale documented",
+      "crumb": "module/assessment/{assessment_id}/wm_plan",
+      "fix_hint": "Select WM level and document rationale"
+    },
+    {
+      "id": "discrepancy_reason_required",
+      "tier": "blocker",
+      "expr": "indicated_loc != actual_loc implies len(discrepancy_reasons) >= 1",
+      "message": "Level of care discrepancy detected—must document reason",
+      "crumb": "module/assessment/{assessment_id}/loc_discrepancy",
+      "fix_hint": "Explain why actual LOC differs from indicated LOC"
+    },
+    {
+      "id": "signature_required_before_export",
+      "tier": "blocker",
+      "expr": "status == 'signed'",
+      "message": "Assessment must be signed before export",
+      "crumb": "module/assessment/{assessment_id}/signature",
+      "fix_hint": "Complete signature to enable export"
+    },
+    {
+      "id": "problem_goal_missing",
+      "tier": "gap",
+      "expr": "exists problem where goal is blank",
+      "message": "One or more problems lack treatment goals",
+      "crumb": "module/problems/{problem_id}",
+      "fix_hint": "Add treatment goal for each problem"
+    },
+    {
+      "id": "domain_completion_low",
+      "tier": "gap",
+      "expr": "exists domain where completed_ratio < 0.7",
+      "message": "Domain {domain_key} appears incomplete (<70% fields answered)",
+      "crumb": "module/assessment/{assessment_id}/domain/{domain_key}",
+      "fix_hint": "Review and complete remaining fields"
+    },
+    {
+      "id": "text_may_overflow",
+      "tier": "gap",
+      "expr": "exists field where char_count > overflow_threshold",
+      "message": "Text field '{field_name}' may overflow static PDF box",
+      "crumb": "module/assessment/{assessment_id}/domain/{domain_key}/field/{field_id}",
+      "fix_hint": "Consider shortening text or expect dynamic appendix page"
+    },
+    {
+      "id": "no_problems_documented",
+      "tier": "gap",
+      "expr": "count(problems) == 0",
+      "message": "No clinical problems documented",
+      "crumb": "module/problems",
+      "fix_hint": "Add at least one clinical problem and treatment goal"
+    },
+    {
+      "id": "emr_context_stale",
+      "tier": "advisory",
+      "expr": "exists emr_snapshot where age_hours > cache_ttl_hours",
+      "message": "EMR context data is older than {cache_ttl_hours} hours",
+      "crumb": "module/assessment/{assessment_id}/emr_context",
+      "fix_hint": "Refresh EMR context to view latest data"
+    },
+    {
+      "id": "co_occurring_mismatch",
+      "tier": "advisory",
+      "expr": "severity_C >= 2 and program_capability.co_occurring_capable == false",
+      "message": "Significant mental health needs but selected program not co-occurring capable",
+      "crumb": "module/assessment/{assessment_id}/program_selection",
+      "fix_hint": "Consider co-occurring capable program"
+    },
+    {
+      "id": "rare_route_medical_consult",
+      "tier": "advisory",
+      "expr": "exists substance where route in ['inject', 'transdermal'] and medical_consult_suggested",
+      "message": "Uncommon route of administration—consider medical consultation",
+      "crumb": "module/assessment/{assessment_id}/domain/A/substances",
+      "fix_hint": "Review with medical provider if needed"
+    },
+    {
+      "id": "high_relapse_risk_no_monitoring_plan",
+      "tier": "advisory",
+      "expr": "severity_E >= 3 and monitoring_plan is null",
+      "message": "High relapse risk identified but no monitoring plan documented",
+      "crumb": "module/assessment/{assessment_id}/domain/E",
+      "fix_hint": "Consider adding relapse monitoring plan"
+    }
+  ],
+  "evaluation_notes": {
+    "description": "Evaluate all rules. Group failures by tier. Each failure includes the rule message and a crumb for navigation.",
+    "tier_behavior": {
+      "blocker": "Prevents export. Must be resolved before signing and export.",
+      "gap": "Shows warning on review page. Export allowed but clinician should address.",
+      "advisory": "Non-binding suggestion. No export restriction."
+    },
+    "crumb_templates": {
+      "placeholders": [
+        "{assessment_id}",
+        "{domain_key}",
+        "{field_id}",
+        "{problem_id}"
+      ],
+      "description": "Crumb strings use placeholders that get filled at evaluation time. The app resolves these to actual deep-link paths."
+    }
+  },
+  "overflow_thresholds": {
+    "description": "Character count limits that trigger overflow warnings",
+    "short_field": 200,
+    "medium_field": 500,
+    "long_field": 1000,
+    "notes": "Actual thresholds depend on font size, line height, and PDF box dimensions. Use OverflowPredictor (T-0011) for precise calculation."
+  }
+}

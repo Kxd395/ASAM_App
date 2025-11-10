@@ -1,8 +1,22 @@
 # MASTER_TODO
 This document is generated from `docs/TODO_INDEX.json`. Do not edit by hand.
 
-Updated: 2025-11-09T23:00:00.000000
-Open: 27  |  Done: 7
+Updated: 2025-11-10T19:00:00.000000
+Open: 33  |  Done: 7
+
+## 🔴 CRITICAL: ASAM IP Compliance
+
+**Task T-0050**: ASAM IP Compliance Enforcement - **P0 BLOCKER**  
+See: `agent_ops/docs/ASAM_IP_COMPLIANCE_ENFORCEMENT.md`
+
+**Sub-tasks:**
+- T-0051: CI token guard implementation (P0)
+- T-0052: Compliance Gate in build process (P0)
+- T-0053: Legal screen and PDF footer fields (P0)
+- T-0054: Rules hash audit event (P0)
+- T-0055: Licensed mode toggle and checks (P0)
+
+⚠️ **Must complete before any TestFlight or production deployment**
 
 | ID | Status | Priority | Title | Owner | Due |
 |----|--------|----------|-------|-------|-----|

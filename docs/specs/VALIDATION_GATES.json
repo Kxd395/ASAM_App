@@ -1,0 +1,26 @@
+[
+  {
+    "id": "safety_flag_block",
+    "expr": "safety_flag == true",
+    "block_export": true,
+    "message": "Safety action required before export."
+  },
+  {
+    "id": "six_ratings_required",
+    "expr": "count(ratings_present) == 6",
+    "block_export": true,
+    "message": "All six domain ratings are required."
+  },
+  {
+    "id": "wm_required_if_indicated",
+    "expr": "wm_indicated implies wm_set_or_rationale",
+    "block_export": true,
+    "message": "WM must be set or rationale documented."
+  },
+  {
+    "id": "discrepancy_reasons_required",
+    "expr": "indicated_level != actual_level implies discrepancy_reasons_count >= 1",
+    "block_export": true,
+    "message": "Select discrepancy reasons when levels differ."
+  }
+]

@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0",
+  "domains": {
+    "A": {
+      "label": "Intoxication / Withdrawal",
+      "anchors": [
+        "0: No intoxication; no objective signs of withdrawal; stable vitals.",
+        "1: Mild symptoms; self-manageable; no vital instability.",
+        "2: Moderate symptoms; needs periodic evaluation.",
+        "3: Significant symptoms or history indicating high risk; close monitoring.",
+        "4: Severe intoxication/withdrawal; urgent management."
+      ]
+    },
+    "B": {
+      "label": "Biomedical",
+      "anchors": [
+        "0: No active medical problems.",
+        "1: Stable chronic condition(s).",
+        "2: Active issues requiring coordination.",
+        "3: Unstable or poorly controlled condition(s).",
+        "4: Acute, severe instability; hospital-level care."
+      ]
+    },
+    "C": {
+      "label": "Psychiatric / Cognitive",
+      "anchors": [
+        "0: No acute psychiatric/cognitive problems.",
+        "1: Mild symptoms; functioning intact.",
+        "2: Moderate symptoms; impairs participation.",
+        "3: Severe symptoms or safety concerns.",
+        "4: Imminent danger or severe impairment."
+      ]
+    },
+    "D": {
+      "label": "Readiness / Motivation",
+      "anchors": [
+        "0: Fully engaged; consistent follow-through.",
+        "1: Ambivalent at times; engages with coaching.",
+        "2: Variable engagement; prompts needed.",
+        "3: Minimal engagement; needs intensive structure.",
+        "4: Refuses or unable to engage."
+      ]
+    },
+    "E": {
+      "label": "Use-Related Risks / Relapse Potential",
+      "anchors": [
+        "0: Sustained remission; strong supports.",
+        "1: Low risk; skills and environment protective.",
+        "2: Moderate risk; triggers present.",
+        "3: High risk; recent use and limited skills.",
+        "4: Imminent/ongoing use with harm."
+      ]
+    },
+    "F": {
+      "label": "Recovery Environment / Person-Centered",
+      "anchors": [
+        "0: Stable housing/supports.",
+        "1: Minor barriers manageable with support.",
+        "2: Notable barriers; coordination required.",
+        "3: Unsafe/unsupportive environment.",
+        "4: Immediate danger in environment."
+      ]
+    }
+  }
+}

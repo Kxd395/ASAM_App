@@ -1,0 +1,49 @@
+{
+  "title": "WM candidate 2.7 only \u2192 no escalation",
+  "input": {
+    "severities": {
+      "A": 2,
+      "B": 2,
+      "C": 1,
+      "D": 1,
+      "E": 2,
+      "F": 1
+    },
+    "d1": {
+      "substances": [
+        {
+          "substance_group": "alcohol",
+          "ciwa": 16
+        }
+      ]
+    },
+    "flags": {
+      "vitals_unstable": false,
+      "no_withdrawal_signs": false
+    },
+    "override": {
+      "wm_candidate_levels": [
+        "2.7"
+      ]
+    }
+  },
+  "expected": {
+    "wm": {
+      "indicated": true,
+      "candidate_levels": [
+        "2.7"
+      ]
+    },
+    "loc": {
+      "indicated": "2.1",
+      "why": [
+        "stable_structured_support"
+      ]
+    },
+    "validation": {
+      "blockers": [],
+      "gaps": [],
+      "advisories": []
+    }
+  }
+}

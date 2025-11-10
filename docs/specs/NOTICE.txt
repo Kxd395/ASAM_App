@@ -1,0 +1,3 @@
+NOTICE
+This package uses neutral labels internally. Do not ship external taxonomy names or PDF wording without a written license.
+AcroForm field names for static pages must match licensed templates. Keep field maps in a private asset not included in public builds.

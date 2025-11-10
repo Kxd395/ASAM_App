@@ -1,0 +1,43 @@
+{
+  "title": "No withdrawal signs \u2192 no WM",
+  "input": {
+    "severities": {
+      "A": 2,
+      "B": 1,
+      "C": 1,
+      "D": 1,
+      "E": 2,
+      "F": 1
+    },
+    "d1": {
+      "substances": [
+        {
+          "substance_group": "opioid",
+          "last_use_hours": 72,
+          "cows": 2
+        }
+      ]
+    },
+    "flags": {
+      "vitals_unstable": false,
+      "no_withdrawal_signs": true
+    }
+  },
+  "expected": {
+    "wm": {
+      "indicated": false,
+      "candidate_levels": []
+    },
+    "loc": {
+      "indicated": "2.1",
+      "why": [
+        "stable_structured_support"
+      ]
+    },
+    "validation": {
+      "blockers": [],
+      "gaps": [],
+      "advisories": []
+    }
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Neutral Level of Care Reference",
+  "description": "Ship-safe LOC taxonomy using neutral internal codes. Does not reference ASAM trademarked terminology.",
+  "version": "1.0.0",
+  "last_updated": "2025-11-08",
+  "location": "Philadelphia, PA",
+  "levels": [
+    {
+      "code": "OUT",
+      "display": "Outpatient Services",
+      "description": "Less than 9 hours of service per week",
+      "intensity": "low",
+      "setting": "outpatient",
+      "capabilities": {
+        "biomedical": false,
+        "co_occurring": "limited"
+      },
+      "validation": {
+        "min_hours_week": 0,
+        "max_hours_week": 9
+      },
+      "ui_tooltip": "Suitable for patients with low severity across clinical domains"
+    },
+    {
+      "code": "IOP",
+      "display": "Intensive Outpatient Program",
+      "description": "9+ hours of structured programming per week",
+      "intensity": "moderate",
+      "setting": "outpatient",
+      "capabilities": {
+        "biomedical": false,
+        "co_occurring": "moderate"
+      },
+      "validation": {
+        "min_hours_week": 9,
+        "max_hours_week": 20
+      },
+      "ui_tooltip": "Structured program for patients needing more support than outpatient"
+    },
+    {
+      "code": "PHP",
+      "display": "Partial Hospitalization Program",
+      "description": "20+ hours per week with return home daily",
+      "intensity": "high",
+      "setting": "partial_hospitalization",
+      "capabilities": {
+        "biomedical": "limited",
+        "co_occurring": "high"
+      },
+      "validation": {
+        "min_hours_week": 20,
+        "max_hours_week": 40
+      },
+      "ui_tooltip": "Day program with intensive clinical support, return home nightly"
+    },
+    {
+      "code": "RES",
+      "display": "Residential Treatment",
+      "description": "24-hour care in therapeutic environment",
+      "intensity": "high",
+      "setting": "residential",
+      "capabilities": {
+        "biomedical": "moderate",
+        "co_occurring": "high",
+        "withdrawal_management": false
+      },
+      "validation": {
+        "min_length_of_stay_days": 7,
+        "max_length_of_stay_days": 90
+      },
+      "ui_tooltip": "24-hour structured residential care with clinical monitoring"
+    },
+    {
+      "code": "RES-WM",
+      "display": "Residential Treatment with Withdrawal Management",
+      "description": "24-hour care with medical withdrawal support",
+      "intensity": "high",
+      "setting": "residential",
+      "capabilities": {
+        "biomedical": "high",
+        "co_occurring": "high",
+        "withdrawal_management": true,
+        "withdrawal_level": "moderate"
+      },
+      "validation": {
+        "min_length_of_stay_days": 3,
+        "max_length_of_stay_days": 14
+      },
+      "ui_tooltip": "Residential care with medical support for withdrawal symptoms"
+    },
+    {
+      "code": "INP",
+      "display": "Inpatient Hospital Services",
+      "description": "24-hour medical care in hospital setting",
+      "intensity": "very_high",
+      "setting": "inpatient",
+      "capabilities": {
+        "biomedical": "very_high",
+        "co_occurring": "very_high",
+        "withdrawal_management": false
+      },
+      "validation": {
+        "requires_medical_necessity": true,
+        "min_length_of_stay_days": 1,
+        "max_length_of_stay_days": 30
+      },
+      "ui_tooltip": "Hospital-based care for severe medical or psychiatric complications"
+    },
+    {
+      "code": "INP-DETOX",
+      "display": "Medically Managed Withdrawal (Inpatient)",
+      "description": "24-hour medical detoxification in hospital setting",
+      "intensity": "very_high",
+      "setting": "inpatient",
+      "capabilities": {
+        "biomedical": "very_high",
+        "co_occurring": "very_high",
+        "withdrawal_management": true,
+        "withdrawal_level": "severe"
+      },
+      "validation": {
+        "requires_medical_necessity": true,
+        "min_length_of_stay_days": 1,
+        "max_length_of_stay_days": 14
+      },
+      "ui_tooltip": "Medical detoxification for severe withdrawal requiring hospital-level care"
+    },
+    {
+      "code": "OUT-WM",
+      "display": "Ambulatory Withdrawal Management",
+      "description": "Outpatient withdrawal support with minimal medical monitoring",
+      "intensity": "low",
+      "setting": "outpatient",
+      "capabilities": {
+        "biomedical": "limited",
+        "co_occurring": "limited",
+        "withdrawal_management": true,
+        "withdrawal_level": "mild"
+      },
+      "validation": {
+        "min_visits_week": 1,
+        "max_visits_week": 7
+      },
+      "ui_tooltip": "Outpatient withdrawal management for low-severity cases"
+    },
+    {
+      "code": "IOP-WM",
+      "display": "Intensive Outpatient with Withdrawal Management",
+      "description": "IOP programming with medical withdrawal support",
+      "intensity": "moderate",
+      "setting": "outpatient",
+      "capabilities": {
+        "biomedical": "moderate",
+        "co_occurring": "moderate",
+        "withdrawal_management": true,
+        "withdrawal_level": "moderate"
+      },
+      "validation": {
+        "min_hours_week": 9,
+        "max_hours_week": 20
+      },
+      "ui_tooltip": "Intensive outpatient with added medical support for withdrawal"
+    },
+    {
+      "code": "PHP-WM",
+      "display": "Partial Hospitalization with Withdrawal Management",
+      "description": "PHP programming with medical withdrawal support",
+      "intensity": "high",
+      "setting": "partial_hospitalization",
+      "capabilities": {
+        "biomedical": "high",
+        "co_occurring": "high",
+        "withdrawal_management": true,
+        "withdrawal_level": "moderate_to_severe"
+      },
+      "validation": {
+        "min_hours_week": 20,
+        "max_hours_week": 40
+      },
+      "ui_tooltip": "Day program with medical withdrawal management, return home nightly"
+    }
+  ],
+  "domain_severity_mapping": {
+    "description": "General guidelines for mapping clinical domain severity to appropriate level of care",
+    "note": "These are guidelines only. Clinical judgment and individual patient circumstances override algorithmic recommendations.",
+    "domains": [
+      {
+        "id": 1,
+        "name": "Acute Intoxication and/or Withdrawal Potential",
+        "severity_levels": {
+          "0": "No risk - any outpatient level appropriate",
+          "1": "Mild risk - outpatient with monitoring",
+          "2": "Moderate risk - consider withdrawal management services",
+          "3": "Severe risk - medically monitored or managed withdrawal required"
+        }
+      },
+      {
+        "id": 2,
+        "name": "Biomedical Conditions and Complications",
+        "severity_levels": {
+          "0": "No issues - any setting appropriate",
+          "1": "Mild issues - outpatient care sufficient",
+          "2": "Moderate issues - requires biomedical monitoring",
+          "3": "Severe issues - requires hospital-level care"
+        }
+      },
+      {
+        "id": 3,
+        "name": "Emotional, Behavioral, or Cognitive Conditions",
+        "severity_levels": {
+          "0": "Stable - any setting appropriate",
+          "1": "Mild symptoms - outpatient care sufficient",
+          "2": "Moderate symptoms - requires daily clinical support",
+          "3": "Severe symptoms - requires 24-hour care"
+        }
+      },
+      {
+        "id": 4,
+        "name": "Readiness to Change",
+        "severity_levels": {
+          "0": "High readiness - any setting appropriate",
+          "1": "Moderate readiness - may need extra support",
+          "2": "Low readiness - requires structured environment",
+          "3": "Resistant - requires intensive structure and support"
+        }
+      },
+      {
+        "id": 5,
+        "name": "Relapse, Continued Use, or Continued Problem Potential",
+        "severity_levels": {
+          "0": "Low risk - outpatient appropriate",
+          "1": "Moderate risk - may need IOP or higher",
+          "2": "High risk - requires residential or higher",
+          "3": "Imminent risk - requires 24-hour monitoring"
+        }
+      },
+      {
+        "id": 6,
+        "name": "Recovery Environment",
+        "severity_levels": {
+          "0": "Supportive - outpatient appropriate",
+          "1": "Some challenges - may need extra support",
+          "2": "Unsupportive - consider residential",
+          "3": "Dangerous/toxic - requires residential or inpatient"
+        }
+      }
+    ]
+  },
+  "usage_notes": {
+    "legal": "This taxonomy is proprietary and does not reference ASAM trademarked terms. Safe for shipping without license.",
+    "clinical": "These codes are for internal system use. Map to external standards (LOINC, SNOMED) when exporting to EMR.",
+    "validation": "UI should enforce validation rules to prevent inappropriate level of care assignments.",
+    "i18n": "Display names and tooltips should be localized for multi-language support."
+  }
+}

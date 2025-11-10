@@ -1,0 +1,45 @@
+{
+  "title": "Alcohol CIWA severe \u2192 3.7",
+  "input": {
+    "severities": {
+      "A": 2,
+      "B": 2,
+      "C": 1,
+      "D": 1,
+      "E": 2,
+      "F": 1
+    },
+    "d1": {
+      "substances": [
+        {
+          "substance_group": "alcohol",
+          "ciwa": 18
+        }
+      ]
+    },
+    "flags": {
+      "vitals_unstable": false,
+      "no_withdrawal_signs": false
+    }
+  },
+  "expected": {
+    "wm": {
+      "indicated": true,
+      "candidate_levels": [
+        "2.7",
+        "3.7"
+      ]
+    },
+    "loc": {
+      "indicated": "3.7",
+      "why": [
+        "wm_requires_medical_setting"
+      ]
+    },
+    "validation": {
+      "blockers": [],
+      "gaps": [],
+      "advisories": []
+    }
+  }
+}

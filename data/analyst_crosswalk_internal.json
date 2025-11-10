@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Analyst Crosswalk - Internal to External Taxonomy",
+  "description": "⚠️ ANALYST-ONLY: Maps neutral internal codes to external taxonomy names. DO NOT SHIP without proper license.",
+  "version": "1.0.0",
+  "last_updated": "2025-11-08",
+  "location": "Philadelphia, PA",
+  "legal_notice": "This file contains trademarked terminology and is for internal analyst reference only. It MUST NOT be included in production builds, client deliverables, or public repositories without appropriate licensing agreements.",
+  "crosswalk": [
+    {
+      "internal_code": "OUT",
+      "external_taxonomy": "ASAM Level 0.5",
+      "external_display": "Early Intervention",
+      "notes": "Corresponds to ASAM Criteria Level 0.5 - Early Intervention"
+    },
+    {
+      "internal_code": "IOP",
+      "external_taxonomy": "ASAM Level 2.1",
+      "external_display": "Intensive Outpatient Services",
+      "notes": "Corresponds to ASAM Criteria Level 2.1"
+    },
+    {
+      "internal_code": "PHP",
+      "external_taxonomy": "ASAM Level 2.5",
+      "external_display": "Partial Hospitalization Services",
+      "notes": "Corresponds to ASAM Criteria Level 2.5"
+    },
+    {
+      "internal_code": "RES",
+      "external_taxonomy": "ASAM Level 3.1 / 3.3 / 3.5",
+      "external_display": "Clinically Managed Low/Medium/High-Intensity Residential Services",
+      "notes": "Maps to ASAM Criteria Levels 3.1, 3.3, or 3.5 depending on clinical intensity"
+    },
+    {
+      "internal_code": "RES-WM",
+      "external_taxonomy": "ASAM Level 3.7",
+      "external_display": "Medically Monitored Intensive Inpatient Services",
+      "notes": "Corresponds to ASAM Criteria Level 3.7 with withdrawal management"
+    },
+    {
+      "internal_code": "INP",
+      "external_taxonomy": "ASAM Level 4",
+      "external_display": "Medically Managed Intensive Inpatient Services",
+      "notes": "Corresponds to ASAM Criteria Level 4 - hospital-based care"
+    },
+    {
+      "internal_code": "INP-DETOX",
+      "external_taxonomy": "ASAM Level 4-WM",
+      "external_display": "Medically Managed Intensive Inpatient Services with Withdrawal Management",
+      "notes": "ASAM Level 4 with intensive withdrawal management (medical detoxification)"
+    },
+    {
+      "internal_code": "OUT-WM",
+      "external_taxonomy": "ASAM Level 1-WM",
+      "external_display": "Ambulatory Withdrawal Management without Extended On-Site Monitoring",
+      "notes": "ASAM withdrawal management at outpatient level"
+    },
+    {
+      "internal_code": "IOP-WM",
+      "external_taxonomy": "ASAM Level 2.1-WM",
+      "external_display": "Intensive Outpatient Services with Withdrawal Management",
+      "notes": "ASAM Level 2.1 with added withdrawal management capabilities"
+    },
+    {
+      "internal_code": "PHP-WM",
+      "external_taxonomy": "ASAM Level 2.5-WM",
+      "external_display": "Partial Hospitalization with Withdrawal Management",
+      "notes": "ASAM Level 2.5 with withdrawal management services"
+    }
+  ],
+  "dimension_mapping": {
+    "description": "Maps our neutral six-domain model to ASAM Criteria dimensions",
+    "domains": [
+      {
+        "internal_id": 1,
+        "internal_name": "Acute Intoxication and/or Withdrawal Potential",
+        "external_dimension": "ASAM Dimension 1",
+        "external_name": "Acute Intoxication and/or Withdrawal Potential"
+      },
+      {
+        "internal_id": 2,
+        "internal_name": "Biomedical Conditions and Complications",
+        "external_dimension": "ASAM Dimension 2",
+        "external_name": "Biomedical Conditions and Complications"
+      },
+      {
+        "internal_id": 3,
+        "internal_name": "Emotional, Behavioral, or Cognitive Conditions",
+        "external_dimension": "ASAM Dimension 3",
+        "external_name": "Emotional, Behavioral, or Cognitive Conditions and Complications"
+      },
+      {
+        "internal_id": 4,
+        "internal_name": "Readiness to Change",
+        "external_dimension": "ASAM Dimension 4",
+        "external_name": "Readiness to Change"
+      },
+      {
+        "internal_id": 5,
+        "internal_name": "Relapse, Continued Use, or Continued Problem Potential",
+        "external_dimension": "ASAM Dimension 5",
+        "external_name": "Relapse, Continued Use, or Continued Problem Potential"
+      },
+      {
+        "internal_id": 6,
+        "internal_name": "Recovery Environment",
+        "external_dimension": "ASAM Dimension 6",
+        "external_name": "Recovery/Living Environment"
+      }
+    ]
+  },
+  "usage_instructions": {
+    "purpose": "This crosswalk enables analysts to understand how our internal neutral taxonomy relates to external standards if/when organization licenses ASAM Criteria.",
+    "restrictions": [
+      "DO NOT include in production builds",
+      "DO NOT include in client-facing documentation",
+      "DO NOT commit to public repositories",
+      "DO NOT distribute without legal approval"
+    ],
+    "use_cases": [
+      "Internal training and education",
+      "Mapping exercises for future ASAM integration",
+      "Understanding external research or publications",
+      "Preparing for potential ASAM Criteria licensing"
+    ],
+    "ci_protection": "The analyst-files-gate CI job will BLOCK this file from production artifacts. See .github/workflows/ci.yml"
+  },
+  "license_information": {
+    "asam_contact": "asamcriteria@asam.org",
+    "asam_website": "https://www.asam.org/asam-criteria",
+    "permission_url": "https://www.asam.org/asam-criteria/copyright-and-permissions",
+    "continuum_api": "https://www.asam.org/asam-criteria/asam-criteria-software/asam-continuum/developers",
+    "note": "If organization decides to license ASAM Criteria or CONTINUUM API, this mapping will facilitate integration."
+  }
+}

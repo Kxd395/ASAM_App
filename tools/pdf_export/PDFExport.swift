@@ -78,6 +78,32 @@ func addFooterSeal(doc: PDFDocument, text: String) {
     last.addAnnotation(ann)
 }
 
+// PRODUCTION HARDENING: Metadata scrubbing for PHI protection
+func stripMetadata(doc: PDFDocument, planHash: String, rulesHash: String, version: String) {
+    let attrs: [PDFDocumentAttribute: Any] = [
+        .titleAttribute: "",
+        .authorAttribute: "",
+        .creatorAttribute: "ASAM Clinical Exporter",
+        .producerAttribute: "ASAM Assessment v\(version)",
+        .keywordsAttribute: "",
+        .subjectAttribute: "ASAM Treatment Plan"
+    ]
+    doc.documentAttributes = attrs
+}
+
+func stampAllPages(doc: PDFDocument, rulesHash: String, timestamp: String) {
+    let footer = "Generated: \(timestamp) | Rules: \(rulesHash.prefix(12))"
+    for i in 0..<doc.pageCount {
+        guard let page = doc.page(at: i) else { continue }
+        let bounds = page.bounds(for: .cropBox)
+        let ann = PDFAnnotation(bounds: CGRect(x: 36, y: 12, width: bounds.width - 72, height: 10),
+                                forType: .freeText, withProperties: nil)
+        ann.font = .systemFont(ofSize: 7); ann.fontColor = .lightGray; ann.alignment = .right
+        ann.contents = footer
+        page.addAnnotation(ann)
+    }
+}
+
 struct Args {
     let pdf: String
     let plan: String
@@ -139,6 +165,13 @@ if let sigImg = imageFromFile(args.sig),
 // Footer seal
 let seal = "[\(plan.signatures.clinician.signedAt != nil || plan.signatures.patient.signedAt != nil ? "SIGNED" : "DRAFT")] Plan ID: \(plan.id.prefix(8)) • Seal: \(shortSeal(plan))"
 addFooterSeal(doc: doc, text: seal)
+
+// PRODUCTION HARDENING: Strip PHI metadata and add audit checksums
+let planHash = shortSeal(plan)
+let rulesHash = "STANDALONE"  // CLI doesn't have rules engine, set placeholder
+let version = "1.0.0"
+stripMetadata(doc: doc, planHash: planHash, rulesHash: rulesHash, version: version)
+stampAllPages(doc: doc, rulesHash: rulesHash, timestamp: ISO8601DateFormatter().string(from: Date()))
 
 // Write
 if !doc.write(to: URL(fileURLWithPath: args.out)) {

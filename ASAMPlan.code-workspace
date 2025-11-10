@@ -1,0 +1,230 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    // Editor Configuration
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.trimAutoWhitespace": true,
+    "editor.rulers": [
+      88,
+      120
+    ],
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+
+    // File Exclusions (hide sensitive/generated files)
+    "files.exclude": {
+      "**/.DS_Store": true,
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      "**/out": true,
+      "**/.build": true,
+      "**/*.xcworkspace/xcuserdata": true
+    },
+
+    // Search Exclusions
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/bower_components": true,
+      "**/__pycache__": true,
+      "**/out": true,
+      "**/.build": true,
+      "**/venv": true,
+      "**/env": true
+    },
+
+    // Python Configuration
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.flake8Enabled": false,
+    "python.linting.pylintArgs": [
+      "--max-line-length=120",
+      "--disable=C0111" // docstring warnings (optional)
+    ],
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+      "--line-length=88"
+    ],
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestArgs": [
+      "tests"
+    ],
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.black-formatter",
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+      }
+    },
+
+    // Swift Configuration (future iOS app)
+    "[swift]": {
+      "editor.tabSize": 4,
+      "editor.insertSpaces": true,
+      "editor.formatOnSave": true
+    },
+
+    // JSON Configuration
+    "[json]": {
+      "editor.defaultFormatter": "vscode.json-language-features",
+      "editor.formatOnSave": true
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "vscode.json-language-features",
+      "editor.formatOnSave": true
+    },
+
+    // Markdown Configuration
+    "[markdown]": {
+      "editor.formatOnSave": true,
+      "editor.wordWrap": "on",
+      "editor.quickSuggestions": {
+        "comments": "off",
+        "strings": "off",
+        "other": "off"
+      }
+    },
+    "markdown.extension.toc.levels": "2..6",
+
+    // Shell Script Configuration
+    "[shellscript]": {
+      "editor.tabSize": 2,
+      "editor.insertSpaces": true,
+      "files.eol": "\n"
+    },
+
+    // Git Configuration
+    "git.ignoreLimitWarning": true,
+    "git.confirmSync": false,
+    "git.autofetch": true,
+    "git.enableSmartCommit": false,
+    "git.postCommitCommand": "none",
+
+    // GitHub Copilot
+    "github.copilot.enable": {
+      "*": true,
+      "yaml": true,
+      "plaintext": false,
+      "markdown": true,
+      "python": true
+    },
+
+    // Security Warnings
+    "files.watcherExclude": {
+      "**/.git/objects/**": true,
+      "**/.git/subtree-cache/**": true,
+      "**/node_modules/**": true,
+      "**/out/**": true
+    },
+
+    // Terminal Configuration
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "terminal.integrated.fontSize": 13,
+    "terminal.integrated.scrollback": 10000,
+
+    // Task Configuration
+    "task.autoDetect": "on",
+    "task.problemMatchers.neverPrompt": false,
+
+    // Extension Recommendations
+    "extensions.ignoreRecommendations": false,
+
+    // Workspace Trust
+    "security.workspace.trust.untrustedFiles": "prompt",
+
+    // Custom ASAMPlan Settings
+    "asamplan.outputDirectory": "${workspaceFolder}/out",
+    "asamplan.assetDirectory": "${workspaceFolder}/assets",
+    "asamplan.dataDirectory": "${workspaceFolder}/data"
+  },
+
+  "extensions": {
+    "recommendations": [
+      // Python Development
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "ms-python.black-formatter",
+
+      // Swift Development
+      "sswg.swift-lang",
+
+      // Git & GitHub
+      "github.vscode-pull-request-github",
+      "github.copilot",
+      "github.copilot-chat",
+      "eamodio.gitlens",
+
+      // Markdown & Documentation
+      "yzhang.markdown-all-in-one",
+      "davidanson.vscode-markdownlint",
+
+      // JSON & YAML
+      "redhat.vscode-yaml",
+
+      // Shell Scripts
+      "timonwong.shellcheck",
+
+      // PDF Viewing (useful for checking outputs)
+      "tomoki1207.pdf",
+
+      // Task Running
+      "spmeesseman.vscode-taskexplorer",
+
+      // Code Quality
+      "editorconfig.editorconfig",
+      "streetsidesoftware.code-spell-checker"
+    ],
+    "unwantedRecommendations": []
+  },
+
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Python: Agent CLI",
+        "type": "python",
+        "request": "launch",
+        "program": "${workspaceFolder}/agent/asm.py",
+        "args": [
+          "plan.validate",
+          "--in",
+          "${workspaceFolder}/data/plan.sample.json"
+        ],
+        "console": "integratedTerminal",
+        "justMyCode": true,
+        "cwd": "${workspaceFolder}"
+      },
+      {
+        "name": "Python: Plan Hash",
+        "type": "python",
+        "request": "launch",
+        "program": "${workspaceFolder}/agent/asm.py",
+        "args": [
+          "plan.hash",
+          "--in",
+          "${workspaceFolder}/data/plan.sample.json"
+        ],
+        "console": "integratedTerminal",
+        "justMyCode": true,
+        "cwd": "${workspaceFolder}"
+      },
+      {
+        "name": "Python: Current File",
+        "type": "python",
+        "request": "launch",
+        "program": "${file}",
+        "console": "integratedTerminal",
+        "justMyCode": true
+      }
+    ]
+  }
+}

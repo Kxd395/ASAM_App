@@ -1,0 +1,46 @@
+{
+  "title": "Opioid acute WM - outpatient safe",
+  "input": {
+    "severities": {
+      "A": 2,
+      "B": 1,
+      "C": 1,
+      "D": 1,
+      "E": 2,
+      "F": 1
+    },
+    "d1": {
+      "substances": [
+        {
+          "substance_group": "opioid",
+          "last_use_hours": 12,
+          "cows": 9
+        }
+      ]
+    },
+    "flags": {
+      "vitals_unstable": false,
+      "no_withdrawal_signs": false
+    }
+  },
+  "expected": {
+    "wm": {
+      "indicated": true,
+      "candidate_levels": [
+        "1.7",
+        "2.7"
+      ]
+    },
+    "loc": {
+      "indicated": "2.1",
+      "why": [
+        "stable_structured_support"
+      ]
+    },
+    "validation": {
+      "blockers": [],
+      "gaps": [],
+      "advisories": []
+    }
+  }
+}

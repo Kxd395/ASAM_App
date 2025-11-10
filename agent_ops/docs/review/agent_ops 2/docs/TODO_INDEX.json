@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "updated_at": "2025-11-10T03:21:36.795587",
+  "tasks": [
+    {
+      "id": "T-0021",
+      "title": "Add rules fixtures with golden outputs and audit rule-id capture",
+      "status": "done",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": ""
+    }
+  ]
+}

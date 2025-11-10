@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0",
+  "tiers": [
+    "blocker",
+    "gap",
+    "advisory"
+  ],
+  "rules": [
+    {
+      "id": "six_ratings_required",
+      "tier": "blocker",
+      "expr": "count(domain.severity)==6",
+      "must_be_true": true,
+      "message": "All six domain severities required.",
+      "crumb": "module/assessment/{assessment_id}/review"
+    },
+    {
+      "id": "safety_resolved_before_export",
+      "tier": "blocker",
+      "expr": "safety.flag==false",
+      "must_be_true": true,
+      "message": "Safety flag active; record action.",
+      "crumb": "module/assessment/{assessment_id}/safety"
+    },
+    {
+      "id": "wm_rationale_required",
+      "tier": "blocker",
+      "expr": "(wm.indicated==false) or exists(wm.plan_text)",
+      "must_be_true": true,
+      "message": "WM indicated but no plan/rationale.",
+      "crumb": "module/assessment/{assessment_id}/domain/A/field/wm_plan"
+    },
+    {
+      "id": "discrepancy_reason_required",
+      "tier": "blocker",
+      "expr": "(loc.indicated==loc.actual) or len(loc.discrepancy_reasons)>=1",
+      "must_be_true": true,
+      "message": "Provide discrepancy reason.",
+      "crumb": "module/assessment/{assessment_id}/summary/field/discrepancy_reasons"
+    },
+    {
+      "id": "problem_goal_missing",
+      "tier": "gap",
+      "expr": "exists(problem where goal=='')",
+      "must_be_true": false,
+      "message": "At least one problem has no goal.",
+      "crumb": "module/problems/{problem_id}"
+    },
+    {
+      "id": "text_may_overflow",
+      "tier": "gap",
+      "expr": "preflight.text_overflow_count==0",
+      "must_be_true": true,
+      "message": "Text may overflow static fields; will render on appendix page.",
+      "crumb": "module/review/preflight"
+    },
+    {
+      "id": "cooccurring_capability_pref",
+      "tier": "advisory",
+      "expr": "program.co_occurring_capable==true",
+      "must_be_true": true,
+      "message": "Prefer co-occurring capable programs when C>=2 or B>=2.",
+      "crumb": "module/summary/loc"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "title": "Severe withdrawal and biomedical \u2192 4.0",
+  "input": {
+    "severities": {
+      "A": 4,
+      "B": 4,
+      "C": 2,
+      "D": 1,
+      "E": 2,
+      "F": 1
+    },
+    "d1": {
+      "substances": [
+        {
+          "substance_group": "alcohol",
+          "ciwa": 22
+        }
+      ]
+    },
+    "flags": {
+      "vitals_unstable": true,
+      "no_withdrawal_signs": false
+    }
+  },
+  "expected": {
+    "wm": {
+      "indicated": true,
+      "candidate_levels": [
+        "3.7",
+        "4.0"
+      ]
+    },
+    "loc": {
+      "indicated": "4.0",
+      "why": [
+        "severe_withdrawal_and_biomedical"
+      ]
+    },
+    "validation": {
+      "blockers": [],
+      "gaps": [],
+      "advisories": []
+    }
+  }
+}

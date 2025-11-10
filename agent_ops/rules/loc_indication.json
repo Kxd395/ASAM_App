@@ -1,0 +1,215 @@
+{
+  "edition": "asam3",
+  "version": "1.0.0",
+  "updated": "2025-11-09",
+  "ruleset_hash": "placeholder_compute_on_load",
+  "enabled_levels": ["0.5", "1.0", "1.7-WM", "2.1", "2.5", "2.7-WM", "3.1", "3.3", "3.5", "3.7", "3.7-WM", "4.0", "4.0-WM"],
+  "description": "Level of Care indication engine. Threshold-based rules using domain severities and WM status.",
+  "rules": [
+    {
+      "rule_id": "loc_4.0_acute_medical",
+      "priority": 100,
+      "if": {
+        "severity_A": "==4",
+        "or": {
+          "severity_B": "==4"
+        }
+      },
+      "then": {
+        "indicated_loc": "4.0",
+        "rationale": "Life-threatening medical condition or severe withdrawal requiring intensive medical management"
+      }
+    },
+    {
+      "rule_id": "loc_4.0_psychiatric_crisis",
+      "priority": 99,
+      "if": {
+        "severity_C": "==4"
+      },
+      "then": {
+        "indicated_loc": "4.0",
+        "rationale": "Acute psychiatric crisis requiring immediate stabilization"
+      }
+    },
+    {
+      "rule_id": "loc_3.7_wm_severe_multiple",
+      "priority": 95,
+      "if": {
+        "wm_indicated": true,
+        "wm_candidate_levels": "includes:3.7-WM",
+        "or": {
+          "count_severity_3_or_4": ">=3"
+        }
+      },
+      "then": {
+        "indicated_loc": "3.7-WM",
+        "rationale": "Medically monitored withdrawal management with multiple severe dimensions"
+      }
+    },
+    {
+      "rule_id": "loc_3.7_high_severity",
+      "priority": 90,
+      "if": {
+        "count_severity_3": ">=2",
+        "or": {
+          "any_severity_4": true
+        }
+      },
+      "then": {
+        "indicated_loc": "3.7",
+        "rationale": "Multiple high-severity dimensions requiring intensive residential treatment"
+      }
+    },
+    {
+      "rule_id": "loc_3.5_unstable_environment",
+      "priority": 85,
+      "if": {
+        "severity_F": ">=3",
+        "and": {
+          "count_severity_2_or_3": ">=2"
+        }
+      },
+      "then": {
+        "indicated_loc": "3.5",
+        "rationale": "High-risk environment with moderate clinical needs requiring clinically managed residential"
+      }
+    },
+    {
+      "rule_id": "loc_3.3_moderate_multiple",
+      "priority": 80,
+      "if": {
+        "count_severity_2": ">=3",
+        "or": {
+          "count_severity_3": ">=1"
+        }
+      },
+      "then": {
+        "indicated_loc": "3.3",
+        "rationale": "Multiple moderate severity dimensions requiring clinically managed population-specific residential"
+      }
+    },
+    {
+      "rule_id": "loc_3.1_moderate_stable",
+      "priority": 75,
+      "if": {
+        "count_severity_2": ">=2",
+        "severity_F": "<=2"
+      },
+      "then": {
+        "indicated_loc": "3.1",
+        "rationale": "Moderate needs with supportive living environment—clinically managed low-intensity residential"
+      }
+    },
+    {
+      "rule_id": "loc_2.7_wm_moderate",
+      "priority": 70,
+      "if": {
+        "wm_indicated": true,
+        "wm_candidate_levels": "includes:2.7-WM",
+        "count_severity_3_or_4": "<2"
+      },
+      "then": {
+        "indicated_loc": "2.7-WM",
+        "rationale": "Ambulatory withdrawal management with extended monitoring"
+      }
+    },
+    {
+      "rule_id": "loc_2.5_partial_hospitalization",
+      "priority": 65,
+      "if": {
+        "count_severity_2": ">=2",
+        "and": {
+          "severity_C": ">=2",
+          "severity_F": "<=2"
+        }
+      },
+      "then": {
+        "indicated_loc": "2.5",
+        "rationale": "Intensive outpatient with significant psychiatric needs—partial hospitalization"
+      }
+    },
+    {
+      "rule_id": "loc_2.1_intensive_outpatient",
+      "priority": 60,
+      "if": {
+        "count_severity_2": ">=1",
+        "all_severity_below": 3
+      },
+      "then": {
+        "indicated_loc": "2.1",
+        "rationale": "Moderate needs manageable in intensive outpatient setting"
+      }
+    },
+    {
+      "rule_id": "loc_1.7_wm_ambulatory",
+      "priority": 55,
+      "if": {
+        "wm_indicated": true,
+        "wm_candidate_levels": "includes:1.7-WM",
+        "all_severity_below": 2
+      },
+      "then": {
+        "indicated_loc": "1.7-WM",
+        "rationale": "Low-risk withdrawal manageable in ambulatory setting without extended monitoring"
+      }
+    },
+    {
+      "rule_id": "loc_1.0_outpatient",
+      "priority": 50,
+      "if": {
+        "count_severity_1": ">=1",
+        "all_severity_below": 2
+      },
+      "then": {
+        "indicated_loc": "1.0",
+        "rationale": "Mild to moderate needs appropriate for outpatient services"
+      }
+    },
+    {
+      "rule_id": "loc_0.5_early_intervention",
+      "priority": 10,
+      "if": {
+        "all_severity_below": 1
+      },
+      "then": {
+        "indicated_loc": "0.5",
+        "rationale": "Minimal risk—early intervention services appropriate"
+      }
+    }
+  ],
+  "evaluation_notes": {
+    "strategy": "first_match_by_priority",
+    "description": "Evaluate rules in descending priority order. Return the first rule where all 'if' conditions match.",
+    "severity_operators": {
+      "==": "exact match",
+      ">=": "greater than or equal",
+      "<=": "less than or equal",
+      "<": "less than",
+      ">": "greater than"
+    },
+    "aggregate_functions": {
+      "count_severity_3_or_4": "Count how many domains (A-F) have severity >= 3",
+      "count_severity_3": "Count domains with severity == 3",
+      "count_severity_2_or_3": "Count domains with severity >= 2",
+      "count_severity_2": "Count domains with severity == 2",
+      "count_severity_1": "Count domains with severity == 1",
+      "any_severity_4": "True if any domain has severity == 4",
+      "all_severity_below": "True if all domains have severity < threshold"
+    }
+  },
+  "loc_levels": {
+    "0.5": "Level 0.5: Early Intervention",
+    "1.0": "Level 1: Outpatient Services",
+    "1.7-WM": "Level 1-WM: Ambulatory Withdrawal Management Without Extended On-Site Monitoring",
+    "2.1": "Level 2.1: Intensive Outpatient Services",
+    "2.5": "Level 2.5: Partial Hospitalization Services",
+    "2.7-WM": "Level 2-WM: Ambulatory Withdrawal Management With Extended On-Site Monitoring",
+    "3.1": "Level 3.1: Clinically Managed Low-Intensity Residential Services",
+    "3.3": "Level 3.3: Clinically Managed Population-Specific High-Intensity Residential Services",
+    "3.5": "Level 3.5: Clinically Managed High-Intensity Residential Services",
+    "3.7": "Level 3.7: Medically Monitored Intensive Inpatient Services",
+    "3.7-WM": "Level 3.7-WM: Medically Monitored Intensive Inpatient Withdrawal Management",
+    "4.0": "Level 4: Medically Managed Intensive Inpatient Services",
+    "4.0-WM": "Level 4-WM: Medically Managed Intensive Inpatient Withdrawal Management"
+  }
+}

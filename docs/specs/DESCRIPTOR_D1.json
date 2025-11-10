@@ -1,0 +1,92 @@
+{
+  "key": "d1",
+  "title": "Intoxication or withdrawal",
+  "rating_field": "severity",
+  "anchors": [
+    {
+      "score": 0,
+      "bullets": [
+        "No signs of withdrawal or intoxication"
+      ]
+    },
+    {
+      "score": 1,
+      "bullets": [
+        "Mild predictable symptoms, manageable without 24h support"
+      ]
+    },
+    {
+      "score": 2,
+      "bullets": [
+        "Moderate symptoms, monitoring may be needed"
+      ]
+    },
+    {
+      "score": 3,
+      "bullets": [
+        "Marked symptoms or history indicating risk"
+      ]
+    },
+    {
+      "score": 4,
+      "bullets": [
+        "Severe withdrawal or intoxication, imminent danger"
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "id": "substance_rows",
+      "type": "table",
+      "columns": [
+        "substance",
+        "last_use",
+        "dur_years",
+        "dur_months",
+        "freq_30d",
+        "routes"
+      ]
+    },
+    {
+      "id": "withdrawal_signs",
+      "type": "enum",
+      "options": [
+        "none",
+        "mild",
+        "moderate",
+        "severe"
+      ]
+    },
+    {
+      "id": "overdose_history",
+      "type": "bool"
+    },
+    {
+      "id": "interviewer_observation",
+      "type": "enum",
+      "options": [
+        "none",
+        "intoxication",
+        "withdrawal"
+      ]
+    }
+  ],
+  "scratchpad": [
+    {
+      "id": "problems_text",
+      "type": "text"
+    },
+    {
+      "id": "goals_text",
+      "type": "text"
+    }
+  ],
+  "gates": [
+    {
+      "id": "d1_severe_signs_needs_block",
+      "expr": "withdrawal_signs == 'severe'",
+      "block_export": true,
+      "message": "Severe signs present. Record safety action before export."
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "edition": "asam3",
+  "version": "1.0.0",
+  "updated": "2025-11-09",
+  "ruleset_hash": "placeholder_compute_on_load",
+  "description": "Withdrawal Management indication logic. Deterministic rules only—no ML.",
+  "rules": [
+    {
+      "rule_id": "wm_opioid_acute",
+      "priority": 100,
+      "if": {
+        "substance": "opioid",
+        "last_use_hours": "<24",
+        "cows_score": ">=8"
+      },
+      "then": {
+        "wm_indicated": true,
+        "candidate_levels": ["1.7-WM", "2.7-WM", "3.7-WM"],
+        "rationale": "Acute opioid withdrawal with moderate to severe symptoms"
+      }
+    },
+    {
+      "rule_id": "wm_alcohol_ciwa",
+      "priority": 100,
+      "if": {
+        "substance": "alcohol",
+        "ciwa_score": ">=10",
+        "last_use_hours": "<72"
+      },
+      "then": {
+        "wm_indicated": true,
+        "candidate_levels": ["2.7-WM", "3.7-WM", "4.0-WM"],
+        "rationale": "Alcohol withdrawal with elevated CIWA score"
+      }
+    },
+    {
+      "rule_id": "wm_benzodiazepine_risk",
+      "priority": 95,
+      "if": {
+        "substance": "benzodiazepine",
+        "daily_use_days": ">30",
+        "last_use_hours": "<48"
+      },
+      "then": {
+        "wm_indicated": true,
+        "candidate_levels": ["2.7-WM", "3.7-WM", "4.0-WM"],
+        "rationale": "Prolonged benzodiazepine use with withdrawal risk"
+      }
+    },
+    {
+      "rule_id": "wm_polysubstance_complex",
+      "priority": 90,
+      "if": {
+        "substances_count": ">=2",
+        "any_withdrawal_symptoms": true,
+        "medical_comorbidity": true
+      },
+      "then": {
+        "wm_indicated": true,
+        "candidate_levels": ["3.7-WM", "4.0-WM"],
+        "rationale": "Complex polysubstance withdrawal with medical complications"
+      }
+    },
+    {
+      "rule_id": "wm_stimulant_severe",
+      "priority": 80,
+      "if": {
+        "substance": "stimulant",
+        "psychiatric_symptoms": "severe",
+        "last_use_hours": "<24"
+      },
+      "then": {
+        "wm_indicated": true,
+        "candidate_levels": ["2.7-WM", "3.7-WM"],
+        "rationale": "Stimulant use with severe psychiatric symptoms requiring monitoring"
+      }
+    },
+    {
+      "rule_id": "wm_no_indication",
+      "priority": 1,
+      "if": {
+        "no_recent_use": true
+      },
+      "then": {
+        "wm_indicated": false,
+        "candidate_levels": [],
+        "rationale": "No active withdrawal risk identified"
+      }
+    }
+  ],
+  "evaluation_notes": {
+    "strategy": "max_priority_true",
+    "description": "Evaluate all rules. Return the highest-priority rule where 'if' conditions match. If no rules fire, default to wm_indicated: false.",
+    "substance_codes": {
+      "opioid": ["heroin", "fentanyl", "oxycodone", "hydrocodone"],
+      "alcohol": ["ethanol"],
+      "benzodiazepine": ["alprazolam", "clonazepam", "diazepam", "lorazepam"],
+      "stimulant": ["cocaine", "methamphetamine", "amphetamine"]
+    }
+  },
+  "wm_levels": {
+    "1.7-WM": "Level 1-WM: Ambulatory Withdrawal Management Without Extended On-Site Monitoring",
+    "2.7-WM": "Level 2-WM: Ambulatory Withdrawal Management With Extended On-Site Monitoring",
+    "3.7-WM": "Level 3.7-WM: Medically Monitored Intensive Inpatient Withdrawal Management",
+    "4.0-WM": "Level 4-WM: Medically Managed Intensive Inpatient Withdrawal Management"
+  }
+}

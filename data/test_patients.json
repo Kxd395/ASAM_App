@@ -1,0 +1,724 @@
+{
+  "test_patients": [
+    {
+      "mrn": "TEST001234",
+      "fin_current": "FIN2025110801",
+      "demographics": {
+        "first_name": "Maria",
+        "last_name": "Rodriguez",
+        "dob": "1985-03-15",
+        "gender": "Female",
+        "address": "123 Maple Street, Philadelphia, PA 19104",
+        "phone": "215-555-0101",
+        "email": "maria.rodriguez.test@example.com",
+        "preferred_language": "Spanish",
+        "marital_status": "Single",
+        "emergency_contact": "Rosa Rodriguez (Mother) - 215-555-0102"
+      },
+      "insurance": {
+        "primary": "Medicaid",
+        "member_id": "MC123456789",
+        "group_number": "PA-MED-001"
+      },
+      "clinical": {
+        "primary_diagnosis": "F10.20 - Alcohol use disorder, moderate",
+        "secondary_diagnoses": [
+          "F41.1 - Generalized anxiety disorder",
+          "Z63.0 - Problems in relationship with spouse or partner"
+        ],
+        "substance_use": {
+          "primary": "Alcohol",
+          "frequency": "Daily",
+          "amount": "8-10 drinks/day",
+          "onset": "Age 19",
+          "last_use": "2 days ago"
+        },
+        "current_medications": [
+          "Sertraline 50mg daily",
+          "Thiamine 100mg daily"
+        ],
+        "allergies": ["Penicillin"]
+      },
+      "asam_assessment": {
+        "recommended_level": "2.1",
+        "level_name": "Intensive Outpatient",
+        "dimensions": {
+          "dim1_intox_withdrawal": "Moderate withdrawal risk, no severe complications",
+          "dim2_biomedical": "Mild vitamin deficiencies, otherwise stable",
+          "dim3_emotional": "Moderate anxiety, stable mood",
+          "dim4_readiness": "Contemplation stage, ambivalent about change",
+          "dim5_relapse": "High relapse potential without structure",
+          "dim6_environment": "Unsupportive home environment, supportive workplace"
+        }
+      },
+      "visit_history": [
+        {
+          "fin": "FIN2025110801",
+          "date": "2025-11-08",
+          "type": "Initial Assessment",
+          "provider": "Dr. Sarah Chen",
+          "location": "Axxess Philadelphia Behavioral Health"
+        },
+        {
+          "fin": "FIN2025080515",
+          "date": "2025-08-05",
+          "type": "ER Visit",
+          "provider": "Dr. Michael Stevens",
+          "location": "Temple University Hospital"
+        }
+      ],
+      "notes": "New patient for ASAM assessment. Spanish-speaking, requires interpreter services."
+    },
+    {
+      "mrn": "TEST002345",
+      "fin_current": "FIN2025110802",
+      "demographics": {
+        "first_name": "James",
+        "last_name": "Thompson",
+        "dob": "1972-07-22",
+        "gender": "Male",
+        "address": "456 Oak Avenue, Philadelphia, PA 19143",
+        "phone": "267-555-0201",
+        "email": "james.thompson.test@example.com",
+        "preferred_language": "English",
+        "marital_status": "Divorced",
+        "emergency_contact": "Linda Thompson (Ex-wife) - 267-555-0202"
+      },
+      "insurance": {
+        "primary": "Aetna",
+        "member_id": "AET987654321",
+        "group_number": "AET-PHI-045"
+      },
+      "clinical": {
+        "primary_diagnosis": "F11.20 - Opioid use disorder, moderate",
+        "secondary_diagnoses": [
+          "M54.5 - Low back pain",
+          "F32.1 - Major depressive disorder, single episode, moderate"
+        ],
+        "substance_use": {
+          "primary": "Prescription opioids (Oxycodone)",
+          "frequency": "Multiple times daily",
+          "amount": "60-80mg/day",
+          "onset": "Age 45 (after back injury)",
+          "last_use": "This morning"
+        },
+        "current_medications": [
+          "Buprenorphine 8mg/2mg sublingual (prescribed)",
+          "Escitalopram 10mg daily",
+          "Ibuprofen 600mg PRN"
+        ],
+        "allergies": ["No known drug allergies"]
+      },
+      "asam_assessment": {
+        "recommended_level": "3.1",
+        "level_name": "Clinically Managed Low-Intensity Residential",
+        "dimensions": {
+          "dim1_intox_withdrawal": "Moderate withdrawal, requires medical monitoring",
+          "dim2_biomedical": "Chronic pain condition, stable",
+          "dim3_emotional": "Moderate depression, no suicidal ideation",
+          "dim4_readiness": "Preparation stage, motivated for MAT",
+          "dim5_relapse": "High risk without structured environment",
+          "dim6_environment": "Limited support, lives alone"
+        }
+      },
+      "visit_history": [
+        {
+          "fin": "FIN2025110802",
+          "date": "2025-11-08",
+          "type": "Follow-up Assessment",
+          "provider": "Dr. Sarah Chen",
+          "location": "Axxess Philadelphia Behavioral Health"
+        },
+        {
+          "fin": "FIN2025103020",
+          "date": "2025-10-30",
+          "type": "MAT Intake",
+          "provider": "Dr. Robert Kim",
+          "location": "Axxess Philadelphia Behavioral Health"
+        }
+      ],
+      "notes": "Returning patient on MAT. Stable on buprenorphine but needs higher level of care."
+    },
+    {
+      "mrn": "TEST003456",
+      "fin_current": "FIN2025110803",
+      "demographics": {
+        "first_name": "Ashley",
+        "last_name": "Williams",
+        "dob": "2007-11-30",
+        "gender": "Female",
+        "address": "789 Pine Street, Philadelphia, PA 19107",
+        "phone": "215-555-0301",
+        "email": "ashley.williams.test@example.com",
+        "preferred_language": "English",
+        "marital_status": "Single",
+        "emergency_contact": "Jennifer Williams (Mother) - 215-555-0302"
+      },
+      "insurance": {
+        "primary": "CHIP (Children's Health Insurance)",
+        "member_id": "CHIP789012",
+        "group_number": "PA-CHIP-001"
+      },
+      "clinical": {
+        "primary_diagnosis": "F12.20 - Cannabis use disorder, moderate",
+        "secondary_diagnoses": [
+          "F90.2 - Attention-deficit hyperactivity disorder, combined type",
+          "F33.1 - Major depressive disorder, recurrent, moderate"
+        ],
+        "substance_use": {
+          "primary": "Cannabis (marijuana)",
+          "frequency": "Daily",
+          "amount": "2-3 joints/day",
+          "onset": "Age 14",
+          "last_use": "Yesterday evening"
+        },
+        "current_medications": [
+          "Vyvanse 30mg daily (ADHD)",
+          "Fluoxetine 20mg daily"
+        ],
+        "allergies": ["Latex"]
+      },
+      "asam_assessment": {
+        "recommended_level": "1",
+        "level_name": "Outpatient Services",
+        "dimensions": {
+          "dim1_intox_withdrawal": "Minimal withdrawal symptoms",
+          "dim2_biomedical": "Adolescent, generally healthy",
+          "dim3_emotional": "Moderate depression, ADHD well-controlled on meds",
+          "dim4_readiness": "Pre-contemplation, mandated by school",
+          "dim5_relapse": "Moderate risk, peer influence high",
+          "dim6_environment": "Supportive family, negative peer influence"
+        }
+      },
+      "visit_history": [
+        {
+          "fin": "FIN2025110803",
+          "date": "2025-11-08",
+          "type": "Adolescent Assessment",
+          "provider": "Dr. Emily Harris (Adolescent Specialist)",
+          "location": "Axxess Philadelphia Behavioral Health"
+        }
+      ],
+      "notes": "Minor patient, requires parent/guardian consent. School-mandated assessment."
+    },
+    {
+      "mrn": "TEST004567",
+      "fin_current": "FIN2025110804",
+      "demographics": {
+        "first_name": "Robert",
+        "last_name": "Jackson",
+        "dob": "1968-04-10",
+        "gender": "Male",
+        "address": "No fixed address (Homeless)",
+        "phone": "N/A",
+        "email": "N/A",
+        "preferred_language": "English",
+        "marital_status": "Divorced",
+        "emergency_contact": "None listed"
+      },
+      "insurance": {
+        "primary": "Medicaid",
+        "member_id": "MC234567890",
+        "group_number": "PA-MED-HOMELESS"
+      },
+      "clinical": {
+        "primary_diagnosis": "F14.20 - Cocaine use disorder, severe",
+        "secondary_diagnoses": [
+          "F10.20 - Alcohol use disorder, moderate",
+          "F20.9 - Schizophrenia, unspecified",
+          "Z59.0 - Homelessness"
+        ],
+        "substance_use": {
+          "primary": "Crack cocaine",
+          "secondary": "Alcohol",
+          "frequency": "Daily polysubstance use",
+          "amount": "Variable, depends on resources",
+          "onset": "Age 22",
+          "last_use": "Last night"
+        },
+        "current_medications": [
+          "Risperidone 2mg BID (often non-compliant)",
+          "Thiamine 100mg daily"
+        ],
+        "allergies": ["No known drug allergies"]
+      },
+      "asam_assessment": {
+        "recommended_level": "3.7",
+        "level_name": "Medically Monitored Intensive Inpatient",
+        "dimensions": {
+          "dim1_intox_withdrawal": "Severe, requires detox",
+          "dim2_biomedical": "Multiple health issues, malnourishment",
+          "dim3_emotional": "Severe psychiatric symptoms, requires stabilization",
+          "dim4_readiness": "Pre-contemplation, brought in by outreach team",
+          "dim5_relapse": "Very high risk",
+          "dim6_environment": "Homeless, no recovery environment"
+        }
+      },
+      "visit_history": [
+        {
+          "fin": "FIN2025110804",
+          "date": "2025-11-08",
+          "type": "Crisis Assessment",
+          "provider": "Dr. Sarah Chen",
+          "location": "Axxess Philadelphia Behavioral Health"
+        },
+        {
+          "fin": "FIN2025020314",
+          "date": "2025-02-03",
+          "type": "ER Psychiatric Hold",
+          "provider": "Dr. Amanda Lee",
+          "location": "Temple University Hospital"
+        }
+      ],
+      "notes": "Homeless patient, co-occurring severe mental illness. Requires intensive stabilization."
+    },
+    {
+      "mrn": "TEST005678",
+      "fin_current": "FIN2025110805",
+      "demographics": {
+        "first_name": "Lisa",
+        "last_name": "Chen",
+        "dob": "1995-09-18",
+        "gender": "Female",
+        "address": "321 Walnut Street, Philadelphia, PA 19106",
+        "phone": "215-555-0501",
+        "email": "lisa.chen.test@example.com",
+        "preferred_language": "English",
+        "marital_status": "Married",
+        "emergency_contact": "David Chen (Husband) - 215-555-0502"
+      },
+      "insurance": {
+        "primary": "Blue Cross Blue Shield",
+        "member_id": "BCBS345678901",
+        "group_number": "BCBS-PA-789"
+      },
+      "clinical": {
+        "primary_diagnosis": "F15.20 - Stimulant use disorder (methamphetamine), severe",
+        "secondary_diagnoses": [
+          "F31.31 - Bipolar disorder, current episode depressed, mild",
+          "Z33.1 - Pregnant state, incidental"
+        ],
+        "substance_use": {
+          "primary": "Methamphetamine",
+          "frequency": "3-4 times per week",
+          "amount": "0.25-0.5g per use",
+          "onset": "Age 23",
+          "last_use": "4 days ago (confirmed pregnant)"
+        },
+        "current_medications": [
+          "Prenatal vitamins",
+          "Lamotrigine 100mg BID (bipolar, safe in pregnancy)"
+        ],
+        "allergies": ["Codeine"],
+        "pregnancy": {
+          "gestational_age": "12 weeks",
+          "ob_provider": "Dr. Patricia Wong",
+          "high_risk": true
+        }
+      },
+      "asam_assessment": {
+        "recommended_level": "3.7-WM",
+        "level_name": "Medically Monitored Intensive Inpatient (Pregnant Women)",
+        "dimensions": {
+          "dim1_intox_withdrawal": "Moderate, requires monitoring for fetal safety",
+          "dim2_biomedical": "First trimester pregnancy, high-risk",
+          "dim3_emotional": "Stable on mood stabilizer, motivated by pregnancy",
+          "dim4_readiness": "Action stage, wants to stop for baby",
+          "dim5_relapse": "High risk without support",
+          "dim6_environment": "Supportive husband, but needs structure"
+        }
+      },
+      "visit_history": [
+        {
+          "fin": "FIN2025110805",
+          "date": "2025-11-08",
+          "type": "Pregnant Women Assessment",
+          "provider": "Dr. Sarah Chen",
+          "location": "Axxess Philadelphia Behavioral Health"
+        }
+      ],
+      "notes": "Pregnant patient requiring specialized care. Coordination with OB needed."
+    },
+    {
+      "mrn": "TEST006789",
+      "fin_current": "FIN2025110806",
+      "demographics": {
+        "first_name": "Michael",
+        "last_name": "O'Brien",
+        "dob": "1955-12-05",
+        "gender": "Male",
+        "address": "654 Chestnut Avenue, Philadelphia, PA 19102",
+        "phone": "215-555-0601",
+        "email": "michael.obrien.test@example.com",
+        "preferred_language": "English",
+        "marital_status": "Widowed",
+        "emergency_contact": "Patrick O'Brien (Son) - 215-555-0602"
+      },
+      "insurance": {
+        "primary": "Medicare Part A & B",
+        "member_id": "MED456789012",
+        "supplemental": "AARP Medicare Supplement"
+      },
+      "clinical": {
+        "primary_diagnosis": "F10.20 - Alcohol use disorder, moderate",
+        "secondary_diagnoses": [
+          "I10 - Essential hypertension",
+          "E11.9 - Type 2 diabetes mellitus",
+          "F03.90 - Unspecified dementia, mild"
+        ],
+        "substance_use": {
+          "primary": "Alcohol",
+          "frequency": "Daily",
+          "amount": "6-8 drinks/day (started after wife's death)",
+          "onset": "Age 65 (recent onset)",
+          "last_use": "Yesterday"
+        },
+        "current_medications": [
+          "Lisinopril 20mg daily",
+          "Metformin 1000mg BID",
+          "Atorvastatin 40mg daily",
+          "Aspirin 81mg daily"
+        ],
+        "allergies": ["Sulfa drugs"]
+      },
+      "asam_assessment": {
+        "recommended_level": "2.5",
+        "level_name": "Partial Hospitalization",
+        "dimensions": {
+          "dim1_intox_withdrawal": "Moderate withdrawal risk, age-related complications",
+          "dim2_biomedical": "Multiple chronic conditions requiring monitoring",
+          "dim3_emotional": "Grief-related depression, recent loss",
+          "dim4_readiness": "Preparation stage, family pressure",
+          "dim5_relapse": "Moderate risk, social isolation",
+          "dim6_environment": "Lives alone, supportive adult children nearby"
+        }
+      },
+      "visit_history": [
+        {
+          "fin": "FIN2025110806",
+          "date": "2025-11-08",
+          "type": "Geriatric Assessment",
+          "provider": "Dr. Sarah Chen",
+          "location": "Axxess Philadelphia Behavioral Health"
+        }
+      ],
+      "notes": "Elderly patient with late-onset alcohol use disorder following spouse's death. Complex medical comorbidities."
+    },
+    {
+      "mrn": "TEST007890",
+      "fin_current": "FIN2025110807",
+      "demographics": {
+        "first_name": "Tyrone",
+        "last_name": "Washington",
+        "dob": "1990-06-25",
+        "gender": "Male",
+        "address": "987 Broad Street, Philadelphia, PA 19123",
+        "phone": "267-555-0701",
+        "email": "tyrone.washington.test@example.com",
+        "preferred_language": "English",
+        "marital_status": "Single",
+        "emergency_contact": "Angela Washington (Mother) - 267-555-0702"
+      },
+      "insurance": {
+        "primary": "Medicaid",
+        "member_id": "MC345678901",
+        "group_number": "PA-MED-002"
+      },
+      "clinical": {
+        "primary_diagnosis": "F11.20 - Opioid use disorder, moderate",
+        "secondary_diagnoses": [
+          "F43.10 - Post-traumatic stress disorder",
+          "Z65.5 - Exposure to disaster/war/other hostilities (military veteran)"
+        ],
+        "substance_use": {
+          "primary": "Heroin",
+          "frequency": "1-2 times daily",
+          "amount": "0.5-1g per day",
+          "onset": "Age 24 (after military discharge)",
+          "last_use": "16 hours ago",
+          "route": "Intranasal (snorting)"
+        },
+        "current_medications": [
+          "Prazosin 2mg at bedtime (PTSD nightmares)",
+          "Sertraline 100mg daily"
+        ],
+        "allergies": ["No known drug allergies"],
+        "military_history": {
+          "branch": "US Army",
+          "years_served": "2008-2013",
+          "deployments": "Iraq 2010-2011",
+          "honorable_discharge": true
+        }
+      },
+      "asam_assessment": {
+        "recommended_level": "2.1",
+        "level_name": "Intensive Outpatient with MAT",
+        "dimensions": {
+          "dim1_intox_withdrawal": "Moderate withdrawal, suitable for MAT induction",
+          "dim2_biomedical": "Generally healthy, no HCV/HIV",
+          "dim3_emotional": "PTSD symptoms managed, stable on meds",
+          "dim4_readiness": "Action stage, ready for MAT",
+          "dim5_relapse": "Moderate risk, triggers related to PTSD",
+          "dim6_environment": "Supportive family, connected with VA services"
+        }
+      },
+      "visit_history": [
+        {
+          "fin": "FIN2025110807",
+          "date": "2025-11-08",
+          "type": "MAT Intake Assessment",
+          "provider": "Dr. Sarah Chen",
+          "location": "Axxess Philadelphia Behavioral Health"
+        },
+        {
+          "fin": "FIN2025092512",
+          "date": "2025-09-25",
+          "type": "PTSD Therapy Session",
+          "provider": "Dr. Jennifer Martinez (VA)",
+          "location": "VA Medical Center Philadelphia"
+        }
+      ],
+      "notes": "Military veteran with PTSD and OUD. Good candidate for MAT. Coordinate with VA services."
+    },
+    {
+      "mrn": "TEST008901",
+      "fin_current": "FIN2025110808",
+      "demographics": {
+        "first_name": "Sophia",
+        "last_name": "Martinez",
+        "dob": "1988-02-14",
+        "gender": "Female",
+        "address": "147 South Street, Philadelphia, PA 19147",
+        "phone": "215-555-0801",
+        "email": "sophia.martinez.test@example.com",
+        "preferred_language": "English",
+        "marital_status": "Married",
+        "emergency_contact": "Carlos Martinez (Husband) - 215-555-0802"
+      },
+      "insurance": {
+        "primary": "Independence Blue Cross",
+        "member_id": "IBC567890123",
+        "group_number": "IBC-PHI-456"
+      },
+      "clinical": {
+        "primary_diagnosis": "F13.20 - Sedative, hypnotic, or anxiolytic use disorder (benzodiazepines), severe",
+        "secondary_diagnoses": [
+          "F41.0 - Panic disorder",
+          "F42.2 - Obsessive-compulsive disorder"
+        ],
+        "substance_use": {
+          "primary": "Alprazolam (Xanax) - non-prescribed",
+          "frequency": "Multiple times daily",
+          "amount": "6-8mg/day (escalated from prescribed 1mg PRN)",
+          "onset": "Age 30 (started after prescribed for panic attacks)",
+          "last_use": "This morning"
+        },
+        "current_medications": [
+          "Sertraline 150mg daily",
+          "Clomipramine 50mg at bedtime (OCD)"
+        ],
+        "allergies": ["No known drug allergies"]
+      },
+      "asam_assessment": {
+        "recommended_level": "3.7",
+        "level_name": "Medically Monitored Intensive Inpatient (Detox)",
+        "dimensions": {
+          "dim1_intox_withdrawal": "SEVERE - Benzodiazepine withdrawal life-threatening, requires medical detox",
+          "dim2_biomedical": "Otherwise healthy, but withdrawal risk high",
+          "dim3_emotional": "Severe anxiety and OCD, requires medication management",
+          "dim4_readiness": "Contemplation, fearful of withdrawal",
+          "dim5_relapse": "Very high risk, strong physical dependence",
+          "dim6_environment": "Supportive husband, but benzos accessible"
+        }
+      },
+      "visit_history": [
+        {
+          "fin": "FIN2025110808",
+          "date": "2025-11-08",
+          "type": "Benzodiazepine Detox Assessment",
+          "provider": "Dr. Sarah Chen",
+          "location": "Axxess Philadelphia Behavioral Health"
+        }
+      ],
+      "notes": "CRITICAL: Benzodiazepine detox requires medical supervision. High seizure risk. Cannot do outpatient taper."
+    },
+    {
+      "mrn": "TEST009012",
+      "fin_current": "FIN2025110809",
+      "demographics": {
+        "first_name": "Kevin",
+        "last_name": "Nguyen",
+        "dob": "1998-08-30",
+        "gender": "Male",
+        "address": "258 Market Street, Philadelphia, PA 19106",
+        "phone": "267-555-0901",
+        "email": "kevin.nguyen.test@example.com",
+        "preferred_language": "English",
+        "secondary_language": "Vietnamese",
+        "marital_status": "Single",
+        "emergency_contact": "Linh Nguyen (Mother) - 267-555-0902"
+      },
+      "insurance": {
+        "primary": "Aetna",
+        "member_id": "AET678901234",
+        "group_number": "AET-PHI-123"
+      },
+      "clinical": {
+        "primary_diagnosis": "F10.10 - Alcohol use disorder, mild",
+        "secondary_diagnoses": [
+          "F32.0 - Major depressive disorder, single episode, mild",
+          "Z56.9 - Work-related stress"
+        ],
+        "substance_use": {
+          "primary": "Alcohol",
+          "frequency": "Weekends, sometimes weeknights",
+          "amount": "4-6 drinks per occasion",
+          "onset": "Age 21 (college)",
+          "last_use": "3 days ago",
+          "pattern": "Binge drinking"
+        },
+        "current_medications": [
+          "Bupropion XL 150mg daily (recently started)"
+        ],
+        "allergies": ["No known drug allergies"]
+      },
+      "asam_assessment": {
+        "recommended_level": "0.5",
+        "level_name": "Early Intervention",
+        "dimensions": {
+          "dim1_intox_withdrawal": "No withdrawal, minimal physical dependence",
+          "dim2_biomedical": "Healthy young adult",
+          "dim3_emotional": "Mild depression, work stress, good insight",
+          "dim4_readiness": "Preparation stage, self-referred",
+          "dim5_relapse": "Low to moderate risk",
+          "dim6_environment": "Supportive family, stable job, peer drinking culture"
+        }
+      },
+      "visit_history": [
+        {
+          "fin": "FIN2025110809",
+          "date": "2025-11-08",
+          "type": "Screening & Early Intervention",
+          "provider": "Dr. Emily Harris",
+          "location": "Axxess Philadelphia Behavioral Health"
+        }
+      ],
+      "notes": "Self-referred young professional. Early intervention candidate. Good prognosis with brief intervention."
+    },
+    {
+      "mrn": "TEST010123",
+      "fin_current": "FIN2025110810",
+      "demographics": {
+        "first_name": "Patricia",
+        "last_name": "Johnson",
+        "dob": "1980-11-12",
+        "gender": "Female",
+        "address": "369 Vine Street, Philadelphia, PA 19148",
+        "phone": "215-555-1001",
+        "email": "patricia.johnson.test@example.com",
+        "preferred_language": "English",
+        "marital_status": "Married",
+        "emergency_contact": "Marcus Johnson (Husband) - 215-555-1002"
+      },
+      "insurance": {
+        "primary": "Cigna",
+        "member_id": "CIG789012345",
+        "group_number": "CIG-PA-567"
+      },
+      "clinical": {
+        "primary_diagnosis": "F11.20 - Opioid use disorder, moderate (IN RECOVERY)",
+        "secondary_diagnoses": [
+          "F10.10 - Alcohol use disorder, mild (in early remission)",
+          "Z71.51 - Drug counseling and surveillance (maintenance)"
+        ],
+        "substance_use": {
+          "primary": "None (abstinent 18 months)",
+          "past_primary": "Prescription opioids",
+          "recovery_date": "2024-05-15",
+          "mat_status": "Stable on buprenorphine/naloxone 16/4mg",
+          "clean_time": "18 months",
+          "support": "Attends NA meetings 3x/week"
+        },
+        "current_medications": [
+          "Buprenorphine/Naloxone 16mg/4mg daily",
+          "Hydroxyzine 25mg PRN anxiety"
+        ],
+        "allergies": ["Shellfish"]
+      },
+      "asam_assessment": {
+        "recommended_level": "OMT",
+        "level_name": "Opioid Maintenance Therapy (Ongoing)",
+        "dimensions": {
+          "dim1_intox_withdrawal": "None - stable on MAT",
+          "dim2_biomedical": "Healthy, no active issues",
+          "dim3_emotional": "Stable mood, occasional anxiety",
+          "dim4_readiness": "Maintenance stage, committed to recovery",
+          "dim5_relapse": "Low risk, strong coping skills",
+          "dim6_environment": "Excellent - supportive husband, stable job, active in recovery community"
+        }
+      },
+      "visit_history": [
+        {
+          "fin": "FIN2025110810",
+          "date": "2025-11-08",
+          "type": "MAT Follow-up (Monthly)",
+          "provider": "Dr. Robert Kim",
+          "location": "Axxess Philadelphia Behavioral Health"
+        },
+        {
+          "fin": "FIN2025101015",
+          "date": "2025-10-10",
+          "type": "MAT Follow-up",
+          "provider": "Dr. Robert Kim",
+          "location": "Axxess Philadelphia Behavioral Health"
+        },
+        {
+          "fin": "FIN2024051501",
+          "date": "2024-05-15",
+          "type": "Initial MAT Intake",
+          "provider": "Dr. Sarah Chen",
+          "location": "Axxess Philadelphia Behavioral Health"
+        }
+      ],
+      "notes": "SUCCESS STORY: Stable recovery, employed, excellent family support. Model patient for MAT program."
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "created_date": "2025-11-08",
+    "created_by": "SUDPlan POC Development Team",
+    "description": "Synthetic test patient data for SUD Treatment Plan POC",
+    "phi_notice": "THIS IS SYNTHETIC TEST DATA ONLY. Contains NO real patient information.",
+    "scenarios_covered": [
+      "Moderate alcohol use disorder with anxiety (Spanish-speaking)",
+      "Opioid use disorder on MAT (returning patient)",
+      "Adolescent cannabis use disorder with ADHD (minor, school-mandated)",
+      "Severe polysubstance use with homelessness and mental illness",
+      "Pregnant woman with stimulant use disorder (high-risk)",
+      "Elderly patient with late-onset alcohol use disorder (grief-related)",
+      "Military veteran with OUD and PTSD",
+      "Benzodiazepine use disorder requiring medical detox (CRITICAL)",
+      "Young professional with mild alcohol use disorder (early intervention)",
+      "Patient in stable recovery on MAT (success story)"
+    ],
+    "asam_levels_represented": [
+      "0.5 - Early Intervention",
+      "1 - Outpatient",
+      "2.1 - Intensive Outpatient",
+      "2.5 - Partial Hospitalization",
+      "3.1 - Clinically Managed Residential",
+      "3.7 - Medically Monitored Intensive Inpatient",
+      "3.7-WM - Medically Monitored Intensive Inpatient (Pregnant Women)",
+      "OMT - Opioid Maintenance Therapy"
+    ],
+    "special_populations": [
+      "Spanish-speaking",
+      "Adolescent/Minor",
+      "Homeless",
+      "Pregnant",
+      "Elderly/Geriatric",
+      "Military veteran",
+      "Recovery/maintenance"
+    ]
+  }
+}

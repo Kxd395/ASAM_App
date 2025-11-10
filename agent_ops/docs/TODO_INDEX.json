@@ -1,0 +1,222 @@
+{
+  "version": "1.0",
+  "updated_at": "2025-11-09T00:55:04.587671",
+  "tasks": [
+    {
+      "id": "T-0001",
+      "title": "Implement NavigationSplitView shell and screens",
+      "status": "done",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": ""
+    },
+    {
+      "id": "T-0002",
+      "title": "Build safety banner and export block logic",
+      "status": "done",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": ""
+    },
+    {
+      "id": "T-0003",
+      "title": "Implement Problems module (single CRUD owner)",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": ""
+    },
+    {
+      "id": "T-0004",
+      "title": "EMR Context drawer (read only + TTL)",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P2",
+      "due": null,
+      "notes": ""
+    },
+    {
+      "id": "T-0005",
+      "title": "PDFComposer and dynamic renderers (D1/D2/Problems)",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": ""
+    },
+    {
+      "id": "T-0006",
+      "title": "Preflight checks + neutral filename policy",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": ""
+    },
+    {
+      "id": "T-0007",
+      "title": "Upload with retry and Binary->DocumentReference fallback",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P2",
+      "due": null,
+      "notes": ""
+    },
+    {
+      "id": "T-0008",
+      "title": "Unit tests: gates, hash stability, renderer overflow, preflight",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": ""
+    },
+    {
+      "id": "T-0009",
+      "title": "Accessibility pass and idle lock wiring",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P2",
+      "due": null,
+      "notes": ""
+    },
+    {
+      "id": "T-0010",
+      "title": "Implement canonical JSON encoder for seal and composer",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": "Deterministic JSON encoding with sorted keys and UTC ISO8601 dates for stable hashing and signature seals"
+    },
+    {
+      "id": "T-0011",
+      "title": "Implement OverflowPredictor and wire to preflight",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": "Predict text overflow before PDF generation. Calculate exact character counts vs available space in static PDF boxes"
+    },
+    {
+      "id": "T-0012",
+      "title": "Build SafetyAction modal and persistence",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": "Modal requiring action type and timestamp. Persist safety_resolution in assessment payload. Block export until resolved"
+    },
+    {
+      "id": "T-0013",
+      "title": "Add crumb anchors to all rules and form fields",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": "Wire breadcrumb navigation from validation Fix buttons to exact fields. Implement crumb resolver using crumbs.yml registry"
+    },
+    {
+      "id": "T-0014",
+      "title": "Build DocumentReference flow with Binary fallback and Provenance",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P2",
+      "due": null,
+      "notes": "Upload PDF as DocumentReference. On 413 error fallback to Binary then link via DocumentReference. Attach Provenance resource"
+    },
+    {
+      "id": "T-0015",
+      "title": "Add MAC chain to audit_events and a verifier command",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": "Rolling HMAC chain for tamper-evident audit trail. Each event includes MAC of previous event. Add CLI verifier for integrity check"
+    },
+    {
+      "id": "T-0016",
+      "title": "Add Accessibility pass checklist and automated contrast checks",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P2",
+      "due": null,
+      "notes": "WCAG 2.1 AA compliance: contrast ratios, focus order, large type support, VoiceOver testing. Automated checks in CI"
+    },
+    {
+      "id": "T-0017",
+      "title": "Add edition scoping for anchors and levels, plus ruleset_hash computation",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": "Distinguish ASAM 3 vs ASAM 4 editions. Compute SHA-256 hash of rules for audit trail and PDF seal"
+    },
+    {
+      "id": "T-0018",
+      "title": "Replace signature rule with strict check and wire exporter gate",
+      "status": "done",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": "Fixed validation rule to require status=='signed' only. Exporter must check both no blockers AND signed status"
+    },
+    {
+      "id": "T-0019",
+      "title": "Add crumb linter that validates all rule crumbs against crumbs.yml in CI",
+      "status": "done",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": "Created crumb_linter.py tool that parses validation rules and ensures every crumb exists in registry. All crumbs validated."
+    },
+    {
+      "id": "T-0020",
+      "title": "Create operators.json and wire evaluator to data-driven operators",
+      "status": "done",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": "Created comprehensive operators.json with deterministic semantics for all comparison, logical, aggregate, and special operators"
+    },
+    {
+      "id": "T-0021",
+      "title": "Add rules fixtures with golden outputs and include rule ids in audit logs",
+      "status": "done",
+      "owner": "agent",
+      "priority": "P1",
+      "due": null,
+      "notes": "Created 12 test fixtures in agent_ops/tests/fixtures/ covering all key scenarios: opioid acute, alcohol CIWA, vital instability, severe A&B, psych crisis, environment needs, stable outpatient, no WM, polysubstance, WM only, co-occurring advisory, and discrepancy blocker"
+    },
+    {
+      "id": "T-0022",
+      "title": "Implement WM to LOC guard so 3.7 base does not fire if 3.7-WM already matched",
+      "status": "done",
+      "owner": "agent",
+      "priority": "P2",
+      "due": null,
+      "notes": "Implemented in loc_indication.guard.json with precedence-based WM escalation rule and negative membership guards (!3.7, !4.0) to prevent double-counting. RulesEngine.swift evaluator supports negated membership checks."
+    },
+    {
+      "id": "T-0023",
+      "title": "Add program capability resolver that down-shifts or flags no compatible program",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P2",
+      "due": null,
+      "notes": "When program cannot perform indicated LOC, resolver picks nearest supported level or emits advisory 'no compatible program'"
+    },
+    {
+      "id": "T-0024",
+      "title": "Add ruleset hash to PDF seal and audit events",
+      "status": "open",
+      "owner": "agent",
+      "priority": "P2",
+      "due": null,
+      "notes": "Compute SHA-256 over concatenated normalized rules files at export. Store in audit events and PDF footer for provenance"
+    }
+  ]
+}

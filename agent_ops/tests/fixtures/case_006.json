@@ -1,0 +1,37 @@
+{
+  "title": "Environment structure need \u2192 3.1",
+  "input": {
+    "severities": {
+      "A": 1,
+      "B": 2,
+      "C": 2,
+      "D": 1,
+      "E": 3,
+      "F": 1
+    },
+    "d1": {
+      "substances": []
+    },
+    "flags": {
+      "vitals_unstable": false,
+      "no_withdrawal_signs": true
+    }
+  },
+  "expected": {
+    "wm": {
+      "indicated": false,
+      "candidate_levels": []
+    },
+    "loc": {
+      "indicated": "3.1",
+      "why": [
+        "environment_structure"
+      ]
+    },
+    "validation": {
+      "blockers": [],
+      "gaps": [],
+      "advisories": []
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "title": "Vital instability \u2192 3.7",
+  "input": {
+    "severities": {
+      "A": 2,
+      "B": 2,
+      "C": 2,
+      "D": 1,
+      "E": 2,
+      "F": 1
+    },
+    "d1": {
+      "substances": []
+    },
+    "flags": {
+      "vitals_unstable": true,
+      "no_withdrawal_signs": false
+    }
+  },
+  "expected": {
+    "wm": {
+      "indicated": true,
+      "candidate_levels": [
+        "3.7",
+        "4.0"
+      ]
+    },
+    "loc": {
+      "indicated": "3.7",
+      "why": [
+        "wm_requires_medical_setting"
+      ]
+    },
+    "validation": {
+      "blockers": [],
+      "gaps": [],
+      "advisories": []
+    }
+  }
+}

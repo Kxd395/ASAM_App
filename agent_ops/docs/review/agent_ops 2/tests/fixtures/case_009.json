@@ -1,0 +1,47 @@
+{
+  "title": "Polysubstance + biomedical \u22653 \u2192 3.7",
+  "input": {
+    "severities": {
+      "A": 2,
+      "B": 3,
+      "C": 2,
+      "D": 1,
+      "E": 2,
+      "F": 1
+    },
+    "d1": {
+      "substances": [
+        {
+          "substance_group": "opioid",
+          "last_use_hours": 36,
+          "cows": 6
+        },
+        {
+          "substance_group": "alcohol",
+          "ciwa": 12
+        }
+      ]
+    },
+    "flags": {
+      "vitals_unstable": false,
+      "no_withdrawal_signs": false
+    }
+  },
+  "expected": {
+    "wm": {
+      "indicated": false,
+      "candidate_levels": []
+    },
+    "loc": {
+      "indicated": "3.7",
+      "why": [
+        "biomedical_management"
+      ]
+    },
+    "validation": {
+      "blockers": [],
+      "gaps": [],
+      "advisories": []
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://example.local/schemas/operators.schema.json",
+  "version": "1.0.0",
+  "updated": "2025-11-10T03:31:05.381893",
+  "operators": {
+    "numeric_cmp": {
+      "desc": "Compare numeric subject to a threshold given as string predicate (e.g., '>=3', '<=2'). Allowed prefixes: <=, >=, <, >, ==.",
+      "examples": [
+        "A: '<=2'",
+        "B: '>=3'"
+      ]
+    },
+    "bool_eq": {
+      "desc": "Boolean equality test for condition keys mapping to True/False."
+    },
+    "string_in": {
+      "desc": "Membership test when condition value is an array, e.g., {'wm_candidate': ['3.7','4.0']}"
+    }
+  },
+  "coercions": {
+    "numbers": "Strings like '3' and numeric JSON values are coerced to float then compared.",
+    "truthy": "True/False only; strings are not auto-coerced."
+  }
+}

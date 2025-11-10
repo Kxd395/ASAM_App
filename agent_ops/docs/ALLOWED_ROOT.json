@@ -1,0 +1,18 @@
+{
+  "allowed": [
+    ".DS_Store",
+    ".editorconfig",
+    ".gitattributes",
+    ".gitignore",
+    "ASAMPlan.code-workspace",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "FORM_FIELD_MAP.json",
+    "INDEX.md",
+    "LICENSE",
+    "PROJECT_STRUCTURE.md",
+    "QUICK_START.md",
+    "README.md",
+    "REPOSITORY_CLEANUP_COMPLETE.md"
+  ]
+}

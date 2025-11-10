@@ -26,6 +26,44 @@
       "type": "shell",
       "dependsOn": "Agent: Build pdf_export",
       "command": "python3 agent/asm.py pdf.export --plan data/plan.sample.json --pdf assets/ASAM_TreatmentPlan_Template.pdf --sig assets/sample_signature.png --out out/ASAMPlan_$(python3 agent/asm.py rand.id).pdf"
+    },
+    {
+      "label": "Agent: Postrun",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/agent_ops"
+      },
+      "command": "python3 tools/agent_postrun.py --run-id $(date +%Y%m%d%H%M%S) --actor agent --summary \"${input:summary}\" --completed ${input:completed} --artifacts ${input:artifacts}",
+      "problemMatcher": []
+    },
+    {
+      "label": "Agent: Check Root Hygiene",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/agent_ops"
+      },
+      "command": "python3 tools/check_root_files.py",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "summary",
+      "type": "promptString",
+      "description": "Run summary (no PHI)",
+      "default": "Updated docs and tasks"
+    },
+    {
+      "id": "completed",
+      "type": "promptString",
+      "description": "Completed task IDs (space separated, e.g., T-0001 T-0003)",
+      "default": ""
+    },
+    {
+      "id": "artifacts",
+      "type": "promptString",
+      "description": "Artifact paths (space separated, e.g., artifacts/export.pdf)",
+      "default": ""
     }
   ]
 }

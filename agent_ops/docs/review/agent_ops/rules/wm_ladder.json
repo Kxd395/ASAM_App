@@ -1,0 +1,79 @@
+{
+  "version": "1.0.0",
+  "model": "deterministic_rules",
+  "rules": [
+    {
+      "rule_id": "wm_opioid_recent",
+      "if": {
+        "substance_group": "opioid",
+        "last_use_hours": "<=24",
+        "cows": ">=8"
+      },
+      "then": {
+        "wm_indicated": true,
+        "candidate_levels": [
+          "1.7",
+          "2.7"
+        ],
+        "rationale": [
+          "opioid_recent",
+          "cows_threshold"
+        ]
+      },
+      "priority": 50
+    },
+    {
+      "rule_id": "wm_alcohol_ciwa",
+      "if": {
+        "substance_group": "alcohol",
+        "ciwa": ">=15"
+      },
+      "then": {
+        "wm_indicated": true,
+        "candidate_levels": [
+          "2.7",
+          "3.7"
+        ],
+        "rationale": [
+          "ciwa_severe"
+        ]
+      },
+      "priority": 60
+    },
+    {
+      "rule_id": "wm_vitals",
+      "if": {
+        "vitals_unstable": true
+      },
+      "then": {
+        "wm_indicated": true,
+        "candidate_levels": [
+          "3.7",
+          "4.0"
+        ],
+        "rationale": [
+          "vital_instability"
+        ]
+      },
+      "priority": 90
+    },
+    {
+      "rule_id": "wm_none",
+      "if": {
+        "no_withdrawal_signs": true
+      },
+      "then": {
+        "wm_indicated": false,
+        "candidate_levels": []
+      },
+      "priority": 10
+    }
+  ],
+  "resolution": {
+    "combine": "max_priority_true",
+    "fallback": {
+      "wm_indicated": false,
+      "candidate_levels": []
+    }
+  }
+}

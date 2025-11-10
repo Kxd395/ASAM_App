@@ -1,0 +1,7 @@
+version: 1.0.0
+registry:
+  assessment_review: module/assessment/{assessment_id}/review
+  safety: module/assessment/{assessment_id}/safety
+  domain_field: module/assessment/{assessment_id}/domain/{domain_key}/field/{field_id}
+  problems_item: module/problems/{problem_id}
+  summary_loc: module/assessment/{assessment_id}/summary

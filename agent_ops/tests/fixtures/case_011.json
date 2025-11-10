@@ -1,0 +1,42 @@
+{
+  "title": "Co-occurring advisory expected",
+  "input": {
+    "severities": {
+      "A": 2,
+      "B": 2,
+      "C": 2,
+      "D": 1,
+      "E": 2,
+      "F": 1
+    },
+    "d1": {
+      "substances": []
+    },
+    "flags": {
+      "vitals_unstable": false,
+      "no_withdrawal_signs": true
+    },
+    "program": {
+      "co_occurring_capable": false
+    }
+  },
+  "expected": {
+    "wm": {
+      "indicated": false,
+      "candidate_levels": []
+    },
+    "loc": {
+      "indicated": "2.1",
+      "why": [
+        "stable_structured_support"
+      ]
+    },
+    "validation": {
+      "blockers": [],
+      "gaps": [],
+      "advisories": [
+        "cooccurring_capability_pref"
+      ]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Agent Postrun",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/agent_ops"
+      },
+      "command": "python3 tools/agent_postrun.py --run-id ${currentTime} --actor agent --summary \"${input:summary}\" --completed ${input:completed}",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "summary",
+      "type": "promptString",
+      "description": "Run summary",
+      "default": "Updated docs and tasks"
+    },
+    {
+      "id": "completed",
+      "type": "promptString",
+      "description": "Completed task IDs (space separated)",
+      "default": ""
+    }
+  ]
+}

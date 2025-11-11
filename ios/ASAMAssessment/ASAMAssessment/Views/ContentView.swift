@@ -531,9 +531,17 @@ struct DomainDetailView: View {
                 await MainActor.run {
                     self.questionnaire = parsedQuestionnaire
                     self.isLoading = false
-                    // Load saved answers after questionnaire loads
-                    self.answers = domain.answers
-                    print("✅ Successfully loaded questionnaire for Domain \(domain.number): \(parsedQuestionnaire.questions.count) questions")
+                    
+                    // CRITICAL FIX: Load saved answers from current assessment in store, not from stale domain parameter
+                    if let currentAssessment = assessmentStore.currentAssessment,
+                       let currentDomain = currentAssessment.domains.first(where: { $0.id == domain.id }) {
+                        self.answers = currentDomain.answers
+                        print("✅ Successfully loaded questionnaire for Domain \(domain.number): \(parsedQuestionnaire.questions.count) questions, \(self.answers.count) saved answers")
+                    } else {
+                        // Fallback to domain parameter only if current assessment not available
+                        self.answers = domain.answers
+                        print("✅ Successfully loaded questionnaire for Domain \(domain.number): \(parsedQuestionnaire.questions.count) questions, \(self.answers.count) answers (fallback)")
+                    }
                 }
             } catch {
                 await MainActor.run {
@@ -555,13 +563,28 @@ struct DomainDetailView: View {
         var updatedAssessment = currentAssessment
         
         print("💾 Saving answers for Domain \(domain.number) - Current Assessment: \(String(currentAssessment.id.uuidString.prefix(8)))")
-        print("💾 New answers: \(newAnswers.keys.count) questions answered")
         
         // Update the domain with new answers
         if let domainIndex = updatedAssessment.domains.firstIndex(where: { $0.id == domain.id }) {
-            // Store previous answers for comparison
+            // Store previous answers for comparison - CRITICAL FOR TRACKING FIELD REMOVAL
             let previousAnswers = updatedAssessment.domains[domainIndex].answers
+            let oldCount = previousAnswers.count
+            
+            // Update with new answers (this handles BOTH additions and removals)
             updatedAssessment.domains[domainIndex].answers = newAnswers
+            
+            let newCount = newAnswers.count
+            let delta = newCount - oldCount
+            
+            // ENHANCED LOGGING for field addition/removal tracking
+            print("💾 New answers: \(newCount) questions answered")
+            print("📊 Answer count changed: \(oldCount) → \(newCount) (Δ\(delta > 0 ? "+" : "")\(delta))")
+            
+            if delta < 0 {
+                print("⬇️  Field removal detected: \(abs(delta)) answer(s) removed")
+            } else if delta > 0 {
+                print("⬆️  Field addition detected: \(delta) answer(s) added")
+            }
             
             // Calculate severity score based on new answers
             do {
@@ -618,8 +641,15 @@ struct DomainDetailView: View {
             // Save the updated assessment - this will handle currentAssessment sync internally
             assessmentStore.updateAssessment(updatedAssessment)
             
-            print("✅ Successfully saved \(newAnswers.count) answers for Domain \(domain.number), Complete: \(updatedAssessment.domains[domainIndex].isComplete), Severity: \(updatedAssessment.domains[domainIndex].severity)")
-            print("🔍 Previous answers count: \(previousAnswers.count), New answers count: \(newAnswers.count)")
+            // ENHANCED LOGGING: Calculate and log progress after save
+            let domainProgress = updatedAssessment.domains[domainIndex].calculateProgress()
+            let overallProgress = updatedAssessment.calculateOverallProgress()
+            
+            print("✅ Successfully saved \(newAnswers.count) answers for Domain \(domain.number)")
+            print("📊 Domain \(domain.number) progress: \(String(format: "%.0f%%", domainProgress * 100))")
+            print("📊 Overall assessment progress: \(String(format: "%.0f%%", overallProgress * 100))")
+            print("📋 Domain \(domain.number) complete: \(updatedAssessment.domains[domainIndex].isComplete), Severity: \(updatedAssessment.domains[domainIndex].severity)")
+            print("🔍 Field count change: \(oldCount) → \(newCount)")
         } else {
             print("❌ Could not find domain \(domain.number) with ID \(domain.id) in current assessment")
         }

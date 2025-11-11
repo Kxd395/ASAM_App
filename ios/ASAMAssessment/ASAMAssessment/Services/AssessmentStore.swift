@@ -102,37 +102,98 @@ class AssessmentStore: ObservableObject {
     /// Save all assessments to UserDefaults
     private func persistAssessments() {
         do {
-            let data = try JSONEncoder().encode(assessments)
-            UserDefaults.standard.set(data, forKey: assessmentsKey)
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted // For debugging
             
-            // Enhanced debug logging
+            let data = try encoder.encode(assessments)
+            let dataSize = ByteCountFormatter.string(fromByteCount: Int64(data.count), countStyle: .file)
+            
+            print("💾 Persisting \(assessments.count) assessments (\(dataSize))")
+            print("💾 Current assessment: \(currentAssessment?.id.uuidString.prefix(8) ?? "none")")
+            
+            // Enhanced debug logging - log domain answers for current assessment
             if let currentAssessment = currentAssessment {
                 let domainAnswersCount = currentAssessment.domains.map { "\($0.number):\($0.answers.count)" }.joined(separator: ", ")
-                print("💾 AssessmentStore: Persisted \(assessments.count) assessments - Current: [\(domainAnswersCount)]")
-            } else {
-                print("💾 AssessmentStore: Persisted \(assessments.count) assessments to storage")
+                print("💾 Current assessment domains [Domain:Answers]: [\(domainAnswersCount)]")
+                
+                let completedCount = currentAssessment.completedDomainsCount
+                let startedCount = currentAssessment.startedDomainsCount
+                let progress = currentAssessment.completionPercentage
+                print("💾 Progress: \(progress)% (\(completedCount) complete, \(startedCount) started)")
             }
+            
+            UserDefaults.standard.set(data, forKey: assessmentsKey)
             
             // Force UserDefaults to synchronize
             UserDefaults.standard.synchronize()
+            
+            print("✅ Persistence complete - data synchronized to disk")
+            
         } catch {
-            print("❌ AssessmentStore: Failed to persist assessments: \(error)")
+            print("❌ PERSISTENCE FAILED: \(error)")
+            print("❌ Error description: \(error.localizedDescription)")
+            if let encodingError = error as? EncodingError {
+                switch encodingError {
+                case .invalidValue(let value, let context):
+                    print("❌ Invalid value at \(context.codingPath): \(value)")
+                default:
+                    print("❌ Encoding error: \(encodingError)")
+                }
+            }
         }
     }
     
     /// Load assessments from UserDefaults
     private func loadPersistedAssessments() {
         guard let data = UserDefaults.standard.data(forKey: assessmentsKey) else {
-            print("📂 AssessmentStore: No persisted assessments found")
+            print("📂 No persisted assessments found (first launch or no data yet)")
             return
         }
         
+        let dataSize = ByteCountFormatter.string(fromByteCount: Int64(data.count), countStyle: .file)
+        print("📂 Loading persisted data (\(dataSize))")
+        
         do {
-            assessments = try JSONDecoder().decode([Assessment].self, from: data)
-            print("📂 AssessmentStore: Loaded \(assessments.count) assessments from storage")
+            let decoder = JSONDecoder()
+            assessments = try decoder.decode([Assessment].self, from: data)
+            
+            print("✅ Loaded \(assessments.count) assessments successfully")
+            
+            // Verify data integrity - log assessment details
+            for assessment in assessments {
+                let answerCounts = assessment.domains.map { $0.answers.count }
+                let totalAnswers = answerCounts.reduce(0, +)
+                let progress = assessment.completionPercentage
+                print("📂   Assessment \(assessment.id.uuidString.prefix(8)): \(totalAnswers) total answers, \(progress)% complete")
+                print("📂     Domain breakdown: \(assessment.domains.map { "D\($0.number):\($0.answers.count)" }.joined(separator: ", "))")
+            }
+            
         } catch {
-            print("❌ AssessmentStore: Failed to load persisted assessments: \(error)")
+            print("❌ FAILED TO LOAD ASSESSMENTS: \(error)")
+            print("❌ Error description: \(error.localizedDescription)")
+            
+            if let decodingError = error as? DecodingError {
+                switch decodingError {
+                case .dataCorrupted(let context):
+                    print("❌ Data corrupted at \(context.codingPath)")
+                case .keyNotFound(let key, let context):
+                    print("❌ Key '\(key)' not found at \(context.codingPath)")
+                case .typeMismatch(let type, let context):
+                    print("❌ Type mismatch for \(type) at \(context.codingPath)")
+                case .valueNotFound(let type, let context):
+                    print("❌ Value not found for \(type) at \(context.codingPath)")
+                @unknown default:
+                    print("❌ Unknown decoding error: \(decodingError)")
+                }
+            }
+            
+            print("⚠️  Resetting to empty assessment list - corrupted data archived")
             assessments = []
+            
+            // Archive corrupted data for forensics
+            let timestamp = Date().timeIntervalSince1970
+            UserDefaults.standard.set(data, forKey: "corrupted_backup_\(timestamp)")
+            print("📦 Corrupted data backed up to: corrupted_backup_\(timestamp)")
         }
     }
     

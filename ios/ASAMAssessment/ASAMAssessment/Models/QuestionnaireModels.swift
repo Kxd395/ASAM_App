@@ -134,6 +134,37 @@ struct Question: Codable, Identifiable {
     let substanceTemplate: SubstanceTemplate?
     let availableSubstances: [SubstanceDefinition]?
     
+    // Explicit initializer with default values for new optional parameters
+    init(
+        id: String,
+        text: String,
+        type: QuestionType,
+        required: Bool,
+        breadcrumb: String? = nil,
+        visibleIf: VisibilityCondition? = nil,
+        options: [QuestionOption]? = nil,
+        validation: Validation? = nil,
+        description: String? = nil,
+        helpText: String? = nil,
+        repeaterFields: [RepeaterField]? = nil,
+        substanceTemplate: SubstanceTemplate? = nil,
+        availableSubstances: [SubstanceDefinition]? = nil
+    ) {
+        self.id = id
+        self.text = text
+        self.type = type
+        self.required = required
+        self.breadcrumb = breadcrumb
+        self.visibleIf = visibleIf
+        self.options = options
+        self.validation = validation
+        self.description = description
+        self.helpText = helpText
+        self.repeaterFields = repeaterFields
+        self.substanceTemplate = substanceTemplate
+        self.availableSubstances = availableSubstances
+    }
+    
     enum CodingKeys: String, CodingKey {
         case id, text, type, required, breadcrumb, options, validation, description
         case helpText = "helpText"

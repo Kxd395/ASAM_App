@@ -181,6 +181,22 @@ enum SafetyAction: String, CaseIterable, Identifiable {
         case .transportArranged: return .red
         }
     }
+    
+    /// Minimum notes length required
+    var minNotesLength: Int {
+        switch self {
+        case .noRiskIdentified: return 10
+        case .monitoringPlan: return 15
+        case .escalated: return 25
+        case .consultRequested: return 15
+        case .transportArranged: return 20
+        }
+    }
+    
+    /// Whether notes are required for this action
+    var notesRequired: Bool {
+        return true // All safety actions require notes
+    }
 }
 
 #Preview {

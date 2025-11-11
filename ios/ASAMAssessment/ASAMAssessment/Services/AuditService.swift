@@ -47,7 +47,8 @@ struct AuditEntry: Identifiable, Codable {
         self.notes = notes
 
         // Generate HMAC for tamper detection - UTC timestamp for consistency
-        let data = "\(id.uuidString)|\(Time.iso.string(from: timestamp))|\(eventType.rawValue)|\(actor)|\(action)".data(using: .utf8)!
+        let formatter = ISO8601DateFormatter()
+        let data = "\(id.uuidString)|\(formatter.string(from: timestamp))|\(eventType.rawValue)|\(actor)|\(action)".data(using: .utf8)!
         let key = SymmetricKey(size: .bits256)  // In production, use secure key storage
         let hmacValue = HMAC<SHA256>.authenticationCode(for: data, using: key)
         self.hmac = hmacValue.map { String(format: "%02x", $0) }.joined()
@@ -72,7 +73,8 @@ class AuditService: ObservableObject {
         entries.append(entry)
 
         // In production, persist to secure storage
-        print("🔒 AUDIT: [\(Time.iso.string(from: entry.timestamp))] \(entry.eventType.rawValue) by \(entry.actor)")
+        let formatter = ISO8601DateFormatter()
+        print("🔒 AUDIT: [\(formatter.string(from: entry.timestamp))] \(entry.eventType.rawValue) by \(entry.actor)")
     }
 
     /// Get audit trail for specific assessment
@@ -88,12 +90,13 @@ class AuditService: ObservableObject {
 
     /// Export audit log (NO PHI)
     func exportAuditLog() -> String {
+        let formatter = ISO8601DateFormatter()
         var log = "# ASAM Assessment Audit Log\n"
-        log += "# Generated: \(Time.nowISO)\n"
+        log += "# Generated: \(formatter.string(from: Date()))\n"
         log += "# HIPAA Compliant - No PHI\n\n"
 
         for entry in entries.sorted(by: { $0.timestamp < $1.timestamp }) {
-            log += "[\(Time.iso.string(from: entry.timestamp))] "
+            log += "[\(formatter.string(from: entry.timestamp))] "
             log += "\(entry.eventType.rawValue) | "
             log += "Actor: \(entry.actor) | "
             log += "Action: \(entry.action)"

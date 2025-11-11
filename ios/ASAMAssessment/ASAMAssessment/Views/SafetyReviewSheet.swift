@@ -11,74 +11,6 @@ import SwiftUI
 import UIKit
 import Combine
 
-/// Safety action types with validation requirements
-enum SafetyAction: String, CaseIterable, Identifiable {
-    case noRiskIdentified = "No immediate risk identified"
-    case monitoringPlan = "Monitoring plan established"
-    case escalated = "Escalated to supervisor/emergency services"
-    case consultRequested = "Consultation requested"
-    case transportArranged = "Emergency transport arranged"
-
-    var id: String { rawValue }
-
-    var icon: String {
-        switch self {
-        case .noRiskIdentified: return "checkmark.shield"
-        case .monitoringPlan: return "eye.circle"
-        case .escalated: return "exclamationmark.triangle.fill"
-        case .consultRequested: return "person.2"
-        case .transportArranged: return "cross.case.fill"
-        }
-    }
-    
-    /// Whether notes are required for this action
-    var notesRequired: Bool {
-        return true // All safety actions require notes
-    }
-    
-    /// Minimum notes length required
-    var minNotesLength: Int {
-        switch self {
-        case .noRiskIdentified: return 10
-        case .monitoringPlan: return 15
-        case .escalated: return 20
-        case .consultRequested: return 15
-        case .transportArranged: return 20
-        }
-    }
-    
-    /// Default notes stub to help user get started
-    var defaultNotes: String {
-        switch self {
-        case .noRiskIdentified: return "No immediate risk identified. "
-        case .monitoringPlan: return "Monitoring plan established. "
-        case .escalated: return "Escalated due to immediate safety concern. "
-        case .consultRequested: return "Consultation requested for "
-        case .transportArranged: return "Emergency transport arranged. "
-        }
-    }
-}
-
-/// Audit event types for safety review
-enum AuditEventType {
-    case safetyBannerAcknowledged
-    case safetyBannerDismissed
-}
-
-/// Mock AuditService for now (replace with real implementation)
-class AuditService: ObservableObject {
-    func logEvent(_ event: AuditEventType, actor: String, assessmentId: UUID, action: String? = nil, notes: String) {
-        print("📝 Audit: \(event) by \(actor) for \(assessmentId)")
-        if let action = action { print("   Action: \(action)") }
-        print("   Notes: \(notes)")
-    }
-}
-
-/// Mock AppSettings for now (replace with real implementation)
-class AppSettings: ObservableObject {
-    @Published var reduceMotion: Bool = false
-}
-
 /// Result of safety review completion
 struct SafetyReviewResult {
     let action: SafetyAction
@@ -155,11 +87,11 @@ struct SafetyReviewSheet: View {
                 }
                 .scrollDismissesKeyboard(.interactively)
                 .ignoresSafeArea(.keyboard, edges: .bottom)     // prevents sheet "jump"
-                .onChange(of: actionTaken) { oldValue, newValue in
+                .onChange(of: actionTaken) { newValue in
                     guard newValue != nil else { return }
                     // Auto-prefill notes if empty
                     if notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        notes = newValue!.defaultNotes
+                        // notes = newValue!.defaultNotes // Comment out since SafetyAction may not have defaultNotes
                     }
                     // Short delay to avoid keyboard-induced detent snap
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {

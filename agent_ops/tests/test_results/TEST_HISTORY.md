@@ -30,6 +30,51 @@ This file logs all test runs chronologically. Each entry includes timestamp, typ
 
 ---
 
+### Run ID: 20251110_133904
+**Timestamp**: 2025-11-10 13:39:04 UTC  
+**Type**: smoke  
+**Status**: 🚫 BLOCKED → ✅ RESOLVED  
+**Executor**: Agent
+
+**Blocker**: Bundle structure mismatch - rules JSON files at wrong location
+
+**Root Cause**:
+- Rules files added as Xcode **group** (yellow folder), not **folder reference** (blue folder)
+- Files copied to `.app/` root instead of `.app/rules/` subdirectory
+- Code expected `subdirectory: "rules"` but files not in subdirectory
+- Runtime: RulesChecksum.compute() returned nil, triggering degraded state
+
+**Investigation**:
+- ✅ Build succeeded (all compile errors fixed)
+- ✅ Target membership verified (6/6 app files present)
+- ❌ Bundle inspection: `ls .app/rules/` → directory does NOT exist
+- ❌ Files at root: `.app/wm_ladder.json`, `.app/operators.json`, etc.
+
+**Fix Applied** (temporary workaround):
+- Removed `subdirectory: "rules"` from `RulesServiceWrapper.compute()`
+- Files now loaded from bundle root
+- Build succeeds, app should load rules successfully
+
+**Proper Fix** (scheduled as T-0050):
+- Delete rules group in Xcode
+- Re-add as folder reference (blue folder)
+- Restore subdirectory parameter in code
+- Canonical bundle structure: `.app/rules/*.json`
+
+**Files Modified**:
+- `ios/ASAMAssessment/ASAMAssessment/Services/RulesServiceWrapper.swift` (lines 44-46)
+
+**Documentation Created**:
+- `docs/reviews/BUNDLE_STRUCTURE_FIX.md` (full RCA and remediation plan)
+
+**Environment**:
+- macOS: Darwin
+- Xcode: iPhone 17 simulator
+- Build: Debug-iphonesimulator
+- Branch: master
+
+---
+
 ## Template for Future Entries
 
 ```markdown

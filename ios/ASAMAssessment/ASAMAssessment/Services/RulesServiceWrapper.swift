@@ -11,6 +11,25 @@ import SwiftUI
 import Combine
 import CryptoKit
 
+// MARK: - Resilient Bundle Resolver
+
+/// Resilient JSON resolver: handles both folder references AND flattened bundles
+/// Tries: 1) rules/ subdirectory, 2) bundle root, 3) scan all paths
+fileprivate func resolveJSON(_ name: String, bundle: Bundle) -> URL? {
+    // 1) Preferred: inside rules/ subdirectory (blue folder reference)
+    if let url = bundle.url(forResource: name, withExtension: "json", subdirectory: "rules") {
+        return url
+    }
+    // 2) Flattened (yellow group fallback): root of bundle
+    if let url = bundle.url(forResource: name, withExtension: "json") {
+        return url
+    }
+    // 3) Last resort: scan all json and match basename
+    let matches = bundle.paths(forResourcesOfType: "json", inDirectory: nil)
+        .filter { $0.hasSuffix("/\(name).json") || $0.contains("/rules/\(name).json") }
+    return matches.first.map(URL.init(fileURLWithPath:))
+}
+
 // MARK: - Rules Preflight
 
 enum RulesPreflight {
@@ -18,12 +37,19 @@ enum RulesPreflight {
     case degraded(String)
 
     static func check(_ bundle: Bundle = .main) -> RulesPreflight {
+        // Use resilient resolver for preflight
+        guard let wmURL = resolveJSON("wm_ladder", bundle: bundle),
+              let locURL = resolveJSON("loc_indication.guard", bundle: bundle),
+              let opURL = resolveJSON("operators", bundle: bundle) else {
+            return .degraded("Missing required rules files (wm_ladder, loc_indication.guard, or operators)")
+        }
+
         do {
             _ = try RulesService(
                 bundle: bundle,
-                wmRulesFile: "rules/wm_ladder.json",
-                locRulesFile: "rules/loc_indication.guard.json",
-                operatorsFile: "rules/operators.json"
+                wmRulesFile: wmURL.path,
+                locRulesFile: locURL.path,
+                operatorsFile: opURL.path
             )
             return .ok
         } catch {
@@ -34,31 +60,82 @@ enum RulesPreflight {
 
 // MARK: - Rules Checksum
 
-struct RulesChecksum {
-    let sha256: String
+struct RulesChecksum: Codable {
+    let sha256Full: String   // Full 64-char hex for audit/provenance
     let version: String
     let timestamp: Date
+    let manifest: String     // JSON array of {file, sha256, bytes}
 
-    static func compute(bundle: Bundle = .main) -> RulesChecksum? {
-        guard let wmURL = bundle.url(forResource: "wm_ladder", withExtension: "json", subdirectory: "rules"),
-              let locURL = bundle.url(forResource: "loc_indication.guard", withExtension: "json", subdirectory: "rules"),
-              let opURL = bundle.url(forResource: "operators", withExtension: "json", subdirectory: "rules") else {
-            return nil
+    /// Short 12-char hash for display in footers
+    var sha256Short: String {
+        String(sha256Full.prefix(12)).uppercased()
+    }
+
+    /// Canonical data read: normalize line endings to LF, ensure UTF-8
+    private static func canonicalData(for url: URL) throws -> Data {
+        var data = try Data(contentsOf: url)
+        // Normalize line endings for cross-platform determinism
+        if let str = String(data: data, encoding: .utf8)?
+            .replacingOccurrences(of: "\r\n", with: "\n")
+            .replacingOccurrences(of: "\r", with: "\n"),
+           let normalized = str.data(using: .utf8) {
+            data = normalized
+        }
+        return data
+    }
+
+    static func compute(bundle: Bundle = .main, subdir: String = "rules") -> RulesChecksum? {
+        // Canonical file list (must match documented audit inputs)
+        // Order matters for deterministic hash
+        let filenames = ["anchors.json",
+                        "wm_ladder.json",
+                        "loc_indication.guard.json",
+                        "validation_rules.json",
+                        "operators.json"]
+
+        var manifestEntries: [[String: Any]] = []
+        var concat = Data()
+
+        for filename in filenames {
+            let resource = filename.replacingOccurrences(of: ".json", with: "")
+
+            // Use resilient resolver instead of strict subdirectory lookup
+            guard let url = resolveJSON(resource, bundle: bundle) else {
+                print("❌ Missing file: \(filename) (tried rules/, root, and full scan)")
+                return nil
+            }
+
+            guard let data = try? canonicalData(for: url) else {
+                print("❌ Cannot read file: \(filename)")
+                return nil
+            }
+
+            concat.append(data)
+            let fileHash = SHA256.hash(data: data)
+            let fileHashString = fileHash.compactMap { String(format: "%02x", $0) }.joined()
+
+            manifestEntries.append([
+                "file": filename,
+                "sha256": fileHashString,
+                "bytes": data.count
+            ])
         }
 
-        let combined = try? [wmURL, locURL, opURL]
-            .compactMap { try? Data(contentsOf: $0) }
-            .reduce(Data()) { $0 + $1 }
+        let fullHash = SHA256.hash(data: concat)
+        let fullHashString = fullHash.compactMap { String(format: "%02x", $0) }.joined()
 
-        guard let data = combined else { return nil }
-
-        let hash = SHA256.hash(data: data)
-        let hashString = hash.compactMap { String(format: "%02x", $0) }.joined()
+        // Pretty-print manifest for auditors
+        let manifestData = try? JSONSerialization.data(
+            withJSONObject: manifestEntries,
+            options: [.prettyPrinted, .sortedKeys]
+        )
+        let manifestJSON = manifestData.flatMap { String(data: $0, encoding: .utf8) } ?? "[]"
 
         return RulesChecksum(
-            sha256: String(hashString.prefix(12)),  // 12-char prefix
-            version: "1.1.0",
-            timestamp: Date()
+            sha256Full: fullHashString,  // Full 64-char
+            version: "v4",
+            timestamp: Date(),
+            manifest: manifestJSON
         )
     }
 }
@@ -84,6 +161,7 @@ final class RulesServiceWrapper: ObservableObject {
     @Published var errorMessage: String?
     @Published var checksum: RulesChecksum?
     @Published var rulesState: RulesState = .degraded("Uninitialized")  // COMPILE FIX #3
+    @Published var loadedAt: Date?  // Track when rules loaded successfully
 
     @AppStorage("asam_version") var asamVersion: ASAMVersion = .v4
 
@@ -97,32 +175,51 @@ final class RulesServiceWrapper: ObservableObject {
         }
     }
 
+    /// Public method to reinitialize rules engine (for diagnostics/retry)
+    func reinitialize(bundle: Bundle = .main) async {
+        await initialize(bundle: bundle)
+    }
+
     @MainActor
     private func initialize(bundle: Bundle) async {
+        // HYPER-CRITICAL DIAGNOSTIC: Prove files exist in runtime bundle
+        debugRulesBundle(bundle)
+
         let preflight = RulesPreflight.check(bundle)
 
         switch preflight {
         case .ok:
             do {
+                // Use resilient resolver to find files (handles both folder ref and flattened)
+                guard let wmURL = resolveJSON("wm_ladder", bundle: bundle),
+                      let locURL = resolveJSON("loc_indication.guard", bundle: bundle),
+                      let opURL = resolveJSON("operators", bundle: bundle) else {
+                    throw RulesServiceError.missing("Required rules files not found in bundle")
+                }
+
                 self.svc = try RulesService(
                     bundle: bundle,
-                    wmRulesFile: "rules/wm_ladder.json",
-                    locRulesFile: "rules/loc_indication.guard.json",
-                    operatorsFile: "rules/operators.json"
+                    wmRulesFile: wmURL.path,
+                    locRulesFile: locURL.path,
+                    operatorsFile: opURL.path
                 )
                 self.isAvailable = true
                 self.errorMessage = nil
                 self.rulesState = .healthy  // COMPILE FIX #3
+                self.loadedAt = Date()  // Record successful load time
                 self.checksum = RulesChecksum.compute(bundle: bundle)
 
                 if let checksum = self.checksum {
                     print("✅ Rules engine loaded successfully")
-                    print("🔒 Rules: v\(checksum.version) [\(checksum.sha256)]")
+                    print("🔒 Rules: v\(checksum.version) [\(checksum.sha256Short)]")
+                    print("📋 Full hash: \(checksum.sha256Full)")
+                    print("📄 Manifest: \(checksum.manifest)")
                 }
             } catch {
                 self.isAvailable = false
                 self.errorMessage = error.localizedDescription
                 self.rulesState = .degraded(error.localizedDescription)  // COMPILE FIX #3
+                self.loadedAt = nil  // Clear load time on failure
                 print("❌ Rules engine failed: \(error.localizedDescription)")
             }
 
@@ -130,6 +227,7 @@ final class RulesServiceWrapper: ObservableObject {
             self.isAvailable = false
             self.errorMessage = message
             self.rulesState = .degraded(message)  // COMPILE FIX #3
+            self.loadedAt = nil  // Clear load time when degraded
             print("⚠️ Rules engine degraded: \(message)")
         }
     }
@@ -146,7 +244,7 @@ final class RulesServiceWrapper: ObservableObject {
         if bypassDebounce {
             return performCalculation(assessment)
         }
-        
+
         // Cancel previous debounce
         debounceTask?.cancel()
 
@@ -260,6 +358,29 @@ final class RulesServiceWrapper: ObservableObject {
             return "4.0 Medically Managed Intensive Inpatient Withdrawal Management"
         default:
             return "Unknown WM Level: \(level)"
+        }
+    }
+
+    /// HYPER-CRITICAL DIAGNOSTIC: Prove files exist in runtime bundle
+    /// Call before any parse to definitively show bundle structure
+    private func debugRulesBundle(_ bundle: Bundle = .main) {
+        let want = [
+            "anchors.json",
+            "wm_ladder.json",
+            "loc_indication.guard.json",
+            "validation_rules.json",
+            "operators.json"
+        ]
+        print("📦 bundle.rules dir = \(bundle.bundleURL.path)")
+        for f in want {
+            if let url = bundle.url(forResource: (f as NSString).deletingPathExtension,
+                                    withExtension: (f as NSString).pathExtension,
+                                    subdirectory: "rules"),
+               let data = try? Data(contentsOf: url) {
+                print("✅ rules/\(f) size=\(data.count)")
+            } else {
+                print("❌ MISSING rules/\(f)")
+            }
         }
     }
 }

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+# Only run if mapping/ or rules/ changed (speeds up)
+if ! git diff --cached --name-only | grep -E '^(rules/|mapping/)' >/dev/null 2>&1; then
+  exit 0
+fi
+
+echo "🔁 Running anchor↔︎mapping check (pre-commit)…"
+LENIENT=0 "$REPO_ROOT/scripts/check-anchors-vs-map.py"

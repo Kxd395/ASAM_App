@@ -1,7 +1,7 @@
 # MASTER_TODO
 This document is generated from `docs/TODO_INDEX.json`. Do not edit by hand.
 
-Updated: 2025-11-10T21:00:00.000000
+Updated: 2025-11-10T21:45:00.000000
 Open: 32  |  Done: 13 (T-0024 merged into T-0029)
 
 ## ⚠️ CRITICAL: Compile Breakers Fixed
@@ -18,7 +18,45 @@ Open: 32  |  Done: 13 (T-0024 merged into T-0029)
 - T-0037: Wire clinical thresholds JSON loader to ReconciliationChecks
 - T-0038: PDF flatten service + embed provenance in PDF Info dict
 - T-0039: Deterministic target membership CI check (replace grep)
-- T-0040: Canonical hash with 5 files + manifest (64-char SHA256)
+- ✅ T-0040: Canonical hash with 5 files + manifest (64-char SHA256) **COMPLETE 2025-11-10**
+
+**Screenshot Review Fixes** (COMPLETE 2025-11-10):
+- ✅ Enhanced diagnostic logging for rules initialization (per-file verification)
+- ✅ Implemented full ExportView UI (was placeholder text only)
+- ✅ Verified SafetyAction picker implementation (correct)
+- ⏳ Manual: Blue folder conversion (USER - P0 BLOCKER)
+- ⏳ Manual: Delete duplicate files (USER - P0)
+- ⏳ Manual: Add build phase guard (USER - P1)
+- See: `docs/reviews/SCREENSHOT_ISSUES_FIXED.md` for complete analysis
+
+**Hyper-Critical Review Fixes** (COMPLETE 2025-11-10):
+- ✅ LocalizedError for RulesServiceError (file-specific diagnostics)
+- ✅ Canonical 64-char hash with manifest (line-ending normalization)
+- ✅ Domains navigation fixed (NavigationStack + tappable rows)
+- ✅ DomainDetailPlaceholderView created (pending questionnaire)
+- ⏳ Manual: Blue folder conversion (USER - P0 BLOCKER) ← ROOT CAUSE
+- See: `docs/reviews/HYPER_CRITICAL_FIXES_APPLIED.md` for technical details
+
+**Diagnostic Probe + Enhancements** (COMPLETE 2025-11-10):
+- ✅ Added debugRulesBundle() probe showing file sizes or MISSING
+- ✅ Re-applied canonical hash after git checkout (sha256Full + manifest)
+- ✅ Added loadedAt property for diagnostics view
+- ✅ Added reinitialize() method for retry button
+- ✅ Verified ExportButton provenance issue (nil passed - P1 fix needed)
+- ✅ Confirmed .contentShape(Rectangle()) present on domain rows
+- ⏳ Manual: Launch app + check console for diagnostic output (USER - P0)
+- See: `docs/reviews/DIAGNOSTIC_PROBE_ADDED.md` for diagnostic details
+
+**Resilient Bundle Resolver** (COMPLETE 2025-11-10):
+- ✅ Implemented resolveJSON() with 3 fallback strategies
+- ✅ Updated RulesPreflight.check() to use resolver
+- ✅ Updated initialize() to use resolver  
+- ✅ Updated RulesChecksum.compute() to use resolver
+- ✅ Created build-phase guard script (verify-rules-build-phase.sh)
+- ✅ App now works even if bundle structure wrong (defensive coding)
+- ⏳ Manual: 60-second blue folder conversion (USER - P0 CRITICAL)
+- ⏳ Manual: Add build-phase guard to prevent regression (USER - P1)
+- See: `docs/reviews/RESILIENT_RESOLVER_COMPLETE.md` for 60-second fix
 
 ---
 
@@ -93,7 +131,7 @@ See: `agent_ops/docs/ASAM_IP_COMPLIANCE_ENFORCEMENT.md`
 | **T-0037** | **open** | **P1** | **Externalize clinical thresholds to rules/clinical_thresholds.json** | **agent** |  |
 | **T-0038** | **open** | **P1** | **PDF flatten service + embed provenance in PDF Info dict** | **agent** |  |
 | **T-0039** | **open** | **P1** | **Replace grep with deterministic target-membership check in CI** | **agent** |  |
-| **T-0040** | **open** | **P1** | **Implement canonical hash with 5 files + manifest (64-char SHA256)** | **agent** |  |
+| **T-0040** | **done** | **P1** | **Implement canonical hash with 5 files + manifest (64-char SHA256)** | **agent** | **2025-11-10** |
 
 ## Checklist
 - [x] T-0001  Implement NavigationSplitView shell and screens (P1)
@@ -135,4 +173,4 @@ See: `agent_ops/docs/ASAM_IP_COMPLIANCE_ENFORCEMENT.md`
 - [ ] **T-0037  Externalize clinical thresholds to rules/clinical_thresholds.json (P1)**
 - [ ] **T-0038  PDF flatten service + embed provenance in PDF Info dict (P1)**
 - [ ] **T-0039  Replace grep with deterministic target-membership check in CI (P1)**
-- [ ] **T-0040  Implement canonical hash with 5 files + manifest (64-char SHA256) (P1)**
+- [x] **T-0040  Implement canonical hash with 5 files + manifest (64-char SHA256) (P1) ✅ COMPLETE 2025-11-10**

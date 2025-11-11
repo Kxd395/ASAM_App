@@ -34,6 +34,16 @@ python3 tools/check_root_files.py
 ```
 This fails if any file in repo root is not whitelisted.
 
+## Code Quality Protocol
+When fixing compile errors or making code changes:
+- **REQUIRED**: Follow the CODE_FIX_PROTOCOL in `agent_ops/rules/CODE_FIX_PROTOCOL.md`
+- Read full context (20-30 lines) before making changes
+- Check property/type definitions before fixing access errors
+- Fix ALL cascade errors immediately, not just the first error
+- Never report success if lint errors reveal new problems
+- Search for duplicate declarations and related code impacts
+
 ## Notes
 - Do not write to repo root. Put new docs under `docs/` and scripts under `tools/`.
 - If a task cannot be completed, leave it open and include a reason in the run summary.
+- **Code fixes are NOT complete until all related errors are resolved.**

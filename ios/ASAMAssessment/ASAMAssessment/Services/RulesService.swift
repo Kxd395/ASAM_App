@@ -1,8 +1,42 @@
 import Foundation
 
-public enum RulesServiceError: Error {
-    case notFound(URL)
-    case loadFailure(String)
+/// Rules service errors with meaningful diagnostic messages
+public enum RulesServiceError: LocalizedError {
+    case missing(String)              // file not found in bundle
+    case read(String)                 // file exists but can't read
+    case decode(String, String)       // JSON decode failed with reason
+    case notFound(URL)                // legacy: URL resolution failed
+    case loadFailure(String)          // legacy: generic load failure
+    
+    public var errorDescription: String? {
+        switch self {
+        case .missing(let file):
+            return "Missing rules file: \(file)"
+        case .read(let file):
+            return "Unable to read rules file: \(file)"
+        case .decode(let file, let reason):
+            return "JSON decode failed (\(file)): \(reason)"
+        case .notFound(let url):
+            return "Rules file not found: \(url.lastPathComponent)"
+        case .loadFailure(let msg):
+            return "Rules load failure: \(msg)"
+        }
+    }
+    
+    public var recoverySuggestion: String? {
+        switch self {
+        case .missing:
+            return "Ensure rules/ folder is a blue folder reference in Xcode with all required JSON files"
+        case .read:
+            return "Check file permissions and bundle structure"
+        case .decode:
+            return "Verify JSON syntax and schema match expected format"
+        case .notFound:
+            return "Verify bundle contains rules/ directory with required files"
+        case .loadFailure:
+            return "Check console logs for detailed error information"
+        }
+    }
 }
 
 public final class RulesService {

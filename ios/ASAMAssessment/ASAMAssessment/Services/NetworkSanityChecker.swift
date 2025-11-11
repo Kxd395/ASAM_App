@@ -9,6 +9,7 @@
 
 import Foundation
 import Network
+import Combine
 
 enum NetworkStatus {
     case online

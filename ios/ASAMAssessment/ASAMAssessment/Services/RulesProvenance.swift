@@ -26,7 +26,7 @@ struct RulesProvenance: Codable {
     let rulesVersion: String  // e.g., "v4"
     let timestamp: Date
     let legalNoticeVersion: String
-    
+
     /// Deterministic PDF footer with uppercase hex
     /// Format: "Plan <8> | Seal <12> | Rules <12> | Legal v1.0 | Mode <mode>"
     /// Example: "Plan 7F9C2A1B | Seal A3B2C1D4E5F6 | Rules 9C3A1B4D2E5F | Legal v1.0 | Mode internal_neutral"
@@ -36,7 +36,7 @@ struct RulesProvenance: Codable {
         let rulesHashShort = String(rulesetHash.prefix(12)).uppercased()
         return "Plan \(planIdShort) | Seal \(planHashShort) | Rules \(rulesHashShort) | Legal v\(legalNoticeVersion) | Mode \(complianceMode)"
     }
-    
+
     /// Format for audit event
     func auditEventPayload() -> [String: Any] {
         [
@@ -53,7 +53,7 @@ extension RulesChecksum {
     /// Convert to provenance record
     func toProvenance(legalVersion: String = "1.0") -> RulesProvenance {
         RulesProvenance(
-            rulesetHash: self.sha256,  // Full 64-char hash
+            rulesetHash: self.sha256Full,  // Full 64-char hash for audit
             rulesManifest: self.manifest,  // JSON manifest
             rulesVersion: self.version,
             timestamp: self.timestamp,
@@ -67,22 +67,24 @@ extension RulesChecksum {
 /// Singleton for app-wide rules provenance tracking
 class RulesProvenanceTracker {
     static let shared = RulesProvenanceTracker()
-    
+
     private(set) var currentProvenance: RulesProvenance?
-    
+    private(set) var currentChecksum: RulesChecksum?  // Store checksum for verification
+
     private init() {}
-    
+
     /// Record rules provenance on app launch
     func recordRulesLoaded(checksum: RulesChecksum, legalVersion: String = "1.0") {
+        self.currentChecksum = checksum
         self.currentProvenance = checksum.toProvenance(legalVersion: legalVersion)
-        
+
         // Log audit event
         print("📋 Rules loaded:")
         print("   Version: \(checksum.version)")
-        print("   Hash: \(checksum.sha256.prefix(12))...")
+        print("   Hash: \(checksum.sha256Short)...")
         print("   Legal: v\(legalVersion)")
     }
-    
+
     /// Get current provenance for PDF export
     func provenanceForExport() -> RulesProvenance? {
         return currentProvenance
@@ -107,12 +109,12 @@ extension PDFDocument {
             complianceMode: complianceMode
         )
         let timestamp = ISO8601DateFormatter().string(from: Date())
-        
+
         for pageIndex in 0..<pageCount {
             guard let page = page(at: pageIndex) else { continue }
-            
+
             let bounds = page.bounds(for: .cropBox)
-            
+
             // Main provenance footer (bottom right)
             let provenanceAnnotation = PDFAnnotation(
                 bounds: CGRect(
@@ -131,9 +133,9 @@ extension PDFDocument {
             provenanceAnnotation.contents = footerText
             provenanceAnnotation.backgroundColor = .clear
             provenanceAnnotation.border = nil
-            
+
             page.addAnnotation(provenanceAnnotation)
-            
+
             // Timestamp footer (bottom left)
             let timestampAnnotation = PDFAnnotation(
                 bounds: CGRect(
@@ -152,7 +154,7 @@ extension PDFDocument {
             timestampAnnotation.contents = "Generated: \(timestamp)"
             timestampAnnotation.backgroundColor = .clear
             timestampAnnotation.border = nil
-            
+
             page.addAnnotation(timestampAnnotation)
         }
     }
@@ -162,7 +164,7 @@ extension PDFDocument {
 
 /*
  // On app launch (in ASAMAssessmentApp.swift):
- 
+
  Task { @MainActor in
      if let checksum = RulesChecksum.compute() {
          RulesProvenanceTracker.shared.recordRulesLoaded(
@@ -171,13 +173,13 @@ extension PDFDocument {
          )
      }
  }
- 
+
  // During PDF export:
- 
+
  guard let provenance = RulesProvenanceTracker.shared.provenanceForExport() else {
      throw ExportError.rulesProvenanceMissing
  }
- 
+
  pdfDocument.stampProvenanceFooter(
      planHash: planHash,
      rulesProvenance: provenance

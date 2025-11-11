@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import Combine
 
 /// Upload job with idempotency key and backoff state
 struct UploadJob: Codable, Identifiable {

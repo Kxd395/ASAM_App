@@ -12,21 +12,21 @@ PROJECT_PATH="ios/ASAMAssessment/ASAMAssessment/ASAMAssessment.xcodeproj/project
 
 echo "🔍 Checking Xcode target membership for P0 files..."
 
-# Required files that must be in app target
+# Required files that must be in app target (just filenames, not full paths)
 REQUIRED_APP_FILES=(
-    "Views/SubstanceRowSheet.swift"
-    "Views/ClinicalFlagsSection.swift"
-    "Services/ExportPreflight.swift"
-    "Services/RulesProvenance.swift"
-    "Services/ReconciliationChecks.swift"
-    "Services/RulesServiceWrapper.swift"
+    "SubstanceRowSheet.swift"
+    "ClinicalFlagsSection.swift"
+    "ExportPreflight.swift"
+    "RulesProvenance.swift"
+    "ReconciliationChecks.swift"
+    "RulesServiceWrapper.swift"
 )
 
 # Required files that must be in test target
 REQUIRED_TEST_FILES=(
-    "ASAMAssessmentTests/P0RulesInputTests.swift"
-    "ASAMAssessmentTests/ExportPreflightTests.swift"
-    "ASAMAssessmentTests/RulesProvenanceTests.swift"
+    "P0RulesInputTests.swift"
+    "ExportPreflightTests.swift"
+    "RulesProvenanceTests.swift"
 )
 
 VIOLATIONS=0
@@ -39,7 +39,8 @@ fi
 
 echo "📋 Checking app target files..."
 for file in "${REQUIRED_APP_FILES[@]}"; do
-    if grep -q "$file" "$PROJECT_PATH"; then
+    # Check if file exists AND is in Sources (meaning it's compiled)
+    if grep -q "$file.*in Sources" "$PROJECT_PATH"; then
         echo "  ✅ $file"
     else
         echo "  ❌ MISSING: $file"
@@ -50,7 +51,7 @@ done
 echo ""
 echo "🧪 Checking test target files..."
 for file in "${REQUIRED_TEST_FILES[@]}"; do
-    if grep -q "$file" "$PROJECT_PATH"; then
+    if grep -q "$file.*in Sources" "$PROJECT_PATH"; then
         echo "  ✅ $file"
     else
         echo "  ❌ MISSING: $file"

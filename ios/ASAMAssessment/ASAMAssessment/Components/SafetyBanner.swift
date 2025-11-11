@@ -95,7 +95,7 @@ struct SafetyBanner: View {
                 Section {
                     Toggle(isOn: $hasAcknowledged) {
                         Text("I have reviewed safety criteria and documented appropriate action")
-                            .font(.subheadline)
+                            .font(.system(size: UIFont.preferredFont(forTextStyle: .subheadline).pointSize * 1.15))
                     }
                     .tint(.red)
                     .accessibilityLabel("Acknowledge safety review")

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 struct SubstanceRow: Identifiable, Codable, Hashable {
     let id: UUID

@@ -13,7 +13,7 @@ struct ClinicalFlagsSection: View {
     @Binding var pregnant: Bool
     @Binding var noWithdrawalSigns: Bool
     @Binding var acutePsych: Bool
-    
+
     var body: some View {
         Section {
             Toggle(isOn: $vitalsUnstable) {
@@ -23,7 +23,7 @@ struct ClinicalFlagsSection: View {
                     Text("Vitals Unstable")
                 }
             }
-            
+
             Toggle(isOn: $pregnant) {
                 HStack {
                     Image(systemName: pregnant ? "figure.and.child.holdinghands" : "figure")
@@ -31,7 +31,7 @@ struct ClinicalFlagsSection: View {
                     Text("Pregnant")
                 }
             }
-            
+
             Toggle(isOn: $noWithdrawalSigns) {
                 HStack {
                     Image(systemName: noWithdrawalSigns ? "checkmark.circle.fill" : "circle")
@@ -39,7 +39,7 @@ struct ClinicalFlagsSection: View {
                     Text("No Withdrawal Signs")
                 }
             }
-            
+
             Toggle(isOn: $acutePsych) {
                 HStack {
                     Image(systemName: acutePsych ? "exclamationmark.triangle.fill" : "brain")
@@ -55,37 +55,6 @@ struct ClinicalFlagsSection: View {
     }
 }
 
-// MARK: - Convenience Extension for Assessment
-
-extension Assessment {
-    /// Binding helpers for clinical flags
-    mutating func clinicalFlagsBindings() -> (
-        vitalsUnstable: Binding<Bool>,
-        pregnant: Binding<Bool>,
-        noWithdrawalSigns: Binding<Bool>,
-        acutePsych: Binding<Bool>
-    ) {
-        return (
-            vitalsUnstable: Binding(
-                get: { self.vitalsUnstable },
-                set: { self.vitalsUnstable = $0 }
-            ),
-            pregnant: Binding(
-                get: { self.pregnant },
-                set: { self.pregnant = $0 }
-            ),
-            noWithdrawalSigns: Binding(
-                get: { self.noWithdrawalSigns },
-                set: { self.noWithdrawalSigns = $0 }
-            ),
-            acutePsych: Binding(
-                get: { self.acutePsych },
-                set: { self.acutePsych = $0 }
-            )
-        )
-    }
-}
-
 // MARK: - Preview
 
 #Preview("Clinical Flags") {
@@ -93,7 +62,7 @@ extension Assessment {
     @Previewable @State var pregnant = false
     @Previewable @State var noWithdrawalSigns = true
     @Previewable @State var acutePsych = false
-    
+
     Form {
         ClinicalFlagsSection(
             vitalsUnstable: $vitalsUnstable,

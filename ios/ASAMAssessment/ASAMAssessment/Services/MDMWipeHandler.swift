@@ -9,6 +9,7 @@
 
 import Foundation
 import Security
+import Combine
 
 #if canImport(UIKit)
 import UIKit

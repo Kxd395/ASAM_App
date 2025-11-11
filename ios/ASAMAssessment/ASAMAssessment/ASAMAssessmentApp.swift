@@ -15,6 +15,7 @@ struct ASAMAssessmentApp: App {
     @StateObject private var rulesService = RulesServiceWrapper()  // NEW: Rules engine
     @StateObject private var networkChecker = NetworkSanityChecker()  // NEW: Network monitoring
     @StateObject private var uploadQueue = UploadQueue()  // NEW: Idempotent upload queue
+    @StateObject private var settings = AppSettings()  // NEW: App-wide display settings
 
     var body: some Scene {
         WindowGroup {
@@ -24,6 +25,8 @@ struct ASAMAssessmentApp: App {
                 .environmentObject(rulesService)  // NEW: Inject rules service
                 .environmentObject(networkChecker)  // NEW: Inject network checker
                 .environmentObject(uploadQueue)  // NEW: Inject upload queue
+                .environmentObject(settings)  // NEW: Inject display settings
+                .dynamicTypeSize(settings.dynamicType)  // NEW: Apply app-wide text size
                 .task {
                     // Perform initial network probe
                     await networkChecker.performActiveProbe()
@@ -57,7 +60,8 @@ struct ASAMAssessmentApp: App {
             }
 
             // Process pending uploads
-            await uploadQueue.processPending { job in
+            let readyJobs = await uploadQueue.ready()
+            for job in readyJobs {
                 do {
                     // TODO: Replace with actual upload implementation
                     print("📤 Processing upload: \(job.documentId)")
@@ -65,10 +69,11 @@ struct ASAMAssessmentApp: App {
                     // Simulate upload
                     try await Task.sleep(for: .seconds(1))
 
-                    return true  // Success
+                    // Mark as complete
+                    await uploadQueue.complete(jobId: job.id)
                 } catch {
                     print("❌ Upload failed: \(error)")
-                    return false  // Retry
+                    await uploadQueue.retry(jobId: job.id, error: error.localizedDescription)
                 }
             }
         }

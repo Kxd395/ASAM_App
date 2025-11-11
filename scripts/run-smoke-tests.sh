@@ -47,11 +47,11 @@ echo "Checking Xcode target membership..."
 if ! ./scripts/check-target-membership.sh > "$LOG_FILE" 2>&1; then
     echo -e "${RED}❌ BLOCKED: Files missing from Xcode targets${NC}"
     cat "$LOG_FILE"
-    
+
     # Update result
     jq '.status = "blocked" | .blocker = "Xcode target membership" | .phases.prerequisites = "fail"' "$RESULT_FILE" > "$RESULT_FILE.tmp"
     mv "$RESULT_FILE.tmp" "$RESULT_FILE"
-    
+
     echo
     echo "Fix required: Add missing files to Xcode targets"
     echo "See: docs/reviews/SMOKE_TEST_PLAN.md"
@@ -74,14 +74,14 @@ if ! xcodebuild \
     -destination 'platform=iOS Simulator,name=iPhone 15' \
     clean build \
     >> "$LOG_FILE" 2>&1; then
-    
+
     echo -e "${RED}❌ Build failed${NC}"
     echo "Last 20 lines of build log:"
     tail -20 "$LOG_FILE"
-    
+
     jq '.status = "fail" | .phases.build = "fail"' "$RESULT_FILE" > "$RESULT_FILE.tmp"
     mv "$RESULT_FILE.tmp" "$RESULT_FILE"
-    
+
     exit 1
 fi
 
@@ -103,7 +103,7 @@ if xcodebuild test \
     -sdk iphonesimulator \
     -destination 'platform=iOS Simulator,name=iPhone 15' \
     >> "$LOG_FILE" 2>&1; then
-    
+
     TEST_STATUS="pass"
     echo -e "${GREEN}✅ All tests passed${NC}"
 else
@@ -191,8 +191,8 @@ jq --arg status "$FINAL_STATUS" \
    --arg test_duration "$TEST_DURATION" \
    --arg critical_pass "$CRITICAL_PASS" \
    --arg critical_fail "$CRITICAL_FAIL" \
-   '.status = $status | 
-    .phases.build = "pass" | 
+   '.status = $status |
+    .phases.build = "pass" |
     .phases.unit_tests = "'$TEST_STATUS'" |
     .phases.critical_tests = {pass: ($critical_pass|tonumber), fail: ($critical_fail|tonumber)} |
     .duration_seconds = ('$TOTAL_DURATION'|tonumber) |

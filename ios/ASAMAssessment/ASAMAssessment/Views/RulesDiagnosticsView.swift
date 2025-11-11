@@ -25,7 +25,7 @@ struct RulesDiagnosticsView: View {
 
                 if let checksum = rulesService.checksum {
                     statusRow(label: "Version", value: checksum.version, color: .primary)
-                    statusRow(label: "Checksum", value: String(checksum.hash.prefix(12)), color: .secondary)
+                    statusRow(label: "Checksum", value: checksum.sha256Short, color: .secondary)
                 }
 
                 if let loaded = rulesService.loadedAt {
@@ -149,13 +149,6 @@ struct RulesDiagnosticsView: View {
         } else {
             locJSON = "Error: Could not load LOC guard JSON"
         }
-    }
-}
-
-extension RulesServiceWrapper {
-    /// Reinitialize rules engine (for diagnostics)
-    func reinitialize() async {
-        await initialize(bundle: .main)
     }
 }
 

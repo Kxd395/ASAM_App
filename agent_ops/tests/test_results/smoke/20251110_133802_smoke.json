@@ -1,0 +1,10 @@
+{
+  "run_id": "20251110_133802",
+  "timestamp": "2025-11-10T18:38:02Z",
+  "type": "smoke",
+  "status": "blocked",
+  "phases": {
+    "prerequisites": "fail"
+  },
+  "blocker": "Xcode target membership"
+}

@@ -8,7 +8,76 @@
 //
 
 import SwiftUI
+import UIKit
 import Combine
+
+/// Safety action types with validation requirements
+enum SafetyAction: String, CaseIterable, Identifiable {
+    case noRiskIdentified = "No immediate risk identified"
+    case monitoringPlan = "Monitoring plan established"
+    case escalated = "Escalated to supervisor/emergency services"
+    case consultRequested = "Consultation requested"
+    case transportArranged = "Emergency transport arranged"
+
+    var id: String { rawValue }
+
+    var icon: String {
+        switch self {
+        case .noRiskIdentified: return "checkmark.shield"
+        case .monitoringPlan: return "eye.circle"
+        case .escalated: return "exclamationmark.triangle.fill"
+        case .consultRequested: return "person.2"
+        case .transportArranged: return "cross.case.fill"
+        }
+    }
+    
+    /// Whether notes are required for this action
+    var notesRequired: Bool {
+        return true // All safety actions require notes
+    }
+    
+    /// Minimum notes length required
+    var minNotesLength: Int {
+        switch self {
+        case .noRiskIdentified: return 10
+        case .monitoringPlan: return 15
+        case .escalated: return 20
+        case .consultRequested: return 15
+        case .transportArranged: return 20
+        }
+    }
+    
+    /// Default notes stub to help user get started
+    var defaultNotes: String {
+        switch self {
+        case .noRiskIdentified: return "No immediate risk identified. "
+        case .monitoringPlan: return "Monitoring plan established. "
+        case .escalated: return "Escalated due to immediate safety concern. "
+        case .consultRequested: return "Consultation requested for "
+        case .transportArranged: return "Emergency transport arranged. "
+        }
+    }
+}
+
+/// Audit event types for safety review
+enum AuditEventType {
+    case safetyBannerAcknowledged
+    case safetyBannerDismissed
+}
+
+/// Mock AuditService for now (replace with real implementation)
+class AuditService: ObservableObject {
+    func logEvent(_ event: AuditEventType, actor: String, assessmentId: UUID, action: String? = nil, notes: String) {
+        print("📝 Audit: \(event) by \(actor) for \(assessmentId)")
+        if let action = action { print("   Action: \(action)") }
+        print("   Notes: \(notes)")
+    }
+}
+
+/// Mock AppSettings for now (replace with real implementation)
+class AppSettings: ObservableObject {
+    @Published var reduceMotion: Bool = false
+}
 
 /// Result of safety review completion
 struct SafetyReviewResult {
@@ -31,6 +100,7 @@ struct SafetyReviewSheet: View {
     @State private var notes: String = ""
     @State private var acknowledged = false
     @State private var showInlineError = false
+    @State private var detent: PresentationDetent = .large
 
     // MARK: - Environment
     @FocusState private var focusedField: Field?
@@ -77,19 +147,22 @@ struct SafetyReviewSheet: View {
                             .toggleStyle(.switch)
                             .tint(.red)
                             .accessibilityIdentifier("ackToggle")
+                        
+                        // --- Helper text showing what's needed
+                        continueHelper
                     }
                     .padding(20)
                 }
                 .scrollDismissesKeyboard(.interactively)
                 .ignoresSafeArea(.keyboard, edges: .bottom)     // prevents sheet "jump"
-                .onChange(of: actionTaken) { _, newValue in
+                .onChange(of: actionTaken) { oldValue, newValue in
                     guard newValue != nil else { return }
-                    // Allow picker to collapse before focusing.
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                        // Optional: auto-stub notes for the common case
-                        if notes.isEmpty, newValue == .noRiskIdentified {
-                            notes = "No immediate risk identified. "
-                        }
+                    // Auto-prefill notes if empty
+                    if notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        notes = newValue!.defaultNotes
+                    }
+                    // Short delay to avoid keyboard-induced detent snap
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                         focusedField = .notes
                         withAppropriateAnimation {
                             proxy.scrollTo("notes", anchor: .bottom)
@@ -99,9 +172,13 @@ struct SafetyReviewSheet: View {
             }
             .navigationTitle("Safety Review")
             .navigationBarTitleDisplayMode(.inline)
-            .presentationDetents(preferredDetents)
+            .presentationDetents([.large, .medium], selection: $detent)
             .presentationDragIndicator(.visible)
             .interactiveDismissDisabled(true) // must complete
+            .onAppear {
+                // Open at full height by default, user can resize
+                detent = .large
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
@@ -204,14 +281,13 @@ struct SafetyReviewSheet: View {
 
     @ViewBuilder private var notesEditor: some View {
         TextEditor(text: $notes)
-            .frame(minHeight: 120)
+            .frame(minHeight: 160)
             .padding(12)
             .background(.background, in: .rect(cornerRadius: 12))
             .overlay(
                 RoundedRectangle(cornerRadius: 12).stroke(.quaternary, lineWidth: 1)
             )
-            .textInputAutocapitalization(.sentences)
-            .submitLabel(.done)
+            .autocapitalization(.sentences)
             .accessibilityIdentifier("notesField")
             .accessibilityLabel("Safety review notes")
             .accessibilityHint("Describe the action taken and current status")
@@ -220,9 +296,25 @@ struct SafetyReviewSheet: View {
     // MARK: - Logic
 
     private var canContinue: Bool {
-        (actionTaken != nil) &&
-        !notes.trimmed.isEmpty &&
-        acknowledged
+        guard let action = actionTaken else { return false }
+        
+        // Check if notes meet requirements for this action
+        let notesOK = action.notesRequired
+            ? notes.trimmingCharacters(in: .whitespacesAndNewlines).count >= action.minNotesLength
+            : true
+        
+        return notesOK && acknowledged
+    }
+    
+    @ViewBuilder private var continueHelper: some View {
+        if actionTaken == nil {
+            HelperRow(icon: "exclamationmark.circle", text: "Select an action")
+        } else if let action = actionTaken, action.notesRequired,
+                  notes.trimmingCharacters(in: .whitespacesAndNewlines).count < action.minNotesLength {
+            HelperRow(icon: "square.and.pencil", text: "Add a brief note (\(action.minNotesLength) chars minimum)")
+        } else if !acknowledged {
+            HelperRow(icon: "checkmark.circle", text: "Acknowledge review")
+        }
     }
 
     private func validateAndContinue() {
@@ -247,21 +339,26 @@ struct SafetyReviewSheet: View {
         isPresented = false
     }
 
-    private var preferredDetents: Set<PresentationDetent> {
-        // Settings-aware detents for iPad/large text
-        if dts >= .accessibility2 {
-            return [.fraction(0.6), .large]
-        }
-        // Honor settings default (large by default for safety review)
-        return [.large, .medium]
-    }
-
     private func withAppropriateAnimation(_ block: @escaping () -> Void) {
         if settings.reduceMotion {
             block()
         } else {
             withAnimation(.easeInOut(duration: 0.25), block)
         }
+    }
+}
+
+// MARK: - Helper Row Component
+private struct HelperRow: View {
+    let icon: String
+    let text: String
+    
+    var body: some View {
+        Label(text, systemImage: icon)
+            .foregroundStyle(.secondary)
+            .font(.footnote)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 4)
     }
 }
 

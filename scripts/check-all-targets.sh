@@ -25,9 +25,9 @@ CHECKED_COUNT=0
 check_file() {
     local file_path=$1
     local file_name=$(basename "$file_path")
-    
+
     CHECKED_COUNT=$((CHECKED_COUNT + 1))
-    
+
     if grep -q "$file_name" "$PBXPROJ"; then
         echo "  ✅ $file_path"
         return 0

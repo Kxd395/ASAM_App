@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 /// Compliance mode determines IP restrictions and feature availability
 enum ComplianceMode: String, Codable {

@@ -8,6 +8,7 @@
 //
 
 import SwiftUI
+import UIKit  // For ShareSheet (UIActivityViewController)
 
 struct ContentView: View {
     @EnvironmentObject private var assessmentStore: AssessmentStore
@@ -15,13 +16,16 @@ struct ContentView: View {
     @EnvironmentObject private var rulesService: RulesServiceWrapper  // NEW: Rules engine
     @EnvironmentObject private var networkChecker: NetworkSanityChecker  // NEW: Network monitoring
     @EnvironmentObject private var uploadQueue: UploadQueue  // NEW: Upload queue
+    @EnvironmentObject private var settings: AppSettings  // NEW: Display settings
 
     @State private var selectedAssessment: Assessment?
     @State private var selectedSection: NavigationSection?
     @State private var showSafetyBanner: Bool = false
+    @State private var safetyBannerDetent: PresentationDetent = .large  // NEW: For resizable sheets
     @State private var showNewAssessmentSheet: Bool = false
     @State private var showRulesDiagnostics: Bool = false  // NEW: Rules diagnostics
     @State private var showNetworkAlert: Bool = false  // NEW: Network warning
+    @State private var showSettings: Bool = false  // NEW: Settings sheet
     @State private var columnVisibility = NavigationSplitViewVisibility.all
 
     var body: some View {
@@ -42,6 +46,16 @@ struct ContentView: View {
                     // NEW: Network status indicator
                     ToolbarItem(placement: .topBarLeading) {
                         networkStatusIndicator
+                    }
+                    
+                    // NEW: Settings button
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            showSettings = true
+                        } label: {
+                            Label("Settings", systemImage: "gearshape")
+                        }
+                        .accessibilityLabel("Open settings")
                     }
 
                     ToolbarItem(placement: .primaryAction) {
@@ -80,11 +94,22 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showSafetyBanner) {
             if let assessmentId = selectedAssessment?.id {
-                SafetyBanner(assessmentId: assessmentId, isPresented: $showSafetyBanner)
+                SafetyReviewSheet(
+                    isPresented: $showSafetyBanner,
+                    assessmentId: assessmentId
+                ) { result in
+                    // Handle safety review completion
+                    // Store result in assessment if needed
+                    print("Safety review completed - Action: \(result.action.rawValue)")
+                }
+                .environmentObject(settings)
             }
         }
         .sheet(isPresented: $showNewAssessmentSheet) {
             NewAssessmentSheet(isPresented: $showNewAssessmentSheet)
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
         }
         .sheet(isPresented: $showRulesDiagnostics) {
             NavigationStack {
@@ -198,7 +223,7 @@ struct ContentView: View {
                         Label("\(uploadQueue.jobs.count) uploads queued", systemImage: "arrow.up.circle")
                             .foregroundStyle(.orange)
                         Spacer()
-                        if uploadQueue.jobs.contains(where: { $0.retryCount > 0 }) {
+                        if uploadQueue.jobs.contains(where: { $0.attempt > 0 }) {
                             Image(systemName: "exclamationmark.triangle")
                                 .foregroundStyle(.red)
                                 .font(.caption)
@@ -378,14 +403,79 @@ struct AssessmentOverviewView: View {
 
 struct DomainsListView: View {
     let assessment: Assessment
+    @State private var path: [Int] = []  // Navigation path by domain number
+    
     var body: some View {
-        List(assessment.domains) { domain in
-            VStack(alignment: .leading) {
-                Text("Domain \(domain.number): \(domain.title)")
-                Text("Severity: \(domain.severity)")
-                    .font(.caption)
+        NavigationStack(path: $path) {
+            List {
+                ForEach(assessment.domains) { domain in
+                    NavigationLink(value: domain.number) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Domain \(domain.number): \(domain.title)")
+                                    .font(.subheadline)
+                                Text("Severity: \(domain.severity)")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                        .contentShape(Rectangle())
+                        .accessibilityLabel("Domain \(domain.number), \(domain.title), Severity \(domain.severity)")
+                    }
+                }
+            }
+            .navigationTitle("Domains")
+            .navigationDestination(for: Int.self) { domainNumber in
+                if let domain = assessment.domains.first(where: { $0.number == domainNumber }) {
+                    DomainDetailPlaceholderView(domain: domain)
+                } else {
+                    Text("Domain not found")
+                }
             }
         }
+    }
+}
+
+/// Placeholder view for domain details until questionnaire is implemented
+struct DomainDetailPlaceholderView: View {
+    let domain: Domain
+    
+    var body: some View {
+        Form {
+            Section {
+                Text("Domain \(domain.number)")
+                    .font(.headline)
+                Text(domain.title)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+            
+            Section {
+                Text("Severity: \(domain.severity)")
+                Stepper("Adjust Severity", value: .constant(domain.severity), in: 0...4)
+                    .disabled(true)
+            } header: {
+                Text("CURRENT SEVERITY")
+            } footer: {
+                Text("Questionnaire implementation pending. Domain assessment forms will be available here.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            
+            Section {
+                Text("This domain requires structured questionnaire data to enable full assessment.")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text("PENDING IMPLEMENTATION")
+            }
+        }
+        .navigationTitle("Domain \(domain.number)")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -427,9 +517,89 @@ struct ValidationView: View {
 
 struct ExportView: View {
     let assessment: Assessment
+    @EnvironmentObject var rulesService: RulesServiceWrapper
+    @EnvironmentObject var auditService: AuditService
+    
+    @State private var selectedTemplate: ComplianceMode = .internal_neutral
+    @State private var showingExportSheet = false
+    @State private var exportedURL: URL?
+    
     var body: some View {
-        Text("Export options")
+        Form {
+            Section {
+                Picker("Template", selection: $selectedTemplate) {
+                    Text("Internal/Neutral").tag(ComplianceMode.internal_neutral)
+                    Text("Licensed ASAM").tag(ComplianceMode.licensed_asam)
+                }
+                .pickerStyle(.segmented)
+            } header: {
+                Text("COMPLIANCE MODE")
+            } footer: {
+                Text("Internal/Neutral mode for unlicensed use. Licensed mode requires ASAM license.")
+                    .font(.caption)
+            }
+            
+            Section {
+                ExportButton(
+                    assessment: assessment,
+                    rulesService: rulesService
+                ) {
+                    performExport()
+                }
+                .buttonStyle(.borderedProminent)
+                .frame(maxWidth: .infinity)
+            } header: {
+                Text("EXPORT")
+            } footer: {
+                if !rulesService.isAvailable {
+                    Text("Export is disabled until rules engine loads successfully.")
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                }
+            }
+            
+            Section {
+                if let checksum = rulesService.checksum {
+                    LabeledContent("Rules Version", value: checksum.version)
+                    LabeledContent("Rules Hash", value: checksum.sha256Short)
+                }
+                LabeledContent("Assessment ID", value: String(assessment.id.uuidString.prefix(8)).uppercased())
+            } header: {
+                Text("PROVENANCE")
+            }
+        }
+        .navigationTitle("Export")
+        .sheet(isPresented: $showingExportSheet) {
+            if let url = exportedURL {
+                ShareSheet(activityItems: [url])
+            }
+        }
     }
+    
+    private func performExport() {
+        // TODO: Implement actual PDF export
+        // This is a placeholder for the export action
+        print("🔄 Exporting assessment \(assessment.id) with template \(selectedTemplate)")
+        
+        auditService.logEvent(
+            .pdfExported,
+            actor: "assessor",
+            assessmentId: assessment.id,
+            action: "Export initiated with \(selectedTemplate.rawValue) template",
+            notes: ""
+        )
+    }
+}
+
+// Share sheet for iOS
+struct ShareSheet: UIViewControllerRepresentable {
+    let activityItems: [Any]
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+    }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
 // MARK: - ContentView Extensions

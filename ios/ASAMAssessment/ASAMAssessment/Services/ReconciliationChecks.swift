@@ -39,7 +39,7 @@ struct ReconciliationValidator {
         var checks: [ReconciliationCheck] = []
         
         // Check 1: High COWS requires minimum D1 severity
-        if let maxCOWS = substances.map({ $0.cowsScore }).max(), maxCOWS > 0 {
+        if let maxCOWS = substances.compactMap({ $0.cows }).max(), maxCOWS > 0 {
             let minD1 = cowsToMinimumD1(cowsScore: maxCOWS)
             
             if domainASeverity < minD1 {
@@ -57,7 +57,7 @@ struct ReconciliationValidator {
         }
         
         // Check 2: High CIWA requires minimum D1 severity
-        if let maxCIWA = substances.map({ $0.ciwaScore }).max(), maxCIWA > 0 {
+        if let maxCIWA = substances.compactMap({ $0.ciwa }).max(), maxCIWA > 0 {
             let minD1 = ciwaToMinimumD1(ciwaScore: maxCIWA)
             
             if domainASeverity < minD1 {
@@ -138,7 +138,7 @@ struct ReconciliationValidator {
         
         if flags.noWithdrawalSigns {
             // If flagged "no withdrawal", recent use (<24h) is suspicious
-            let recentUse = substances.filter { $0.lastUseHours <= 24 }
+            let recentUse = substances.filter { ($0.lastUseHours ?? 999) <= 24 }
             
             if !recentUse.isEmpty {
                 let substanceList = recentUse.map { $0.substanceGroup.rawValue }.joined(separator: ", ")

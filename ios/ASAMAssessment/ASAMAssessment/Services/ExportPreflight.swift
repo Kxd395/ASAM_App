@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct ExportPreflight {
     enum ExportError: LocalizedError {
@@ -14,7 +15,7 @@ struct ExportPreflight {
         case assessmentIncomplete
         case validationFailed([String])
         case complianceViolation(String)
-        
+
         var errorDescription: String? {
             switch self {
             case .rulesUnavailable(let message):
@@ -27,7 +28,7 @@ struct ExportPreflight {
                 return "Cannot export: \(message)"
             }
         }
-        
+
         var recoverySuggestion: String? {
             switch self {
             case .rulesUnavailable:
@@ -41,7 +42,7 @@ struct ExportPreflight {
             }
         }
     }
-    
+
     /// Perform all preflight checks before export
     /// FIX #2: Hard gate requiring healthy rules state and valid provenance
     /// COMPILE FIX #2: Updated signature with typed ComplianceMode
@@ -66,29 +67,29 @@ struct ExportPreflight {
             let message = "Rules engine is degraded. Cannot export with fallback LOC."
             return .failure(.rulesUnavailable(message))
         }
-        
+
         // FIX #2: Rule 2 - Provenance must exist (blocks degraded rules)
         guard let provenance = provenance else {
             return .failure(.rulesUnavailable("Rules provenance unavailable. Cannot verify rules integrity."))
         }
-        
+
         // FIX #2: Rule 3 - Ruleset hash must be non-empty
         guard !provenance.rulesetHash.isEmpty else {
             return .failure(.rulesUnavailable("Rules hash is empty. Cannot stamp PDF footer."))
         }
-        
+
         // FIX #9: Rule 4 - Compliance template check
         if let templatePath = templatePath {
             if let violation = checkComplianceTemplate(templatePath: templatePath, complianceMode: complianceMode) {
                 return .failure(.complianceViolation(violation))
             }
         }
-        
+
         // Rule 2: Assessment must be marked complete
         if !assessment.isComplete {
             return .failure(.assessmentIncomplete)
         }
-        
+
         // Rule 3: All validation gates must pass
         let failedGates = assessment.validationGates.filter { !$0.isPassed }
         if !failedGates.isEmpty {
@@ -101,7 +102,7 @@ struct ExportPreflight {
             }
             return .failure(.validationFailed(errors))
         }
-        
+
         // Rule 4: LOC recommendation must exist
         if assessment.locRecommendation == nil {
             return .failure(.validationFailed([
@@ -109,10 +110,10 @@ struct ExportPreflight {
                 "Run the rules engine to calculate level of care"
             ]))
         }
-        
+
         return .success(())
     }
-    
+
     // FIX #9: Compliance template validation
     /// Checks if template path is allowed in current compliance mode
     /// Returns violation message if template is banned, nil if OK
@@ -120,7 +121,7 @@ struct ExportPreflight {
     private static func checkComplianceTemplate(templatePath: String, complianceMode: ComplianceMode) -> String? {
         let lowercasePath = templatePath.lowercased()
         let bannedTokens = ["asam", "continuum", "co-triage", "cotriage"]
-        
+
         // In internal_neutral mode, block any official ASAM templates
         if complianceMode == .internal_neutral {
             for token in bannedTokens {
@@ -129,16 +130,16 @@ struct ExportPreflight {
                 }
             }
         }
-        
+
         return nil
     }
-    
+
     /// Quick check - returns true if export is allowed
     /// COMPILE FIX #2: Wire provenance and complianceMode from globals
     static func canExport(assessment: Assessment, rulesService: RulesServiceWrapper) -> Bool {
         let provenance = RulesProvenanceTracker.shared.provenanceForExport()
         let complianceMode = ComplianceConfig.shared.mode
-        
+
         switch check(
             assessment: assessment,
             rulesService: rulesService,
@@ -161,17 +162,20 @@ struct ExportButton: View {
     let assessment: Assessment
     @ObservedObject var rulesService: RulesServiceWrapper
     let action: () -> Void
-    
+
     @State private var showingPreflightError = false
     @State private var preflightError: ExportPreflight.ExportError?
-    
+
     var body: some View {
         Button {
             let result = ExportPreflight.check(
                 assessment: assessment,
-                rulesService: rulesService
+                rulesService: rulesService,
+                provenance: nil as RulesProvenance?,
+                complianceMode: .internal_neutral,
+                templatePath: nil as String?
             )
-            
+
             switch result {
             case .success:
                 action()
@@ -189,7 +193,7 @@ struct ExportButton: View {
             if let error = preflightError {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(error.localizedDescription)
-                    
+
                     if let suggestion = error.recoverySuggestion {
                         Text("\nSuggestion: \(suggestion)")
                             .font(.caption)
@@ -198,7 +202,7 @@ struct ExportButton: View {
             }
         }
     }
-    
+
     private var canExport: Bool {
         ExportPreflight.canExport(assessment: assessment, rulesService: rulesService)
     }
@@ -210,7 +214,7 @@ struct ExportPreflightModifier: ViewModifier {
     let assessment: Assessment
     @ObservedObject var rulesService: RulesServiceWrapper
     @Binding var isExportAllowed: Bool
-    
+
     func body(content: Content) -> some View {
         content
             .onAppear {
@@ -223,7 +227,7 @@ struct ExportPreflightModifier: ViewModifier {
                 updateExportStatus()
             }
     }
-    
+
     private func updateExportStatus() {
         isExportAllowed = ExportPreflight.canExport(
             assessment: assessment,

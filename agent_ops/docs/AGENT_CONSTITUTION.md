@@ -19,6 +19,12 @@ Deliver accurate, compliant, and reproducible updates to the ASSESS project with
 ## Change Control
 - Every run must append an entry to `docs/RUN_LOG.md` and update `docs/MASTER_TODO.md` via the post-run updater.
 - A run is not complete until the post-run updater exits successfully.
+- **Code Quality**: All code fixes must follow the CODE_FIX_PROTOCOL (see `agent_ops/rules/CODE_FIX_PROTOCOL.md`):
+  - Read full context before fixing (20-30 lines minimum)
+  - Verify property/type definitions before changing names
+  - Fix ALL cascade errors immediately, not just the first error
+  - Never report success if new errors were introduced
+  - Check for duplicate declarations and related code impacts
 
 ## Root Hygiene
 - The agent must enforce the allowed root file policy before committing. If unexpected root files exist, the run must fail with a clear message.

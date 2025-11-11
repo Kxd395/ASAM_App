@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import Combine
 
 /// Thread-safe token provider with automatic refresh
 actor TokenProvider {

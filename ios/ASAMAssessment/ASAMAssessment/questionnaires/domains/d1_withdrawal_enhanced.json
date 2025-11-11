@@ -480,46 +480,105 @@
     },
     {
       "id": "d1_27",
-      "text": "Severity Rating - Dimension 1: Select the single best-fitting score for overall acute intoxication and withdrawal potential",
-      "type": "single_choice",
+      "text": "SEVERITY RATING - DIMENSION 1 (Acute Intoxication and/or Withdrawal Potential)",
+      "type": "severity_rating",
       "required": true,
-      "breadcrumb": "severity_rating",
-      "options": [
-        {"value": "0", "label": "0 - None: No signs of withdrawal or intoxication", "score": 0},
-        {"value": "1", "label": "1 - Mild: Mild intoxication/withdrawal; interferes with daily functioning but no danger", "score": 1},
-        {"value": "2", "label": "2 - Moderate: More significant intoxication/withdrawal, patient responds to support; moderate risk", "score": 2},
-        {"value": "3", "label": "3 - Severe: Severe intoxication or withdrawal with imminent risk; needs 24-hour support", "score": 3},
-        {"value": "4", "label": "4 - Very Severe: Incapacitated; presents immediate danger to life", "score": 4}
-      ]
-    },
-    {
-      "id": "d1_28",
-      "text": "Substance-Specific Rating: Check which substance(s) are the main drivers for the severity score above",
-      "type": "multiple_choice",
-      "required": false,
-      "breadcrumb": "severity_substances",
-      "options": [
-        {"value": "alcohol", "label": "Alcohol"},
-        {"value": "opioids", "label": "Opioids"},
-        {"value": "benzodiazepines", "label": "Benzodiazepines"},
-        {"value": "stimulants", "label": "Stimulants"},
-        {"value": "other1", "label": "Other (specify below)"},
-        {"value": "other2", "label": "Additional other (specify below)"}
-      ]
-    },
-    {
-      "id": "d1_29",
-      "text": "Specify other substance(s) driving severity:",
-      "type": "text",
-      "required": false,
-      "breadcrumb": "other_substances_specify"
-    },
-    {
-      "id": "d1_30",
-      "text": "Additional clinical comments for Dimension 1:",
-      "type": "text",
-      "required": false,
-      "breadcrumb": "additional_comments"
+      "breadcrumb": "d1_severity_rating",
+      "helpText": "Please circle the intensity and urgency of the patient's CURRENT needs for services based on the information collected in Dimension 1",
+      "severity_rating": {
+        "severity_cards": [
+          {
+            "rating": 0,
+            "title": "0 None",
+            "color": "#9AD07D",
+            "border": "#5AA03A",
+            "icon": "checkmark.circle",
+            "bullets": [
+              "No signs of withdrawal or intoxication present"
+            ],
+            "disposition": ""
+          },
+          {
+            "rating": 1,
+            "title": "1 Mild",
+            "color": "#7CC46B",
+            "border": "#4F9A3A",
+            "icon": "info.circle",
+            "bullets": [
+              "Mild or moderate intoxication",
+              "Interferes with daily functioning",
+              "Minimal risk of severe withdrawal",
+              "No danger to self or others"
+            ],
+            "disposition": "Withdrawal management (WM) follow up for controlled or mild symptoms"
+          },
+          {
+            "rating": 2,
+            "title": "2 Moderate",
+            "color": "#F6C74A",
+            "border": "#C89E24",
+            "icon": "exclamationmark.triangle",
+            "bullets": [
+              "May have severe intoxication but responds to support",
+              "Moderate risk of severe withdrawal",
+              "No danger to self or others"
+            ],
+            "disposition": "Prioritize the link to medical WM services"
+          },
+          {
+            "rating": 3,
+            "title": "3 Severe",
+            "color": "#F59E3A",
+            "border": "#C7771D",
+            "icon": "exclamationmark.triangle.fill",
+            "bullets": [
+              "Severe intoxication with imminent risk of danger to self or others",
+              "Difficulty coping",
+              "Significant risk of severe withdrawal"
+            ],
+            "disposition": "Urgent, high risk or severe WM needs, high need of support 24 hours per day"
+          },
+          {
+            "rating": 4,
+            "title": "4 Very Severe",
+            "color": "#E9544A",
+            "border": "#B3382D",
+            "icon": "xmark.circle.fill",
+            "bullets": [
+              "Incapacitated",
+              "Severe signs and symptoms",
+              "Presents danger, for example seizures",
+              "Continued substance use poses an imminent threat to life"
+            ],
+            "disposition": "Emergency Department - imminent danger"
+          }
+        ],
+        "substance_options": [
+          {"id": "alcohol", "label": "Alcohol", "type": "checkbox"},
+          {"id": "opioids", "label": "Opioids", "type": "checkbox"},
+          {"id": "benzodiazepines", "label": "Benzodiazepines", "type": "checkbox"},
+          {"id": "stimulants", "label": "Stimulants", "type": "text"},
+          {"id": "other1", "label": "Other", "type": "text"},
+          {"id": "other2", "label": "Other", "type": "text"}
+        ],
+        "safety_rules": [
+          {
+            "condition": "rating >= 3",
+            "banner": "If 3 or 4 is selected, consider WM at a higher level of care and follow emergency protocols as indicated",
+            "severity": "critical"
+          },
+          {
+            "condition": "rating >= 2",
+            "banner": "For Benzodiazepines or Alcohol with moderate or higher severity, review withdrawal management pathway",
+            "severity": "warning"
+          }
+        ],
+        "reference_pages": {
+          "alcohol": "147-154",
+          "sedatives": "155-161",
+          "opioids": "162"
+        }
+      }
     }
   ]
 }

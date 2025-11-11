@@ -119,6 +119,58 @@ struct RepeaterField: Codable, Identifiable {
     }
 }
 
+// MARK: - Severity Rating Structures
+
+struct SeverityCard: Codable, Identifiable {
+    let rating: Int
+    let title: String
+    let color: String
+    let border: String
+    let icon: String
+    let bullets: [String]
+    let disposition: String
+    
+    var id: Int { rating }
+    
+    enum CodingKeys: String, CodingKey {
+        case rating, title, color, border, icon, bullets, disposition
+    }
+}
+
+struct SubstanceOption: Codable, Identifiable {
+    let id: String
+    let label: String
+    let type: String  // "checkbox" or "text"
+    
+    enum CodingKeys: String, CodingKey {
+        case id, label, type
+    }
+}
+
+struct SafetyRule: Codable {
+    let condition: String  // e.g., "rating >= 3"
+    let banner: String
+    let severity: String   // "warning", "critical"
+    
+    enum CodingKeys: String, CodingKey {
+        case condition, banner, severity
+    }
+}
+
+struct SeverityRatingMetadata: Codable {
+    let cards: [SeverityCard]
+    let substanceOptions: [SubstanceOption]
+    let safetyRules: [SafetyRule]
+    let referencePages: [String: String]?  // e.g., ["alcohol": "147-154"]
+    
+    enum CodingKeys: String, CodingKey {
+        case cards = "severity_cards"
+        case substanceOptions = "substance_options"
+        case safetyRules = "safety_rules"
+        case referencePages = "reference_pages"
+    }
+}
+
 struct Question: Codable, Identifiable {
     let id: String
     let text: String
@@ -133,6 +185,7 @@ struct Question: Codable, Identifiable {
     let repeaterFields: [RepeaterField]?  // For repeater type questions
     let substanceTemplate: SubstanceTemplate?
     let availableSubstances: [SubstanceDefinition]?
+    let severityRating: SeverityRatingMetadata?  // NEW: For severity_rating type
     
     // Explicit initializer with default values for new optional parameters
     init(
@@ -148,7 +201,8 @@ struct Question: Codable, Identifiable {
         helpText: String? = nil,
         repeaterFields: [RepeaterField]? = nil,
         substanceTemplate: SubstanceTemplate? = nil,
-        availableSubstances: [SubstanceDefinition]? = nil
+        availableSubstances: [SubstanceDefinition]? = nil,
+        severityRating: SeverityRatingMetadata? = nil
     ) {
         self.id = id
         self.text = text
@@ -163,6 +217,7 @@ struct Question: Codable, Identifiable {
         self.repeaterFields = repeaterFields
         self.substanceTemplate = substanceTemplate
         self.availableSubstances = availableSubstances
+        self.severityRating = severityRating
     }
     
     enum CodingKeys: String, CodingKey {
@@ -172,6 +227,7 @@ struct Question: Codable, Identifiable {
         case repeaterFields = "repeater_fields"
         case substanceTemplate = "substance_template"
         case availableSubstances = "available_substances"
+        case severityRating = "severity_rating"
     }
 }
 
@@ -185,6 +241,7 @@ enum QuestionType: String, Codable, CaseIterable {
     case repeater = "repeater"
     case monthYear = "month_year"
     case dynamicSubstanceGrid = "dynamic_substance_grid"
+    case severityRating = "severity_rating"  // NEW: D1 severity rating cards
 }
 
 struct QuestionOption: Codable, Identifiable {

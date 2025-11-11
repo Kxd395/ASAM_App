@@ -509,6 +509,14 @@ struct QuestionView: View {
                 )
                 .datePickerStyle(.compact)
             }
+            
+        case .severityRating:
+            // Render severity rating cards for D1
+            // TODO: Full SeverityRatingView implementation
+            Text("Severity Rating component - Implementation in progress")
+                .font(.headline)
+                .foregroundColor(.orange)
+                .padding()
         }
     }
     

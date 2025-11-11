@@ -73,12 +73,19 @@ struct SafetyReviewSheet: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
 
-                        // --- Acknowledgement
-                        Toggle("I have reviewed safety criteria and documented appropriate action",
-                               isOn: $acknowledged)
-                            .toggleStyle(.switch)
-                            .tint(.red)
-                            .accessibilityIdentifier("ackToggle")
+                        // --- Acknowledgement Section
+                        Section {
+                            Toggle("I have reviewed safety criteria and documented appropriate action",
+                                   isOn: $acknowledged)
+                                .toggleStyle(.switch)
+                                .tint(.red)
+                                .accessibilityIdentifier("ackToggle")
+                        } header: {
+                            Text("ACKNOWLEDGMENT")
+                                .font(.headline)
+                                .foregroundStyle(.red)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                         
                         // --- Helper text showing what's needed
                         continueHelper

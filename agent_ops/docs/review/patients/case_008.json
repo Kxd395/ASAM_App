@@ -1,0 +1,139 @@
+{
+  "case_id": "case_008",
+  "patient": {
+    "patient_id": "e99b61cc-408b-4b29-a5f3-9229682a1f58",
+    "mrn": "MRN000008",
+    "name": "Hector Morales",
+    "dob": "2000-05-30",
+    "sex": "male",
+    "preferred_language": "es",
+    "phone": ""
+  },
+  "encounter": {
+    "encounter_id": "9e674f03-d3aa-4c5d-9065-2a5fea5b4793",
+    "fin": "FIN000008",
+    "mrn": "MRN000008",
+    "type": "outpatient",
+    "status": "in-progress",
+    "start": "2025-11-10T10:00:00-06:00",
+    "end": "2025-11-10T13:00:00-06:00",
+    "location": "Main Campus / Addiction Clinic",
+    "clinician": "Demo Clinician, MD"
+  },
+  "assessment": {
+    "assessment_id": "d0a0fa51-411a-4fe1-9f7e-c819306e3298",
+    "mrn": "MRN000008",
+    "fin": "FIN000008",
+    "domain_severities": {
+      "A": 1,
+      "B": 1,
+      "C": 1,
+      "D": 2,
+      "E": 2,
+      "F": 2
+    },
+    "domain_severities_numeric": {
+      "d1": 1,
+      "d2": 1,
+      "d3": 1,
+      "d4": 2,
+      "d5": 2,
+      "d6": 2
+    },
+    "clinical_flags": {
+      "vitalsUnstable": false,
+      "pregnant": false,
+      "noWithdrawalSigns": true,
+      "acutePsych": false
+    },
+    "vitals": {
+      "temp_c": 36.6,
+      "bp_sys": 122,
+      "bp_dia": 74,
+      "pulse": 72,
+      "rr": 14,
+      "spo2": 100,
+      "fio2": 0.21
+    },
+    "uds": {
+      "performed_at": "2025-11-10T11:00:00-06:00",
+      "lab_observation_id": "Observation/UDS-027167",
+      "panels": {
+        "cannabis": "positive",
+        "opiates": "negative",
+        "fentanyl": "negative",
+        "amphetamines": "negative",
+        "cocaine": "negative",
+        "benzodiazepines": "negative",
+        "pcp": "negative",
+        "barbiturates": "negative",
+        "methadone": "negative",
+        "oxycodone": "negative",
+        "buprenorphine": "negative"
+      }
+    },
+    "substance_rows": [
+      {
+        "profile_id": "769dca1b-dac2-49d5-97a2-4e51624791b7",
+        "assessment_id": "d0a0fa51-411a-4fe1-9f7e-c819306e3298",
+        "substance_group": "cannabis",
+        "other_substance_text": "",
+        "last_use_dt": "2025-11-09T18:00:00-06:00",
+        "last_use_hours": 18,
+        "route": [
+          "smoked"
+        ],
+        "route_other_text": "",
+        "freq_7d_days": 5,
+        "freq_30d_days": 18,
+        "uses_per_day_typical": 3,
+        "amount_text": "",
+        "std_drinks_per_day": 0,
+        "mg_per_day": 0,
+        "age_first_use": 19,
+        "longest_abstinence_days": 14,
+        "current_withdrawal_symptoms": false,
+        "cows_score": 0,
+        "ciwa_score": 0,
+        "craving_0_10": 6,
+        "treatment_history": {
+          "detox": false,
+          "residential": false,
+          "outpatient": true,
+          "mat_current": false,
+          "mat_type": "none",
+          "mat_other_text": ""
+        },
+        "overdose_history": {
+          "ever_overdosed": false,
+          "last_overdose_dt": null,
+          "overdose_count_lifetime": 0
+        },
+        "risk_context": {
+          "injection_use": false,
+          "shares_equipment": false,
+          "naloxone_access": false,
+          "binge_pattern": false,
+          "money_spent_per_day": 0,
+          "typical_time_of_day": "evening",
+          "triggers_text": ""
+        },
+        "evidence_links": {
+          "uds_latest": null,
+          "emr_observation_ids": []
+        },
+        "notes_clinician": "",
+        "computed_flags": {
+          "recent_use_lt_24h": true,
+          "suspected_fentanyl": false,
+          "wm_indicated_candidate": false
+        },
+        "created_at": "2025-11-10T12:00:00-06:00",
+        "updated_at": "2025-11-10T12:00:00-06:00"
+      }
+    ],
+    "loc_recommendation": null,
+    "created_at": "2025-11-10T12:00:00-06:00",
+    "updated_at": "2025-11-10T12:00:00-06:00"
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "case_id": "qa_case_001",
+  "description": "Golden case for severity scoring validation - moderate severity across all domains",
+  "patient_profile": {
+    "age": 35,
+    "gender": "male",
+    "primary_substance": "alcohol",
+    "treatment_history": "multiple_outpatient"
+  },
+  "domain_answers": {
+    "A": {
+      "a01": "moderate",
+      "a02": "drowsy",
+      "a03": "mild",
+      "a04": ["alcohol", "cannabis"],
+      "a05": true,
+      "a06": 4,
+      "a07": "minor"
+    },
+    "B": {
+      "b01": "mild",
+      "b02": "few",
+      "b03": false,
+      "b04": "good",
+      "b05": "none",
+      "b06": "minimal_help",
+      "b07": "not_applicable"
+    },
+    "C": {
+      "c01": "mildly_depressed",
+      "c02": "none",
+      "c03": "outpatient",
+      "c04": "none",
+      "c05": "normal",
+      "c06": 3,
+      "c07": ["agitation"]
+    },
+    "D": {
+      "d01": "some_problems",
+      "d02": "moderate_internal",
+      "d03": "some_attempts",
+      "d04": "willing",
+      "d05": "contemplation",
+      "d06": "good",
+      "d07": "moderate"
+    },
+    "E": {
+      "e01": "occasional",
+      "e02": "mild",
+      "e03": ["stress", "social"],
+      "e04": "mixed",
+      "e05": 6,
+      "e06": "occasionally",
+      "e07": "basic"
+    },
+    "F": {
+      "f01": "stable_neutral",
+      "f02": "moderate",
+      "f03": "somewhat_accessible",
+      "f04": "part_time",
+      "f05": ["healthy_activities", "isolated"],
+      "f06": "limited",
+      "f07": "minor",
+      "f08": "moderately_supportive"
+    }
+  },
+  "expected_severities": {
+    "A": {
+      "severity": 2,
+      "score_range": [1.8, 2.4],
+      "description": "Low to moderate risk"
+    },
+    "B": {
+      "severity": 2,
+      "score_range": [1.8, 2.4],
+      "description": "Low to moderate complexity"
+    },
+    "C": {
+      "severity": 2,
+      "score_range": [1.8, 2.4],
+      "description": "Low to moderate complexity"
+    },
+    "D": {
+      "severity": 2,
+      "score_range": [1.8, 2.4],
+      "description": "Moderate readiness"
+    },
+    "E": {
+      "severity": 2,
+      "score_range": [1.8, 2.4],
+      "description": "Low to moderate risk"
+    },
+    "F": {
+      "severity": 2,
+      "score_range": [1.8, 2.4],
+      "description": "Moderately supportive"
+    }
+  },
+  "overall_recommendation": {
+    "primary_loc": "2.1",
+    "description": "Intensive outpatient with some residential features",
+    "reasoning": "Consistent moderate severity across domains supports intensive outpatient level of care"
+  }
+}

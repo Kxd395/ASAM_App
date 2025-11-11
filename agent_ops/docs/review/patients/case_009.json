@@ -1,0 +1,140 @@
+{
+  "case_id": "case_009",
+  "patient": {
+    "patient_id": "db31d1a2-eebe-463c-a818-690e33f36188",
+    "mrn": "MRN000009",
+    "name": "Isabella Rossi",
+    "dob": "1983-08-08",
+    "sex": "female",
+    "preferred_language": "en",
+    "phone": ""
+  },
+  "encounter": {
+    "encounter_id": "1035d388-62b7-4b37-9f79-1c355ac58620",
+    "fin": "FIN000009",
+    "mrn": "MRN000009",
+    "type": "inpatient",
+    "status": "in-progress",
+    "start": "2025-11-10T07:00:00-06:00",
+    "end": "2025-11-11T07:00:00-06:00",
+    "location": "Med Floor",
+    "clinician": "Demo Clinician, MD"
+  },
+  "assessment": {
+    "assessment_id": "9f54adcc-8470-4e13-a485-56c97f173d66",
+    "mrn": "MRN000009",
+    "fin": "FIN000009",
+    "domain_severities": {
+      "A": 4,
+      "B": 2,
+      "C": 2,
+      "D": 1,
+      "E": 3,
+      "F": 2
+    },
+    "domain_severities_numeric": {
+      "d1": 4,
+      "d2": 2,
+      "d3": 2,
+      "d4": 1,
+      "d5": 3,
+      "d6": 2
+    },
+    "clinical_flags": {
+      "vitalsUnstable": true,
+      "pregnant": false,
+      "noWithdrawalSigns": false,
+      "acutePsych": false
+    },
+    "vitals": {
+      "temp_c": 38.0,
+      "bp_sys": 160,
+      "bp_dia": 100,
+      "pulse": 120,
+      "rr": 24,
+      "spo2": 93,
+      "fio2": 0.32
+    },
+    "uds": {
+      "performed_at": "2025-11-10T11:00:00-06:00",
+      "lab_observation_id": "Observation/UDS-DF96FE",
+      "panels": {
+        "alcohol": "n/a",
+        "benzodiazepines": "negative",
+        "opiates": "negative",
+        "fentanyl": "negative",
+        "amphetamines": "negative",
+        "cannabis": "negative",
+        "cocaine": "negative",
+        "pcp": "negative",
+        "barbiturates": "negative",
+        "methadone": "negative",
+        "oxycodone": "negative",
+        "buprenorphine": "negative"
+      }
+    },
+    "substance_rows": [
+      {
+        "profile_id": "1493cca2-f962-4ae2-921e-abb2e807b712",
+        "assessment_id": "9f54adcc-8470-4e13-a485-56c97f173d66",
+        "substance_group": "alcohol",
+        "other_substance_text": "",
+        "last_use_dt": "2025-11-10T08:00:00-06:00",
+        "last_use_hours": 4,
+        "route": [
+          "oral"
+        ],
+        "route_other_text": "",
+        "freq_7d_days": 7,
+        "freq_30d_days": 30,
+        "uses_per_day_typical": 12,
+        "amount_text": "~18 standard drinks/day",
+        "std_drinks_per_day": 0,
+        "mg_per_day": 0,
+        "age_first_use": 19,
+        "longest_abstinence_days": 14,
+        "current_withdrawal_symptoms": false,
+        "cows_score": 0,
+        "ciwa_score": 24,
+        "craving_0_10": 6,
+        "treatment_history": {
+          "detox": false,
+          "residential": false,
+          "outpatient": true,
+          "mat_current": false,
+          "mat_type": "none",
+          "mat_other_text": ""
+        },
+        "overdose_history": {
+          "ever_overdosed": false,
+          "last_overdose_dt": null,
+          "overdose_count_lifetime": 0
+        },
+        "risk_context": {
+          "injection_use": false,
+          "shares_equipment": false,
+          "naloxone_access": false,
+          "binge_pattern": true,
+          "money_spent_per_day": 60,
+          "typical_time_of_day": "morning",
+          "triggers_text": "Morning shakes"
+        },
+        "evidence_links": {
+          "uds_latest": null,
+          "emr_observation_ids": []
+        },
+        "notes_clinician": "",
+        "computed_flags": {
+          "recent_use_lt_24h": true,
+          "suspected_fentanyl": false,
+          "wm_indicated_candidate": false
+        },
+        "created_at": "2025-11-10T12:00:00-06:00",
+        "updated_at": "2025-11-10T12:00:00-06:00"
+      }
+    ],
+    "loc_recommendation": null,
+    "created_at": "2025-11-10T12:00:00-06:00",
+    "updated_at": "2025-11-10T12:00:00-06:00"
+  }
+}

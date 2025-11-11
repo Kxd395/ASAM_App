@@ -987,13 +987,31 @@ struct ExpandableSidebarView: View {
                 ForEach(assessment.domains) { domain in
                     DomainNavigationRow(
                         domain: domain,
-                        isSelected: selectedSection == .domains && selectedDomain?.id == domain.id,
-                        action: {
-                            selectedDomain = domain
-                            selectedSection = .domains
-                            directDomainNavigation = true  // Enable direct navigation
-                        }
+                        isSelected: selectedSection == .domains && selectedDomain?.id == domain.id
                     )
+                    .onTapGesture {
+                        print("🔵 Domain clicked: \(domain.number) - \(domain.title)")
+                        print("🔵 Before state update - selectedSection: \(String(describing: selectedSection)), selectedDomain: \(String(describing: selectedDomain?.number))")
+                        
+                        // Update domain first
+                        selectedDomain = domain
+                        
+                        // Force section change to trigger List update
+                        // If already on domains, briefly set to nil then back
+                        if selectedSection == .domains {
+                            selectedSection = nil
+                            // Use DispatchQueue to ensure state update propagates
+                            DispatchQueue.main.async {
+                                selectedSection = .domains
+                                directDomainNavigation = true
+                            }
+                        } else {
+                            selectedSection = .domains
+                            directDomainNavigation = true
+                        }
+                        
+                        print("🔵 After state update - selectedSection: \(String(describing: selectedSection)), selectedDomain: \(String(describing: selectedDomain?.number))")
+                    }
                 }
             }
             
@@ -1138,10 +1156,11 @@ struct ExpandableSection<Content: View>: View {
 struct DomainNavigationRow: View {
     let domain: Domain
     let isSelected: Bool
-    let action: () -> Void
     
     var body: some View {
-        Button(action: action) {
+        let _ = print("🟢 DomainNavigationRow rendering - Domain \(domain.number): isSelected = \(isSelected)")
+        
+        HStack {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Domain \(domain.number)")
@@ -1192,7 +1211,6 @@ struct DomainNavigationRow: View {
             .padding(.vertical, 4)
             .contentShape(Rectangle())
         }
-        .buttonStyle(PlainButtonStyle())
         .background(
             RoundedRectangle(cornerRadius: 8)
                 .fill(isSelected ? Color.blue.opacity(0.1) : Color.clear)  // Use .blue instead of .accent

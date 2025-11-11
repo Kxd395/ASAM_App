@@ -1,0 +1,198 @@
+{
+  "case_id": "case_010",
+  "patient": {
+    "patient_id": "3cda1540-f5cb-4216-aa84-80c8c4943cb5",
+    "mrn": "MRN000010",
+    "name": "Jamal Winters",
+    "dob": "1999-11-19",
+    "sex": "male",
+    "preferred_language": "en",
+    "phone": ""
+  },
+  "encounter": {
+    "encounter_id": "90d12390-8339-478a-86aa-0b82676593e7",
+    "fin": "FIN000010",
+    "mrn": "MRN000010",
+    "type": "ed",
+    "status": "in-progress",
+    "start": "2025-11-10T09:00:00-06:00",
+    "end": "2025-11-10T17:00:00-06:00",
+    "location": "ED",
+    "clinician": "Demo Clinician, MD"
+  },
+  "assessment": {
+    "assessment_id": "ffd4ad28-ee92-4726-9223-cfc0c880f91c",
+    "mrn": "MRN000010",
+    "fin": "FIN000010",
+    "domain_severities": {
+      "A": 2,
+      "B": 1,
+      "C": 3,
+      "D": 1,
+      "E": 3,
+      "F": 2
+    },
+    "domain_severities_numeric": {
+      "d1": 2,
+      "d2": 1,
+      "d3": 3,
+      "d4": 1,
+      "d5": 3,
+      "d6": 2
+    },
+    "clinical_flags": {
+      "vitalsUnstable": false,
+      "pregnant": false,
+      "noWithdrawalSigns": false,
+      "acutePsych": true
+    },
+    "vitals": {
+      "temp_c": 37.9,
+      "bp_sys": 150,
+      "bp_dia": 94,
+      "pulse": 132,
+      "rr": 24,
+      "spo2": 94,
+      "fio2": 0.28
+    },
+    "uds": {
+      "performed_at": "2025-11-10T11:00:00-06:00",
+      "lab_observation_id": "Observation/UDS-912107",
+      "panels": {
+        "cocaine": "positive",
+        "cannabis": "positive",
+        "alcohol": "n/a",
+        "opiates": "negative",
+        "fentanyl": "negative",
+        "amphetamines": "negative",
+        "benzodiazepines": "negative",
+        "pcp": "negative",
+        "barbiturates": "negative",
+        "methadone": "negative",
+        "oxycodone": "negative",
+        "buprenorphine": "negative"
+      }
+    },
+    "substance_rows": [
+      {
+        "profile_id": "8bcbf123-cdc7-4e20-bfed-a96e415b8782",
+        "assessment_id": "ffd4ad28-ee92-4726-9223-cfc0c880f91c",
+        "substance_group": "stimulant_cocaine",
+        "other_substance_text": "",
+        "last_use_dt": "2025-11-10T09:00:00-06:00",
+        "last_use_hours": 3,
+        "route": [
+          "intranasal"
+        ],
+        "route_other_text": "",
+        "freq_7d_days": 4,
+        "freq_30d_days": 12,
+        "uses_per_day_typical": 3,
+        "amount_text": "$80/day",
+        "std_drinks_per_day": 0,
+        "mg_per_day": 0,
+        "age_first_use": 19,
+        "longest_abstinence_days": 14,
+        "current_withdrawal_symptoms": false,
+        "cows_score": 0,
+        "ciwa_score": 0,
+        "craving_0_10": 6,
+        "treatment_history": {
+          "detox": false,
+          "residential": false,
+          "outpatient": true,
+          "mat_current": false,
+          "mat_type": "none",
+          "mat_other_text": ""
+        },
+        "overdose_history": {
+          "ever_overdosed": false,
+          "last_overdose_dt": null,
+          "overdose_count_lifetime": 0
+        },
+        "risk_context": {
+          "injection_use": false,
+          "shares_equipment": false,
+          "naloxone_access": false,
+          "binge_pattern": false,
+          "money_spent_per_day": 0,
+          "typical_time_of_day": "evening",
+          "triggers_text": ""
+        },
+        "evidence_links": {
+          "uds_latest": null,
+          "emr_observation_ids": []
+        },
+        "notes_clinician": "",
+        "computed_flags": {
+          "recent_use_lt_24h": true,
+          "suspected_fentanyl": false,
+          "wm_indicated_candidate": false
+        },
+        "created_at": "2025-11-10T12:00:00-06:00",
+        "updated_at": "2025-11-10T12:00:00-06:00"
+      },
+      {
+        "profile_id": "cc1ae2cc-b89c-4b16-99b5-dff36add4a21",
+        "assessment_id": "ffd4ad28-ee92-4726-9223-cfc0c880f91c",
+        "substance_group": "alcohol",
+        "other_substance_text": "",
+        "last_use_dt": "2025-11-10T09:00:00-06:00",
+        "last_use_hours": 3,
+        "route": [
+          "oral"
+        ],
+        "route_other_text": "",
+        "freq_7d_days": 5,
+        "freq_30d_days": 18,
+        "uses_per_day_typical": 6,
+        "amount_text": "~8 standard drinks/day",
+        "std_drinks_per_day": 0,
+        "mg_per_day": 0,
+        "age_first_use": 19,
+        "longest_abstinence_days": 14,
+        "current_withdrawal_symptoms": false,
+        "cows_score": 0,
+        "ciwa_score": 8,
+        "craving_0_10": 6,
+        "treatment_history": {
+          "detox": false,
+          "residential": false,
+          "outpatient": true,
+          "mat_current": false,
+          "mat_type": "none",
+          "mat_other_text": ""
+        },
+        "overdose_history": {
+          "ever_overdosed": false,
+          "last_overdose_dt": null,
+          "overdose_count_lifetime": 0
+        },
+        "risk_context": {
+          "injection_use": false,
+          "shares_equipment": false,
+          "naloxone_access": false,
+          "binge_pattern": false,
+          "money_spent_per_day": 0,
+          "typical_time_of_day": "evening",
+          "triggers_text": ""
+        },
+        "evidence_links": {
+          "uds_latest": null,
+          "emr_observation_ids": []
+        },
+        "notes_clinician": "",
+        "computed_flags": {
+          "recent_use_lt_24h": true,
+          "suspected_fentanyl": false,
+          "wm_indicated_candidate": false
+        },
+        "created_at": "2025-11-10T12:00:00-06:00",
+        "updated_at": "2025-11-10T12:00:00-06:00"
+      }
+    ],
+    "loc_recommendation": null,
+    "created_at": "2025-11-10T12:00:00-06:00",
+    "updated_at": "2025-11-10T12:00:00-06:00"
+  }
+}

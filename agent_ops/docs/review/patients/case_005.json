@@ -1,0 +1,139 @@
+{
+  "case_id": "case_005",
+  "patient": {
+    "patient_id": "52584f33-1124-4675-b16b-836803e51afc",
+    "mrn": "MRN000005",
+    "name": "Elena Ruiz",
+    "dob": "1965-09-15",
+    "sex": "female",
+    "preferred_language": "es",
+    "phone": ""
+  },
+  "encounter": {
+    "encounter_id": "d268e098-7ae8-4282-a4a1-4adcd2a77501",
+    "fin": "FIN000005",
+    "mrn": "MRN000005",
+    "type": "outpatient",
+    "status": "in-progress",
+    "start": "2025-11-10T10:00:00-06:00",
+    "end": "2025-11-10T13:00:00-06:00",
+    "location": "Main Campus / Addiction Clinic",
+    "clinician": "Demo Clinician, MD"
+  },
+  "assessment": {
+    "assessment_id": "59d9c068-97a8-4a0a-9dc4-0cf380cad08e",
+    "mrn": "MRN000005",
+    "fin": "FIN000005",
+    "domain_severities": {
+      "A": 2,
+      "B": 2,
+      "C": 2,
+      "D": 1,
+      "E": 2,
+      "F": 2
+    },
+    "domain_severities_numeric": {
+      "d1": 2,
+      "d2": 2,
+      "d3": 2,
+      "d4": 1,
+      "d5": 2,
+      "d6": 2
+    },
+    "clinical_flags": {
+      "vitalsUnstable": false,
+      "pregnant": false,
+      "noWithdrawalSigns": false,
+      "acutePsych": false
+    },
+    "vitals": {
+      "temp_c": 36.7,
+      "bp_sys": 126,
+      "bp_dia": 76,
+      "pulse": 76,
+      "rr": 15,
+      "spo2": 99,
+      "fio2": 0.21
+    },
+    "uds": {
+      "performed_at": "2025-11-10T11:00:00-06:00",
+      "lab_observation_id": "Observation/UDS-12C6F7",
+      "panels": {
+        "benzodiazepines": "positive",
+        "cannabis": "negative",
+        "opiates": "negative",
+        "fentanyl": "negative",
+        "amphetamines": "negative",
+        "cocaine": "negative",
+        "pcp": "negative",
+        "barbiturates": "negative",
+        "methadone": "negative",
+        "oxycodone": "negative",
+        "buprenorphine": "negative"
+      }
+    },
+    "substance_rows": [
+      {
+        "profile_id": "6a6d52c1-0955-446c-beb3-ebedb19fb9c9",
+        "assessment_id": "59d9c068-97a8-4a0a-9dc4-0cf380cad08e",
+        "substance_group": "benzodiazepines",
+        "other_substance_text": "",
+        "last_use_dt": "2025-11-10T02:00:00-06:00",
+        "last_use_hours": 10,
+        "route": [
+          "oral"
+        ],
+        "route_other_text": "",
+        "freq_7d_days": 7,
+        "freq_30d_days": 30,
+        "uses_per_day_typical": 2,
+        "amount_text": "clonazepam ~1mg/day",
+        "std_drinks_per_day": 0,
+        "mg_per_day": 0,
+        "age_first_use": 19,
+        "longest_abstinence_days": 14,
+        "current_withdrawal_symptoms": false,
+        "cows_score": 0,
+        "ciwa_score": 0,
+        "craving_0_10": 6,
+        "treatment_history": {
+          "detox": false,
+          "residential": false,
+          "outpatient": true,
+          "mat_current": false,
+          "mat_type": "none",
+          "mat_other_text": ""
+        },
+        "overdose_history": {
+          "ever_overdosed": false,
+          "last_overdose_dt": null,
+          "overdose_count_lifetime": 0
+        },
+        "risk_context": {
+          "injection_use": false,
+          "shares_equipment": false,
+          "naloxone_access": false,
+          "binge_pattern": false,
+          "money_spent_per_day": 0,
+          "typical_time_of_day": "evening",
+          "triggers_text": ""
+        },
+        "evidence_links": {
+          "uds_latest": null,
+          "emr_observation_ids": []
+        },
+        "notes_clinician": "",
+        "computed_flags": {
+          "recent_use_lt_24h": true,
+          "suspected_fentanyl": false,
+          "wm_indicated_candidate": false
+        },
+        "created_at": "2025-11-10T12:00:00-06:00",
+        "updated_at": "2025-11-10T12:00:00-06:00"
+      }
+    ],
+    "loc_recommendation": null,
+    "created_at": "2025-11-10T12:00:00-06:00",
+    "updated_at": "2025-11-10T12:00:00-06:00"
+  }
+}

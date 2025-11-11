@@ -1,0 +1,198 @@
+{
+  "case_id": "case_006",
+  "patient": {
+    "patient_id": "de983e82-d44f-4848-8d2f-8eb8bcab42d5",
+    "mrn": "MRN000006",
+    "name": "Felix Zhang",
+    "dob": "1972-12-02",
+    "sex": "male",
+    "preferred_language": "en",
+    "phone": ""
+  },
+  "encounter": {
+    "encounter_id": "f12a86a8-3c72-4bac-91f6-a1239e2acd2a",
+    "fin": "FIN000006",
+    "mrn": "MRN000006",
+    "type": "outpatient",
+    "status": "in-progress",
+    "start": "2025-11-10T10:00:00-06:00",
+    "end": "2025-11-10T13:00:00-06:00",
+    "location": "Main Campus / Addiction Clinic",
+    "clinician": "Demo Clinician, MD"
+  },
+  "assessment": {
+    "assessment_id": "23044f7b-eb21-4181-ab5e-dd46b3aac42d",
+    "mrn": "MRN000006",
+    "fin": "FIN000006",
+    "domain_severities": {
+      "A": 3,
+      "B": 2,
+      "C": 2,
+      "D": 2,
+      "E": 3,
+      "F": 2
+    },
+    "domain_severities_numeric": {
+      "d1": 3,
+      "d2": 2,
+      "d3": 2,
+      "d4": 2,
+      "d5": 3,
+      "d6": 2
+    },
+    "clinical_flags": {
+      "vitalsUnstable": false,
+      "pregnant": false,
+      "noWithdrawalSigns": false,
+      "acutePsych": false
+    },
+    "vitals": {
+      "temp_c": 37.6,
+      "bp_sys": 146,
+      "bp_dia": 96,
+      "pulse": 110,
+      "rr": 22,
+      "spo2": 95,
+      "fio2": 0.21
+    },
+    "uds": {
+      "performed_at": "2025-11-10T11:00:00-06:00",
+      "lab_observation_id": "Observation/UDS-EC1DA6",
+      "panels": {
+        "benzodiazepines": "positive",
+        "alcohol": "n/a",
+        "opiates": "negative",
+        "fentanyl": "negative",
+        "amphetamines": "negative",
+        "cannabis": "negative",
+        "cocaine": "negative",
+        "pcp": "negative",
+        "barbiturates": "negative",
+        "methadone": "negative",
+        "oxycodone": "negative",
+        "buprenorphine": "negative"
+      }
+    },
+    "substance_rows": [
+      {
+        "profile_id": "a822a14c-5691-468a-a1aa-e38ff48c3202",
+        "assessment_id": "23044f7b-eb21-4181-ab5e-dd46b3aac42d",
+        "substance_group": "alcohol",
+        "other_substance_text": "",
+        "last_use_dt": "2025-11-10T07:00:00-06:00",
+        "last_use_hours": 5,
+        "route": [
+          "oral"
+        ],
+        "route_other_text": "",
+        "freq_7d_days": 7,
+        "freq_30d_days": 30,
+        "uses_per_day_typical": 8,
+        "amount_text": "~12 standard drinks/day",
+        "std_drinks_per_day": 0,
+        "mg_per_day": 0,
+        "age_first_use": 19,
+        "longest_abstinence_days": 14,
+        "current_withdrawal_symptoms": false,
+        "cows_score": 0,
+        "ciwa_score": 22,
+        "craving_0_10": 6,
+        "treatment_history": {
+          "detox": false,
+          "residential": false,
+          "outpatient": true,
+          "mat_current": false,
+          "mat_type": "none",
+          "mat_other_text": ""
+        },
+        "overdose_history": {
+          "ever_overdosed": false,
+          "last_overdose_dt": null,
+          "overdose_count_lifetime": 0
+        },
+        "risk_context": {
+          "injection_use": false,
+          "shares_equipment": false,
+          "naloxone_access": false,
+          "binge_pattern": false,
+          "money_spent_per_day": 0,
+          "typical_time_of_day": "evening",
+          "triggers_text": ""
+        },
+        "evidence_links": {
+          "uds_latest": null,
+          "emr_observation_ids": []
+        },
+        "notes_clinician": "",
+        "computed_flags": {
+          "recent_use_lt_24h": true,
+          "suspected_fentanyl": false,
+          "wm_indicated_candidate": false
+        },
+        "created_at": "2025-11-10T12:00:00-06:00",
+        "updated_at": "2025-11-10T12:00:00-06:00"
+      },
+      {
+        "profile_id": "ee9ea2d8-62c8-482c-9184-06b579affe6c",
+        "assessment_id": "23044f7b-eb21-4181-ab5e-dd46b3aac42d",
+        "substance_group": "benzodiazepines",
+        "other_substance_text": "",
+        "last_use_dt": "2025-11-10T04:00:00-06:00",
+        "last_use_hours": 8,
+        "route": [
+          "oral"
+        ],
+        "route_other_text": "",
+        "freq_7d_days": 7,
+        "freq_30d_days": 28,
+        "uses_per_day_typical": 2,
+        "amount_text": "alprazolam 1-2mg/day",
+        "std_drinks_per_day": 0,
+        "mg_per_day": 0,
+        "age_first_use": 19,
+        "longest_abstinence_days": 14,
+        "current_withdrawal_symptoms": false,
+        "cows_score": 0,
+        "ciwa_score": 0,
+        "craving_0_10": 6,
+        "treatment_history": {
+          "detox": false,
+          "residential": false,
+          "outpatient": true,
+          "mat_current": false,
+          "mat_type": "none",
+          "mat_other_text": ""
+        },
+        "overdose_history": {
+          "ever_overdosed": false,
+          "last_overdose_dt": null,
+          "overdose_count_lifetime": 0
+        },
+        "risk_context": {
+          "injection_use": false,
+          "shares_equipment": false,
+          "naloxone_access": false,
+          "binge_pattern": false,
+          "money_spent_per_day": 0,
+          "typical_time_of_day": "evening",
+          "triggers_text": ""
+        },
+        "evidence_links": {
+          "uds_latest": null,
+          "emr_observation_ids": []
+        },
+        "notes_clinician": "",
+        "computed_flags": {
+          "recent_use_lt_24h": true,
+          "suspected_fentanyl": false,
+          "wm_indicated_candidate": false
+        },
+        "created_at": "2025-11-10T12:00:00-06:00",
+        "updated_at": "2025-11-10T12:00:00-06:00"
+      }
+    ],
+    "loc_recommendation": null,
+    "created_at": "2025-11-10T12:00:00-06:00",
+    "updated_at": "2025-11-10T12:00:00-06:00"
+  }
+}

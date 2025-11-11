@@ -1,0 +1,139 @@
+{
+  "case_id": "case_002",
+  "patient": {
+    "patient_id": "c39812a2-2eb7-45bc-b734-1be26d4b0d22",
+    "mrn": "MRN000002",
+    "name": "Brian Ortega",
+    "dob": "1991-04-22",
+    "sex": "male",
+    "preferred_language": "en",
+    "phone": ""
+  },
+  "encounter": {
+    "encounter_id": "6c9f3b1f-322b-4b71-9798-bc6384122e7b",
+    "fin": "FIN000002",
+    "mrn": "MRN000002",
+    "type": "ed",
+    "status": "in-progress",
+    "start": "2025-11-10T11:00:00-06:00",
+    "end": "2025-11-10T17:00:00-06:00",
+    "location": "ED",
+    "clinician": "Demo Clinician, MD"
+  },
+  "assessment": {
+    "assessment_id": "cf0e13c7-20c8-47ec-aa5e-99ac8520a3d4",
+    "mrn": "MRN000002",
+    "fin": "FIN000002",
+    "domain_severities": {
+      "A": 3,
+      "B": 2,
+      "C": 2,
+      "D": 1,
+      "E": 3,
+      "F": 2
+    },
+    "domain_severities_numeric": {
+      "d1": 3,
+      "d2": 2,
+      "d3": 2,
+      "d4": 1,
+      "d5": 3,
+      "d6": 2
+    },
+    "clinical_flags": {
+      "vitalsUnstable": true,
+      "pregnant": false,
+      "noWithdrawalSigns": false,
+      "acutePsych": false
+    },
+    "vitals": {
+      "temp_c": 38.3,
+      "bp_sys": 168,
+      "bp_dia": 104,
+      "pulse": 128,
+      "rr": 26,
+      "spo2": 92,
+      "fio2": 0.4
+    },
+    "uds": {
+      "performed_at": "2025-11-10T11:00:00-06:00",
+      "lab_observation_id": "Observation/UDS-B91EAA",
+      "panels": {
+        "cocaine": "negative",
+        "cannabis": "negative",
+        "amphetamines": "negative",
+        "barbiturates": "negative",
+        "benzodiazepines": "negative",
+        "opiates": "positive",
+        "pcp": "negative",
+        "methadone": "negative",
+        "buprenorphine": "negative",
+        "fentanyl": "positive",
+        "oxycodone": "negative"
+      }
+    },
+    "substance_rows": [
+      {
+        "profile_id": "bb7f545a-5de8-4ac9-b08e-971c24d3d5e5",
+        "assessment_id": "cf0e13c7-20c8-47ec-aa5e-99ac8520a3d4",
+        "substance_group": "opioid_fentanyl",
+        "other_substance_text": "",
+        "last_use_dt": "2025-11-10T06:00:00-06:00",
+        "last_use_hours": 6,
+        "route": [
+          "iv"
+        ],
+        "route_other_text": "",
+        "freq_7d_days": 6,
+        "freq_30d_days": 24,
+        "uses_per_day_typical": 4,
+        "amount_text": "\u22480.3 g/day",
+        "std_drinks_per_day": 0,
+        "mg_per_day": 0,
+        "age_first_use": 19,
+        "longest_abstinence_days": 14,
+        "current_withdrawal_symptoms": false,
+        "cows_score": 16,
+        "ciwa_score": 0,
+        "craving_0_10": 6,
+        "treatment_history": {
+          "detox": false,
+          "residential": false,
+          "outpatient": true,
+          "mat_current": false,
+          "mat_type": "none",
+          "mat_other_text": ""
+        },
+        "overdose_history": {
+          "ever_overdosed": false,
+          "last_overdose_dt": null,
+          "overdose_count_lifetime": 0
+        },
+        "risk_context": {
+          "injection_use": true,
+          "shares_equipment": false,
+          "naloxone_access": true,
+          "binge_pattern": false,
+          "money_spent_per_day": 120,
+          "typical_time_of_day": "evening",
+          "triggers_text": "Arguments"
+        },
+        "evidence_links": {
+          "uds_latest": null,
+          "emr_observation_ids": []
+        },
+        "notes_clinician": "",
+        "computed_flags": {
+          "recent_use_lt_24h": true,
+          "suspected_fentanyl": true,
+          "wm_indicated_candidate": false
+        },
+        "created_at": "2025-11-10T12:00:00-06:00",
+        "updated_at": "2025-11-10T12:00:00-06:00"
+      }
+    ],
+    "loc_recommendation": null,
+    "created_at": "2025-11-10T12:00:00-06:00",
+    "updated_at": "2025-11-10T12:00:00-06:00"
+  }
+}

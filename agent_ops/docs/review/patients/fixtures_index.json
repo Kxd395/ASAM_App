@@ -1,0 +1,152 @@
+[
+  {
+    "case_id": "case_001",
+    "mrn": "MRN000001",
+    "fin": "FIN000001",
+    "name": "Alexis Hart",
+    "encounter_type": "outpatient",
+    "domains_A_F": {
+      "A": 3,
+      "B": 1,
+      "C": 1,
+      "D": 1,
+      "E": 2,
+      "F": 2
+    }
+  },
+  {
+    "case_id": "case_002",
+    "mrn": "MRN000002",
+    "fin": "FIN000002",
+    "name": "Brian Ortega",
+    "encounter_type": "ed",
+    "domains_A_F": {
+      "A": 3,
+      "B": 2,
+      "C": 2,
+      "D": 1,
+      "E": 3,
+      "F": 2
+    }
+  },
+  {
+    "case_id": "case_003",
+    "mrn": "MRN000003",
+    "fin": "FIN000003",
+    "name": "Chloe Nguyen",
+    "encounter_type": "outpatient",
+    "domains_A_F": {
+      "A": 2,
+      "B": 1,
+      "C": 1,
+      "D": 2,
+      "E": 2,
+      "F": 2
+    }
+  },
+  {
+    "case_id": "case_004",
+    "mrn": "MRN000004",
+    "fin": "FIN000004",
+    "name": "Darius Cole",
+    "encounter_type": "outpatient",
+    "domains_A_F": {
+      "A": 1,
+      "B": 1,
+      "C": 2,
+      "D": 2,
+      "E": 3,
+      "F": 2
+    }
+  },
+  {
+    "case_id": "case_005",
+    "mrn": "MRN000005",
+    "fin": "FIN000005",
+    "name": "Elena Ruiz",
+    "encounter_type": "outpatient",
+    "domains_A_F": {
+      "A": 2,
+      "B": 2,
+      "C": 2,
+      "D": 1,
+      "E": 2,
+      "F": 2
+    }
+  },
+  {
+    "case_id": "case_006",
+    "mrn": "MRN000006",
+    "fin": "FIN000006",
+    "name": "Felix Zhang",
+    "encounter_type": "outpatient",
+    "domains_A_F": {
+      "A": 3,
+      "B": 2,
+      "C": 2,
+      "D": 2,
+      "E": 3,
+      "F": 2
+    }
+  },
+  {
+    "case_id": "case_007",
+    "mrn": "MRN000007",
+    "fin": "FIN000007",
+    "name": "Grace Patel",
+    "encounter_type": "outpatient",
+    "domains_A_F": {
+      "A": 1,
+      "B": 2,
+      "C": 1,
+      "D": 2,
+      "E": 2,
+      "F": 2
+    }
+  },
+  {
+    "case_id": "case_008",
+    "mrn": "MRN000008",
+    "fin": "FIN000008",
+    "name": "Hector Morales",
+    "encounter_type": "outpatient",
+    "domains_A_F": {
+      "A": 1,
+      "B": 1,
+      "C": 1,
+      "D": 2,
+      "E": 2,
+      "F": 2
+    }
+  },
+  {
+    "case_id": "case_009",
+    "mrn": "MRN000009",
+    "fin": "FIN000009",
+    "name": "Isabella Rossi",
+    "encounter_type": "inpatient",
+    "domains_A_F": {
+      "A": 4,
+      "B": 2,
+      "C": 2,
+      "D": 1,
+      "E": 3,
+      "F": 2
+    }
+  },
+  {
+    "case_id": "case_010",
+    "mrn": "MRN000010",
+    "fin": "FIN000010",
+    "name": "Jamal Winters",
+    "encounter_type": "ed",
+    "domains_A_F": {
+      "A": 2,
+      "B": 1,
+      "C": 3,
+      "D": 1,
+      "E": 3,
+      "F": 2
+    }
+  }
+]

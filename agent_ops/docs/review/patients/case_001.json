@@ -1,0 +1,140 @@
+{
+  "case_id": "case_001",
+  "patient": {
+    "patient_id": "6392061c-4d4b-4725-8774-d4257269ca1a",
+    "mrn": "MRN000001",
+    "name": "Alexis Hart",
+    "dob": "1980-01-09",
+    "sex": "female",
+    "preferred_language": "en",
+    "phone": ""
+  },
+  "encounter": {
+    "encounter_id": "a913c143-2c6d-4621-a3a8-b316e1034056",
+    "fin": "FIN000001",
+    "mrn": "MRN000001",
+    "type": "outpatient",
+    "status": "in-progress",
+    "start": "2025-11-10T10:00:00-06:00",
+    "end": "2025-11-10T13:00:00-06:00",
+    "location": "Main Campus / Addiction Clinic",
+    "clinician": "Demo Clinician, MD"
+  },
+  "assessment": {
+    "assessment_id": "4566a53c-aa04-445c-a8ac-7c2d6fa30785",
+    "mrn": "MRN000001",
+    "fin": "FIN000001",
+    "domain_severities": {
+      "A": 3,
+      "B": 1,
+      "C": 1,
+      "D": 1,
+      "E": 2,
+      "F": 2
+    },
+    "domain_severities_numeric": {
+      "d1": 3,
+      "d2": 1,
+      "d3": 1,
+      "d4": 1,
+      "d5": 2,
+      "d6": 2
+    },
+    "clinical_flags": {
+      "vitalsUnstable": false,
+      "pregnant": false,
+      "noWithdrawalSigns": false,
+      "acutePsych": false
+    },
+    "vitals": {
+      "temp_c": 37.4,
+      "bp_sys": 138,
+      "bp_dia": 88,
+      "pulse": 102,
+      "rr": 20,
+      "spo2": 96,
+      "fio2": 0.21
+    },
+    "uds": {
+      "performed_at": "2025-11-10T11:00:00-06:00",
+      "lab_observation_id": "Observation/UDS-7DEA83",
+      "panels": {
+        "alcohol": "n/a",
+        "cocaine": "negative",
+        "cannabis": "negative",
+        "benzodiazepines": "negative",
+        "opiates": "negative",
+        "fentanyl": "negative",
+        "oxycodone": "negative",
+        "amphetamines": "negative",
+        "pcp": "negative",
+        "barbiturates": "negative",
+        "methadone": "negative",
+        "buprenorphine": "negative"
+      }
+    },
+    "substance_rows": [
+      {
+        "profile_id": "9d83ec14-febd-4137-a8e2-ba19d23627e4",
+        "assessment_id": "4566a53c-aa04-445c-a8ac-7c2d6fa30785",
+        "substance_group": "alcohol",
+        "other_substance_text": "",
+        "last_use_dt": "2025-11-10T00:00:00-06:00",
+        "last_use_hours": 12,
+        "route": [
+          "oral"
+        ],
+        "route_other_text": "",
+        "freq_7d_days": 7,
+        "freq_30d_days": 28,
+        "uses_per_day_typical": 5,
+        "amount_text": "~10 standard drinks/day",
+        "std_drinks_per_day": 0,
+        "mg_per_day": 0,
+        "age_first_use": 19,
+        "longest_abstinence_days": 14,
+        "current_withdrawal_symptoms": false,
+        "cows_score": 0,
+        "ciwa_score": 18,
+        "craving_0_10": 6,
+        "treatment_history": {
+          "detox": false,
+          "residential": false,
+          "outpatient": true,
+          "mat_current": false,
+          "mat_type": "none",
+          "mat_other_text": ""
+        },
+        "overdose_history": {
+          "ever_overdosed": false,
+          "last_overdose_dt": null,
+          "overdose_count_lifetime": 0
+        },
+        "risk_context": {
+          "injection_use": false,
+          "shares_equipment": false,
+          "naloxone_access": false,
+          "binge_pattern": false,
+          "money_spent_per_day": 0,
+          "typical_time_of_day": "evening",
+          "triggers_text": ""
+        },
+        "evidence_links": {
+          "uds_latest": null,
+          "emr_observation_ids": []
+        },
+        "notes_clinician": "",
+        "computed_flags": {
+          "recent_use_lt_24h": true,
+          "suspected_fentanyl": false,
+          "wm_indicated_candidate": false
+        },
+        "created_at": "2025-11-10T12:00:00-06:00",
+        "updated_at": "2025-11-10T12:00:00-06:00"
+      }
+    ],
+    "loc_recommendation": null,
+    "created_at": "2025-11-10T12:00:00-06:00",
+    "updated_at": "2025-11-10T12:00:00-06:00"
+  }
+}

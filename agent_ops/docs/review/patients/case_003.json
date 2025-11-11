@@ -1,0 +1,139 @@
+{
+  "case_id": "case_003",
+  "patient": {
+    "patient_id": "e9f7c55e-85d6-44eb-9a5a-7fa123c3c1e6",
+    "mrn": "MRN000003",
+    "name": "Chloe Nguyen",
+    "dob": "1987-07-11",
+    "sex": "female",
+    "preferred_language": "en",
+    "phone": ""
+  },
+  "encounter": {
+    "encounter_id": "3df9fb46-379a-47d8-8b4a-6e64adc46a64",
+    "fin": "FIN000003",
+    "mrn": "MRN000003",
+    "type": "outpatient",
+    "status": "in-progress",
+    "start": "2025-11-10T10:00:00-06:00",
+    "end": "2025-11-10T13:00:00-06:00",
+    "location": "Main Campus / Addiction Clinic",
+    "clinician": "Demo Clinician, MD"
+  },
+  "assessment": {
+    "assessment_id": "de99b23e-2f48-4bd6-8cd4-eb66b555c0a8",
+    "mrn": "MRN000003",
+    "fin": "FIN000003",
+    "domain_severities": {
+      "A": 2,
+      "B": 1,
+      "C": 1,
+      "D": 2,
+      "E": 2,
+      "F": 2
+    },
+    "domain_severities_numeric": {
+      "d1": 2,
+      "d2": 1,
+      "d3": 1,
+      "d4": 2,
+      "d5": 2,
+      "d6": 2
+    },
+    "clinical_flags": {
+      "vitalsUnstable": false,
+      "pregnant": false,
+      "noWithdrawalSigns": false,
+      "acutePsych": false
+    },
+    "vitals": {
+      "temp_c": 36.9,
+      "bp_sys": 128,
+      "bp_dia": 78,
+      "pulse": 84,
+      "rr": 16,
+      "spo2": 98,
+      "fio2": 0.21
+    },
+    "uds": {
+      "performed_at": "2025-11-10T11:00:00-06:00",
+      "lab_observation_id": "Observation/UDS-3D753B",
+      "panels": {
+        "oxycodone": "positive",
+        "opiates": "positive",
+        "fentanyl": "negative",
+        "cannabis": "negative",
+        "cocaine": "negative",
+        "benzodiazepines": "negative",
+        "amphetamines": "negative",
+        "pcp": "negative",
+        "barbiturates": "negative",
+        "methadone": "negative",
+        "buprenorphine": "negative"
+      }
+    },
+    "substance_rows": [
+      {
+        "profile_id": "e5d9a3f4-a031-4ad6-859c-e1f072dc4588",
+        "assessment_id": "de99b23e-2f48-4bd6-8cd4-eb66b555c0a8",
+        "substance_group": "opioid_oxycodone",
+        "other_substance_text": "",
+        "last_use_dt": "2025-11-08T12:00:00-06:00",
+        "last_use_hours": 48,
+        "route": [
+          "oral"
+        ],
+        "route_other_text": "",
+        "freq_7d_days": 5,
+        "freq_30d_days": 15,
+        "uses_per_day_typical": 3,
+        "amount_text": "",
+        "std_drinks_per_day": 0,
+        "mg_per_day": 60,
+        "age_first_use": 19,
+        "longest_abstinence_days": 14,
+        "current_withdrawal_symptoms": false,
+        "cows_score": 5,
+        "ciwa_score": 0,
+        "craving_0_10": 6,
+        "treatment_history": {
+          "detox": false,
+          "residential": false,
+          "outpatient": true,
+          "mat_current": false,
+          "mat_type": "none",
+          "mat_other_text": ""
+        },
+        "overdose_history": {
+          "ever_overdosed": false,
+          "last_overdose_dt": null,
+          "overdose_count_lifetime": 0
+        },
+        "risk_context": {
+          "injection_use": false,
+          "shares_equipment": false,
+          "naloxone_access": false,
+          "binge_pattern": false,
+          "money_spent_per_day": 0,
+          "typical_time_of_day": "evening",
+          "triggers_text": ""
+        },
+        "evidence_links": {
+          "uds_latest": null,
+          "emr_observation_ids": []
+        },
+        "notes_clinician": "",
+        "computed_flags": {
+          "recent_use_lt_24h": false,
+          "suspected_fentanyl": false,
+          "wm_indicated_candidate": false
+        },
+        "created_at": "2025-11-10T12:00:00-06:00",
+        "updated_at": "2025-11-10T12:00:00-06:00"
+      }
+    ],
+    "loc_recommendation": null,
+    "created_at": "2025-11-10T12:00:00-06:00",
+    "updated_at": "2025-11-10T12:00:00-06:00"
+  }
+}

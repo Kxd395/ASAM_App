@@ -1,0 +1,139 @@
+{
+  "case_id": "case_004",
+  "patient": {
+    "patient_id": "939309f5-2233-4cbb-92d1-34a250c93710",
+    "mrn": "MRN000004",
+    "name": "Darius Cole",
+    "dob": "1979-03-03",
+    "sex": "male",
+    "preferred_language": "en",
+    "phone": ""
+  },
+  "encounter": {
+    "encounter_id": "9802b7c7-6438-4435-b21c-02cf99420179",
+    "fin": "FIN000004",
+    "mrn": "MRN000004",
+    "type": "outpatient",
+    "status": "in-progress",
+    "start": "2025-11-10T10:00:00-06:00",
+    "end": "2025-11-10T13:00:00-06:00",
+    "location": "Main Campus / Addiction Clinic",
+    "clinician": "Demo Clinician, MD"
+  },
+  "assessment": {
+    "assessment_id": "779039fd-b97a-48bc-8a2f-9805cbdccca4",
+    "mrn": "MRN000004",
+    "fin": "FIN000004",
+    "domain_severities": {
+      "A": 1,
+      "B": 1,
+      "C": 2,
+      "D": 2,
+      "E": 3,
+      "F": 2
+    },
+    "domain_severities_numeric": {
+      "d1": 1,
+      "d2": 1,
+      "d3": 2,
+      "d4": 2,
+      "d5": 3,
+      "d6": 2
+    },
+    "clinical_flags": {
+      "vitalsUnstable": false,
+      "pregnant": false,
+      "noWithdrawalSigns": true,
+      "acutePsych": false
+    },
+    "vitals": {
+      "temp_c": 37.0,
+      "bp_sys": 132,
+      "bp_dia": 82,
+      "pulse": 98,
+      "rr": 18,
+      "spo2": 97,
+      "fio2": 0.21
+    },
+    "uds": {
+      "performed_at": "2025-11-10T11:00:00-06:00",
+      "lab_observation_id": "Observation/UDS-C0C7BA",
+      "panels": {
+        "amphetamines": "positive",
+        "cannabis": "negative",
+        "cocaine": "negative",
+        "opiates": "negative",
+        "fentanyl": "negative",
+        "benzodiazepines": "negative",
+        "pcp": "negative",
+        "barbiturates": "negative",
+        "methadone": "negative",
+        "oxycodone": "negative",
+        "buprenorphine": "negative"
+      }
+    },
+    "substance_rows": [
+      {
+        "profile_id": "e727223b-adba-46bb-8d3b-ca68fa311cdc",
+        "assessment_id": "779039fd-b97a-48bc-8a2f-9805cbdccca4",
+        "substance_group": "stimulant_methamphetamine",
+        "other_substance_text": "",
+        "last_use_dt": "2025-11-10T04:00:00-06:00",
+        "last_use_hours": 8,
+        "route": [
+          "smoked"
+        ],
+        "route_other_text": "",
+        "freq_7d_days": 7,
+        "freq_30d_days": 30,
+        "uses_per_day_typical": 6,
+        "amount_text": "multiple smokes/day",
+        "std_drinks_per_day": 0,
+        "mg_per_day": 0,
+        "age_first_use": 19,
+        "longest_abstinence_days": 14,
+        "current_withdrawal_symptoms": false,
+        "cows_score": 0,
+        "ciwa_score": 0,
+        "craving_0_10": 9,
+        "treatment_history": {
+          "detox": false,
+          "residential": false,
+          "outpatient": true,
+          "mat_current": false,
+          "mat_type": "none",
+          "mat_other_text": ""
+        },
+        "overdose_history": {
+          "ever_overdosed": false,
+          "last_overdose_dt": null,
+          "overdose_count_lifetime": 0
+        },
+        "risk_context": {
+          "injection_use": false,
+          "shares_equipment": false,
+          "naloxone_access": false,
+          "binge_pattern": false,
+          "money_spent_per_day": 0,
+          "typical_time_of_day": "evening",
+          "triggers_text": ""
+        },
+        "evidence_links": {
+          "uds_latest": null,
+          "emr_observation_ids": []
+        },
+        "notes_clinician": "",
+        "computed_flags": {
+          "recent_use_lt_24h": true,
+          "suspected_fentanyl": false,
+          "wm_indicated_candidate": false
+        },
+        "created_at": "2025-11-10T12:00:00-06:00",
+        "updated_at": "2025-11-10T12:00:00-06:00"
+      }
+    ],
+    "loc_recommendation": null,
+    "created_at": "2025-11-10T12:00:00-06:00",
+    "updated_at": "2025-11-10T12:00:00-06:00"
+  }
+}

@@ -103,6 +103,7 @@ struct ContentView: View {
                     print("Safety review completed - Action: \(result.action.rawValue)")
                 }
                 .environmentObject(settings)
+                .environmentObject(auditService)
             }
         }
         .sheet(isPresented: $showNewAssessmentSheet) {

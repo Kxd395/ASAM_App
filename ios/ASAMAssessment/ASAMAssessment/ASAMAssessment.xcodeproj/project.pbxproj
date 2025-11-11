@@ -7,15 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		217AE9E9EE5EE331A171D335 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217AE9E9EE5EE331A171D334 /* AppSettings.swift */; };
-		65DA230C0A4100E6946B6E77 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DA230C0A4100E6946B6E76 /* SettingsView.swift */; };
-		80366ECC2EC07582008403F4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80366ECA2EC07582008403F4 /* ContentView.swift */; };
+		8002204D2EC3C4BA006ABEB3 /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8002204A2EC3C4BA006ABEB3 /* Assessment.swift */; };
+		8002204E2EC3C4BA006ABEB3 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800220462EC3C4BA006ABEB3 /* AppSettings.swift */; };
+		8002204F2EC3C4BA006ABEB3 /* ASAMModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800220472EC3C4BA006ABEB3 /* ASAMModels.swift */; };
+		800220502EC3C4BA006ABEB3 /* ASAMTraceabilityMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800220492EC3C4BA006ABEB3 /* ASAMTraceabilityMatrix.swift */; };
+		800220512EC3C4BA006ABEB3 /* QuestionnaireModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8002204B2EC3C4BA006ABEB3 /* QuestionnaireModels.swift */; };
+		8002206F2EC3C6C3006ABEB3 /* ASAMAssessmentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8002206E2EC3C6C3006ABEB3 /* ASAMAssessmentApp.swift */; };
+		801322012EC3D0D8001CFF7E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801321FE2EC3D0D8001CFF7E /* AppDelegate.swift */; };
+		801322042EC3D121001CFF7E /* SafetyReviewDiagnostic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322022EC3D121001CFF7E /* SafetyReviewDiagnostic.swift */; };
+		8013220A2EC3D19B001CFF7E /* ASAMSubstanceInventoryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322092EC3D19B001CFF7E /* ASAMSubstanceInventoryBuilder.swift */; };
+		8013220B2EC3D19B001CFF7E /* ASAMDimension3Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322062EC3D19B001CFF7E /* ASAMDimension3Builder.swift */; };
+		8013220C2EC3D19B001CFF7E /* ASAMDimension1Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322052EC3D19B001CFF7E /* ASAMDimension1Builder.swift */; };
+		8013220D2EC3D19B001CFF7E /* ASAMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322072EC3D19B001CFF7E /* ASAMService.swift */; };
+		8013220E2EC3D19B001CFF7E /* ASAMSkipLogicEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322082EC3D19B001CFF7E /* ASAMSkipLogicEngine.swift */; };
+		801322122EC3D2B7001CFF7E /* TimeUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322102EC3D2B7001CFF7E /* TimeUtility.swift */; };
+		801322132EC3D2B7001CFF7E /* TextInputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8013220F2EC3D2B7001CFF7E /* TextInputManager.swift */; };
+		801322152EC3D2DF001CFF7E /* PDFMetadataScrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322142EC3D2DF001CFF7E /* PDFMetadataScrubber.swift */; };
+		8013221A2EC3D309001CFF7E /* QuestionnaireRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322172EC3D309001CFF7E /* QuestionnaireRenderer.swift */; };
+		8013221B2EC3D309001CFF7E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322192EC3D309001CFF7E /* SettingsView.swift */; };
+		8013221C2EC3D309001CFF7E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322162EC3D309001CFF7E /* ContentView.swift */; };
+		8013221D2EC3D309001CFF7E /* RobustTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322182EC3D309001CFF7E /* RobustTextField.swift */; };
+		801322282EC3DD26001CFF7E /* RulesServiceWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322272EC3DD26001CFF7E /* RulesServiceWrapper.swift */; };
+		801322292EC3DD26001CFF7E /* QuestionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322252EC3DD26001CFF7E /* QuestionsService.swift */; };
+		8013222A2EC3DD26001CFF7E /* RulesProvenance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322262EC3DD26001CFF7E /* RulesProvenance.swift */; };
+		8013222B2EC3DD26001CFF7E /* AssessmentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322242EC3DD26001CFF7E /* AssessmentStore.swift */; };
+		8013222D2EC3E0E0001CFF7E /* ASAMModelsEnhanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8013222C2EC3E0E0001CFF7E /* ASAMModelsEnhanced.swift */; };
 		80366ECD2EC07582008403F4 /* SafetyBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80366EC22EC07582008403F4 /* SafetyBanner.swift */; };
 		80366ECE2EC07582008403F4 /* LOCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80366EC82EC07582008403F4 /* LOCService.swift */; };
 		80366ECF2EC07582008403F4 /* AuditService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80366EC72EC07582008403F4 /* AuditService.swift */; };
-		80366ED02EC07582008403F4 /* AssessmentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80366EC62EC07582008403F4 /* AssessmentStore.swift */; };
-		80366ED12EC07582008403F4 /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80366EC42EC07582008403F4 /* Assessment.swift */; };
-		807C8C302EC1897400F7AE37 /* ASAMAssessmentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807C8C2F2EC1897400F7AE37 /* ASAMAssessmentApp.swift */; };
 		807C8C702EC19A5400F7AE37 /* RulesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807C8C6E2EC19A5400F7AE37 /* RulesEngine.swift */; };
 		807C8C712EC19A5400F7AE37 /* RulesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807C8C6F2EC19A5400F7AE37 /* RulesService.swift */; };
 		807C8C9C2EC19C9600F7AE37 /* validation_rules.json in Resources */ = {isa = PBXBuildFile; fileRef = 807C8C992EC19C9600F7AE37 /* validation_rules.json */; };
@@ -43,12 +62,10 @@
 		80AC41B62EC25C1200A06E06 /* ComplianceConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC41AB2EC25C1200A06E06 /* ComplianceConfig.swift */; };
 		80AC41B72EC25C1200A06E06 /* NetworkSanityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC41AF2EC25C1200A06E06 /* NetworkSanityChecker.swift */; };
 		80AC41B82EC25C1200A06E06 /* ReconciliationChecks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC41B02EC25C1200A06E06 /* ReconciliationChecks.swift */; };
-		80AC41B92EC25C1200A06E06 /* RulesServiceWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC41B22EC25C1200A06E06 /* RulesServiceWrapper.swift */; };
 		80AC41BA2EC25C1200A06E06 /* TokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC41B32EC25C1200A06E06 /* TokenProvider.swift */; };
 		80AC41BB2EC25C1200A06E06 /* ExportPreflight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC41AD2EC25C1200A06E06 /* ExportPreflight.swift */; };
 		80AC41BC2EC25C1200A06E06 /* MDMWipeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC41AE2EC25C1200A06E06 /* MDMWipeHandler.swift */; };
 		80AC41BD2EC25C1200A06E06 /* UploadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC41B42EC25C1200A06E06 /* UploadQueue.swift */; };
-		80AC41BE2EC25C1200A06E06 /* RulesProvenance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC41B12EC25C1200A06E06 /* RulesProvenance.swift */; };
 		80AC41C02EC25C2500A06E06 /* SubstanceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC41BF2EC25C2500A06E06 /* SubstanceRow.swift */; };
 		80AC41C22EC25C4100A06E06 /* clinical_thresholds.json in Resources */ = {isa = PBXBuildFile; fileRef = 80AC41C12EC25C4100A06E06 /* clinical_thresholds.json */; };
 		80AC41C32EC25C4100A06E06 /* clinical_thresholds.json in Resources */ = {isa = PBXBuildFile; fileRef = 80AC41C12EC25C4100A06E06 /* clinical_thresholds.json */; };
@@ -61,16 +78,12 @@
 		80AC41D02EC25C5400A06E06 /* SubstanceSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC41CA2EC25C5400A06E06 /* SubstanceSheet.swift */; };
 		80AC420F2EC25D3F00A06E06 /* ExportUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC420B2EC25D3F00A06E06 /* ExportUtils.swift */; };
 		80AC42102EC25D3F00A06E06 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC420D2EC25D3F00A06E06 /* Time.swift */; };
-		80AC42112EC25D3F00A06E06 /* PDFMetadataScrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC420C2EC25D3F00A06E06 /* PDFMetadataScrubber.swift */; };
 		80AC426C2EC2999C00A06E06 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC426B2EC2999C00A06E06 /* SettingsStore.swift */; };
 		80AC426D2EC2999C00A06E06 /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC426A2EC2999C00A06E06 /* SettingsCoordinator.swift */; };
 		80AC428A2EC29F0800A06E06 /* SettingsViewEnhanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC42892EC29F0800A06E06 /* SettingsViewEnhanced.swift */; };
 		80AC428B2EC29F0800A06E06 /* SafetyReviewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC42882EC29F0800A06E06 /* SafetyReviewSheet.swift */; };
 		80D8B9F42EC3545B00D86D32 /* SeverityScoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D8B9F32EC3545B00D86D32 /* SeverityScoring.swift */; };
-		80D8B9F52EC3545B00D86D32 /* QuestionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D8B9F22EC3545B00D86D32 /* QuestionsService.swift */; };
-		80D8B9F72EC3547500D86D32 /* QuestionnaireRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D8B9F62EC3547500D86D32 /* QuestionnaireRenderer.swift */; };
 		80D8B9FA2EC3548500D86D32 /* AutofocusTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D8B9F82EC3548500D86D32 /* AutofocusTextView.swift */; };
-		80D8B9FC2EC354CF00D86D32 /* QuestionnaireModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D8B9FB2EC354CF00D86D32 /* QuestionnaireModels.swift */; };
 		80D8BA0B2EC356DB00D86D32 /* d3_emotional_neutral.json in Resources */ = {isa = PBXBuildFile; fileRef = 80D8B9FF2EC356DB00D86D32 /* d3_emotional_neutral.json */; };
 		80D8BA0C2EC356DB00D86D32 /* severity_rules.json in Resources */ = {isa = PBXBuildFile; fileRef = 80D8BA062EC356DB00D86D32 /* severity_rules.json */; };
 		80D8BA0D2EC356DB00D86D32 /* d5_relapse_neutral.json in Resources */ = {isa = PBXBuildFile; fileRef = 80D8BA012EC356DB00D86D32 /* d5_relapse_neutral.json */; };
@@ -80,6 +93,8 @@
 		80D8BA112EC356DB00D86D32 /* questionnaire.schema.json in Resources */ = {isa = PBXBuildFile; fileRef = 80D8BA042EC356DB00D86D32 /* questionnaire.schema.json */; };
 		80D8BA122EC356DB00D86D32 /* d2_biomedical_neutral.json in Resources */ = {isa = PBXBuildFile; fileRef = 80D8B9FE2EC356DB00D86D32 /* d2_biomedical_neutral.json */; };
 		80D8BA142EC357CB00D86D32 /* README_Questionnaires.md in Resources */ = {isa = PBXBuildFile; fileRef = 80D8BA132EC357CB00D86D32 /* README_Questionnaires.md */; };
+		80D8BA5F2EC38FC500D86D32 /* SubstanceGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D8BA5D2EC38FC500D86D32 /* SubstanceGridView.swift */; };
+		80D8BA602EC356DB00D86D32 /* d1_withdrawal_enhanced.json in Resources */ = {isa = PBXBuildFile; fileRef = 80D8BA612EC356DB00D86D32 /* d1_withdrawal_enhanced.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,18 +115,38 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		217AE9E9EE5EE331A171D334 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
-		65DA230C0A4100E6946B6E76 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		80366E862EC0735E008403F4 /* ASAMAssessment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ASAMAssessment.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		800220462EC3C4BA006ABEB3 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		800220472EC3C4BA006ABEB3 /* ASAMModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMModels.swift; sourceTree = "<group>"; };
+		800220492EC3C4BA006ABEB3 /* ASAMTraceabilityMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMTraceabilityMatrix.swift; sourceTree = "<group>"; };
+		8002204A2EC3C4BA006ABEB3 /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assessment.swift; sourceTree = "<group>"; };
+		8002204B2EC3C4BA006ABEB3 /* QuestionnaireModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionnaireModels.swift; sourceTree = "<group>"; };
+		8002206E2EC3C6C3006ABEB3 /* ASAMAssessmentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMAssessmentApp.swift; sourceTree = "<group>"; };
+		801321FE2EC3D0D8001CFF7E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		801321FF2EC3D0D8001CFF7E /* TestQuestionnaireLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestQuestionnaireLoading.swift; sourceTree = "<group>"; };
+		801322022EC3D121001CFF7E /* SafetyReviewDiagnostic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyReviewDiagnostic.swift; sourceTree = "<group>"; };
+		801322052EC3D19B001CFF7E /* ASAMDimension1Builder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMDimension1Builder.swift; sourceTree = "<group>"; };
+		801322062EC3D19B001CFF7E /* ASAMDimension3Builder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMDimension3Builder.swift; sourceTree = "<group>"; };
+		801322072EC3D19B001CFF7E /* ASAMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMService.swift; sourceTree = "<group>"; };
+		801322082EC3D19B001CFF7E /* ASAMSkipLogicEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMSkipLogicEngine.swift; sourceTree = "<group>"; };
+		801322092EC3D19B001CFF7E /* ASAMSubstanceInventoryBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMSubstanceInventoryBuilder.swift; sourceTree = "<group>"; };
+		8013220F2EC3D2B7001CFF7E /* TextInputManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputManager.swift; sourceTree = "<group>"; };
+		801322102EC3D2B7001CFF7E /* TimeUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtility.swift; sourceTree = "<group>"; };
+		801322142EC3D2DF001CFF7E /* PDFMetadataScrubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFMetadataScrubber.swift; sourceTree = "<group>"; };
+		801322162EC3D309001CFF7E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		801322172EC3D309001CFF7E /* QuestionnaireRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionnaireRenderer.swift; sourceTree = "<group>"; };
+		801322182EC3D309001CFF7E /* RobustTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RobustTextField.swift; sourceTree = "<group>"; };
+		801322192EC3D309001CFF7E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		801322242EC3DD26001CFF7E /* AssessmentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentStore.swift; sourceTree = "<group>"; };
+		801322252EC3DD26001CFF7E /* QuestionsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsService.swift; sourceTree = "<group>"; };
+		801322262EC3DD26001CFF7E /* RulesProvenance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesProvenance.swift; sourceTree = "<group>"; };
+		801322272EC3DD26001CFF7E /* RulesServiceWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesServiceWrapper.swift; sourceTree = "<group>"; };
+		8013222C2EC3E0E0001CFF7E /* ASAMModelsEnhanced.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMModelsEnhanced.swift; sourceTree = "<group>"; };
+		80366E862EC0735E008403F4 /* ASAMAssessment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = ASAMAssessment.app; path = "Treatment Plan Assistant.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		80366E952EC07360008403F4 /* ASAMAssessmentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ASAMAssessmentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		80366E9F2EC07360008403F4 /* ASAMAssessmentUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ASAMAssessmentUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		80366EC22EC07582008403F4 /* SafetyBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyBanner.swift; sourceTree = "<group>"; };
-		80366EC42EC07582008403F4 /* Assessment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assessment.swift; sourceTree = "<group>"; };
-		80366EC62EC07582008403F4 /* AssessmentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssessmentStore.swift; sourceTree = "<group>"; };
 		80366EC72EC07582008403F4 /* AuditService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditService.swift; sourceTree = "<group>"; };
 		80366EC82EC07582008403F4 /* LOCService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LOCService.swift; sourceTree = "<group>"; };
-		80366ECA2EC07582008403F4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		807C8C2F2EC1897400F7AE37 /* ASAMAssessmentApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMAssessmentApp.swift; sourceTree = "<group>"; };
 		807C8C6E2EC19A5400F7AE37 /* RulesEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesEngine.swift; sourceTree = "<group>"; };
 		807C8C6F2EC19A5400F7AE37 /* RulesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesService.swift; sourceTree = "<group>"; };
 		807C8C932EC19C9600F7AE37 /* anchors.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = anchors.json; sourceTree = "<group>"; };
@@ -127,8 +162,6 @@
 		80AC41AE2EC25C1200A06E06 /* MDMWipeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MDMWipeHandler.swift; sourceTree = "<group>"; };
 		80AC41AF2EC25C1200A06E06 /* NetworkSanityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSanityChecker.swift; sourceTree = "<group>"; };
 		80AC41B02EC25C1200A06E06 /* ReconciliationChecks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReconciliationChecks.swift; sourceTree = "<group>"; };
-		80AC41B12EC25C1200A06E06 /* RulesProvenance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesProvenance.swift; sourceTree = "<group>"; };
-		80AC41B22EC25C1200A06E06 /* RulesServiceWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesServiceWrapper.swift; sourceTree = "<group>"; };
 		80AC41B32EC25C1200A06E06 /* TokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenProvider.swift; sourceTree = "<group>"; };
 		80AC41B42EC25C1200A06E06 /* UploadQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadQueue.swift; sourceTree = "<group>"; };
 		80AC41BF2EC25C2500A06E06 /* SubstanceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstanceRow.swift; sourceTree = "<group>"; };
@@ -140,17 +173,13 @@
 		80AC41C92EC25C5400A06E06 /* SubstanceRowSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstanceRowSheet.swift; sourceTree = "<group>"; };
 		80AC41CA2EC25C5400A06E06 /* SubstanceSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstanceSheet.swift; sourceTree = "<group>"; };
 		80AC420B2EC25D3F00A06E06 /* ExportUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportUtils.swift; sourceTree = "<group>"; };
-		80AC420C2EC25D3F00A06E06 /* PDFMetadataScrubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFMetadataScrubber.swift; sourceTree = "<group>"; };
 		80AC420D2EC25D3F00A06E06 /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
 		80AC426A2EC2999C00A06E06 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		80AC426B2EC2999C00A06E06 /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
 		80AC42882EC29F0800A06E06 /* SafetyReviewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyReviewSheet.swift; sourceTree = "<group>"; };
 		80AC42892EC29F0800A06E06 /* SettingsViewEnhanced.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewEnhanced.swift; sourceTree = "<group>"; };
-		80D8B9F22EC3545B00D86D32 /* QuestionsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsService.swift; sourceTree = "<group>"; };
 		80D8B9F32EC3545B00D86D32 /* SeverityScoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeverityScoring.swift; sourceTree = "<group>"; };
-		80D8B9F62EC3547500D86D32 /* QuestionnaireRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionnaireRenderer.swift; sourceTree = "<group>"; };
 		80D8B9F82EC3548500D86D32 /* AutofocusTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofocusTextView.swift; sourceTree = "<group>"; };
-		80D8B9FB2EC354CF00D86D32 /* QuestionnaireModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionnaireModels.swift; sourceTree = "<group>"; };
 		80D8B9FD2EC356DB00D86D32 /* d1_withdrawal_neutral.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = d1_withdrawal_neutral.json; sourceTree = "<group>"; };
 		80D8B9FE2EC356DB00D86D32 /* d2_biomedical_neutral.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = d2_biomedical_neutral.json; sourceTree = "<group>"; };
 		80D8B9FF2EC356DB00D86D32 /* d3_emotional_neutral.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = d3_emotional_neutral.json; sourceTree = "<group>"; };
@@ -160,6 +189,8 @@
 		80D8BA042EC356DB00D86D32 /* questionnaire.schema.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = questionnaire.schema.json; sourceTree = "<group>"; };
 		80D8BA062EC356DB00D86D32 /* severity_rules.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = severity_rules.json; sourceTree = "<group>"; };
 		80D8BA132EC357CB00D86D32 /* README_Questionnaires.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README_Questionnaires.md; sourceTree = "<group>"; };
+		80D8BA5D2EC38FC500D86D32 /* SubstanceGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstanceGridView.swift; sourceTree = "<group>"; };
+		80D8BA612EC356DB00D86D32 /* d1_withdrawal_enhanced.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = d1_withdrawal_enhanced.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -200,20 +231,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		801322032EC3D121001CFF7E /* Diagnostics */ = {
+			isa = PBXGroup;
+			children = (
+				801322022EC3D121001CFF7E /* SafetyReviewDiagnostic.swift */,
+			);
+			path = Diagnostics;
+			sourceTree = "<group>";
+		};
+		801322112EC3D2B7001CFF7E /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				8013220F2EC3D2B7001CFF7E /* TextInputManager.swift */,
+				801322102EC3D2B7001CFF7E /* TimeUtility.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		80366E7D2EC0735E008403F4 = {
 			isa = PBXGroup;
 			children = (
-				807C8C2F2EC1897400F7AE37 /* ASAMAssessmentApp.swift */,
-				80366E982EC07360008403F4 /* ASAMAssessmentTests */,
+				801321FE2EC3D0D8001CFF7E /* AppDelegate.swift */,
+				8002206E2EC3C6C3006ABEB3 /* ASAMAssessmentApp.swift */,
 				80366EA22EC07360008403F4 /* ASAMAssessmentUITests */,
 				80366EC32EC07582008403F4 /* Components */,
+				801322032EC3D121001CFF7E /* Diagnostics */,
 				80366EC52EC07582008403F4 /* Models */,
 				80366E872EC0735E008403F4 /* Products */,
+				80D8BA092EC356DB00D86D32 /* questionnaires */,
 				807C8C9B2EC19C9600F7AE37 /* rules */,
 				80366EC92EC07582008403F4 /* Services */,
+				801321FF2EC3D0D8001CFF7E /* TestQuestionnaireLoading.swift */,
+				801322112EC3D2B7001CFF7E /* Utilities */,
 				80AC420E2EC25D3F00A06E06 /* Utils */,
 				80366ECB2EC07582008403F4 /* Views */,
-				80D8BA092EC356DB00D86D32 /* questionnaires */,
 			);
 			sourceTree = "<group>";
 		};
@@ -231,6 +282,7 @@
 			isa = PBXGroup;
 			children = (
 				80366EC22EC07582008403F4 /* SafetyBanner.swift */,
+				80366E982EC07360008403F4 /* ASAMAssessmentTests */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -238,9 +290,12 @@
 		80366EC52EC07582008403F4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				80D8B9FB2EC354CF00D86D32 /* QuestionnaireModels.swift */,
-				217AE9E9EE5EE331A171D334 /* AppSettings.swift */,
-				80366EC42EC07582008403F4 /* Assessment.swift */,
+				8013222C2EC3E0E0001CFF7E /* ASAMModelsEnhanced.swift */,
+				800220462EC3C4BA006ABEB3 /* AppSettings.swift */,
+				800220472EC3C4BA006ABEB3 /* ASAMModels.swift */,
+				800220492EC3C4BA006ABEB3 /* ASAMTraceabilityMatrix.swift */,
+				8002204A2EC3C4BA006ABEB3 /* Assessment.swift */,
+				8002204B2EC3C4BA006ABEB3 /* QuestionnaireModels.swift */,
 				80AC41BF2EC25C2500A06E06 /* SubstanceRow.swift */,
 			);
 			path = Models;
@@ -249,9 +304,12 @@
 		80366EC92EC07582008403F4 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				80D8B9F22EC3545B00D86D32 /* QuestionsService.swift */,
-				80D8B9F32EC3545B00D86D32 /* SeverityScoring.swift */,
-				80366EC62EC07582008403F4 /* AssessmentStore.swift */,
+				801322052EC3D19B001CFF7E /* ASAMDimension1Builder.swift */,
+				801322062EC3D19B001CFF7E /* ASAMDimension3Builder.swift */,
+				801322072EC3D19B001CFF7E /* ASAMService.swift */,
+				801322082EC3D19B001CFF7E /* ASAMSkipLogicEngine.swift */,
+				801322092EC3D19B001CFF7E /* ASAMSubstanceInventoryBuilder.swift */,
+				801322242EC3DD26001CFF7E /* AssessmentStore.swift */,
 				80366EC72EC07582008403F4 /* AuditService.swift */,
 				80AC41AB2EC25C1200A06E06 /* ComplianceConfig.swift */,
 				80AC41AC2EC25C1200A06E06 /* DatabaseManager.swift */,
@@ -259,13 +317,15 @@
 				80366EC82EC07582008403F4 /* LOCService.swift */,
 				80AC41AE2EC25C1200A06E06 /* MDMWipeHandler.swift */,
 				80AC41AF2EC25C1200A06E06 /* NetworkSanityChecker.swift */,
+				801322252EC3DD26001CFF7E /* QuestionsService.swift */,
 				80AC41B02EC25C1200A06E06 /* ReconciliationChecks.swift */,
 				807C8C6E2EC19A5400F7AE37 /* RulesEngine.swift */,
-				80AC41B12EC25C1200A06E06 /* RulesProvenance.swift */,
+				801322262EC3DD26001CFF7E /* RulesProvenance.swift */,
 				807C8C6F2EC19A5400F7AE37 /* RulesService.swift */,
-				80AC41B22EC25C1200A06E06 /* RulesServiceWrapper.swift */,
+				801322272EC3DD26001CFF7E /* RulesServiceWrapper.swift */,
 				80AC426A2EC2999C00A06E06 /* SettingsCoordinator.swift */,
 				80AC426B2EC2999C00A06E06 /* SettingsStore.swift */,
+				80D8B9F32EC3545B00D86D32 /* SeverityScoring.swift */,
 				80AC41B32EC25C1200A06E06 /* TokenProvider.swift */,
 				80AC41B42EC25C1200A06E06 /* UploadQueue.swift */,
 			);
@@ -275,18 +335,20 @@
 		80366ECB2EC07582008403F4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				80D8B9F92EC3548500D86D32 /* UIKit */,
-				80D8B9F62EC3547500D86D32 /* QuestionnaireRenderer.swift */,
-				80AC42882EC29F0800A06E06 /* SafetyReviewSheet.swift */,
-				80AC42892EC29F0800A06E06 /* SettingsViewEnhanced.swift */,
+				801322162EC3D309001CFF7E /* ContentView.swift */,
+				801322172EC3D309001CFF7E /* QuestionnaireRenderer.swift */,
+				801322182EC3D309001CFF7E /* RobustTextField.swift */,
+				801322192EC3D309001CFF7E /* SettingsView.swift */,
 				80AC41C52EC25C5400A06E06 /* ClinicalFlagsSection.swift */,
-				80366ECA2EC07582008403F4 /* ContentView.swift */,
 				80AC41C62EC25C5400A06E06 /* FlagsSection.swift */,
 				80AC41C72EC25C5400A06E06 /* RulesDegradedBanner.swift */,
 				80AC41C82EC25C5400A06E06 /* RulesDiagnosticsView.swift */,
-				65DA230C0A4100E6946B6E76 /* SettingsView.swift */,
+				80AC42882EC29F0800A06E06 /* SafetyReviewSheet.swift */,
+				80AC42892EC29F0800A06E06 /* SettingsViewEnhanced.swift */,
+				80D8BA5D2EC38FC500D86D32 /* SubstanceGridView.swift */,
 				80AC41C92EC25C5400A06E06 /* SubstanceRowSheet.swift */,
 				80AC41CA2EC25C5400A06E06 /* SubstanceSheet.swift */,
+				80D8B9F92EC3548500D86D32 /* UIKit */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -309,8 +371,8 @@
 		80AC420E2EC25D3F00A06E06 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				801322142EC3D2DF001CFF7E /* PDFMetadataScrubber.swift */,
 				80AC420B2EC25D3F00A06E06 /* ExportUtils.swift */,
-				80AC420C2EC25D3F00A06E06 /* PDFMetadataScrubber.swift */,
 				80AC420D2EC25D3F00A06E06 /* Time.swift */,
 			);
 			path = Utils;
@@ -328,6 +390,7 @@
 			isa = PBXGroup;
 			children = (
 				80D8B9FD2EC356DB00D86D32 /* d1_withdrawal_neutral.json */,
+				80D8BA612EC356DB00D86D32 /* d1_withdrawal_enhanced.json */,
 				80D8B9FE2EC356DB00D86D32 /* d2_biomedical_neutral.json */,
 				80D8B9FF2EC356DB00D86D32 /* d3_emotional_neutral.json */,
 				80D8BA002EC356DB00D86D32 /* d4_readiness_neutral.json */,
@@ -490,6 +553,7 @@
 				80D8BA0D2EC356DB00D86D32 /* d5_relapse_neutral.json in Resources */,
 				80D8BA0E2EC356DB00D86D32 /* d4_readiness_neutral.json in Resources */,
 				80D8BA0F2EC356DB00D86D32 /* d1_withdrawal_neutral.json in Resources */,
+				80D8BA602EC356DB00D86D32 /* d1_withdrawal_enhanced.json in Resources */,
 				80D8BA102EC356DB00D86D32 /* d6_environment_neutral.json in Resources */,
 				80D8BA112EC356DB00D86D32 /* questionnaire.schema.json in Resources */,
 				80D8BA122EC356DB00D86D32 /* d2_biomedical_neutral.json in Resources */,
@@ -538,36 +602,45 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				217AE9E9EE5EE331A171D335 /* AppSettings.swift in Sources */,
-				65DA230C0A4100E6946B6E77 /* SettingsView.swift in Sources */,
-				80366ECC2EC07582008403F4 /* ContentView.swift in Sources */,
-				807C8C302EC1897400F7AE37 /* ASAMAssessmentApp.swift in Sources */,
+				801322282EC3DD26001CFF7E /* RulesServiceWrapper.swift in Sources */,
+				8013222D2EC3E0E0001CFF7E /* ASAMModelsEnhanced.swift in Sources */,
+				801322292EC3DD26001CFF7E /* QuestionsService.swift in Sources */,
+				8013222A2EC3DD26001CFF7E /* RulesProvenance.swift in Sources */,
+				8013222B2EC3DD26001CFF7E /* AssessmentStore.swift in Sources */,
 				80AC428A2EC29F0800A06E06 /* SettingsViewEnhanced.swift in Sources */,
-				80D8B9FC2EC354CF00D86D32 /* QuestionnaireModels.swift in Sources */,
+				80D8BA5F2EC38FC500D86D32 /* SubstanceGridView.swift in Sources */,
 				80AC428B2EC29F0800A06E06 /* SafetyReviewSheet.swift in Sources */,
 				80366ECD2EC07582008403F4 /* SafetyBanner.swift in Sources */,
 				80D8B9F42EC3545B00D86D32 /* SeverityScoring.swift in Sources */,
-				80D8B9F52EC3545B00D86D32 /* QuestionsService.swift in Sources */,
 				80366ECE2EC07582008403F4 /* LOCService.swift in Sources */,
 				80366ECF2EC07582008403F4 /* AuditService.swift in Sources */,
-				80366ED02EC07582008403F4 /* AssessmentStore.swift in Sources */,
-				80D8B9F72EC3547500D86D32 /* QuestionnaireRenderer.swift in Sources */,
 				807C8C702EC19A5400F7AE37 /* RulesEngine.swift in Sources */,
 				807C8C712EC19A5400F7AE37 /* RulesService.swift in Sources */,
 				80AC41B52EC25C1200A06E06 /* DatabaseManager.swift in Sources */,
+				801322122EC3D2B7001CFF7E /* TimeUtility.swift in Sources */,
+				801322132EC3D2B7001CFF7E /* TextInputManager.swift in Sources */,
 				80AC41B62EC25C1200A06E06 /* ComplianceConfig.swift in Sources */,
 				80AC41B72EC25C1200A06E06 /* NetworkSanityChecker.swift in Sources */,
 				80AC41B82EC25C1200A06E06 /* ReconciliationChecks.swift in Sources */,
-				80AC41B92EC25C1200A06E06 /* RulesServiceWrapper.swift in Sources */,
+				801322042EC3D121001CFF7E /* SafetyReviewDiagnostic.swift in Sources */,
+				8002204D2EC3C4BA006ABEB3 /* Assessment.swift in Sources */,
+				8002204E2EC3C4BA006ABEB3 /* AppSettings.swift in Sources */,
+				8002204F2EC3C4BA006ABEB3 /* ASAMModels.swift in Sources */,
+				800220502EC3C4BA006ABEB3 /* ASAMTraceabilityMatrix.swift in Sources */,
+				800220512EC3C4BA006ABEB3 /* QuestionnaireModels.swift in Sources */,
 				80AC41BA2EC25C1200A06E06 /* TokenProvider.swift in Sources */,
 				80AC41BB2EC25C1200A06E06 /* ExportPreflight.swift in Sources */,
 				80AC41BC2EC25C1200A06E06 /* MDMWipeHandler.swift in Sources */,
 				80AC41C02EC25C2500A06E06 /* SubstanceRow.swift in Sources */,
 				80AC41BD2EC25C1200A06E06 /* UploadQueue.swift in Sources */,
-				80AC41BE2EC25C1200A06E06 /* RulesProvenance.swift in Sources */,
+				8013220A2EC3D19B001CFF7E /* ASAMSubstanceInventoryBuilder.swift in Sources */,
+				8013220B2EC3D19B001CFF7E /* ASAMDimension3Builder.swift in Sources */,
+				8013220C2EC3D19B001CFF7E /* ASAMDimension1Builder.swift in Sources */,
+				8013220D2EC3D19B001CFF7E /* ASAMService.swift in Sources */,
+				8013220E2EC3D19B001CFF7E /* ASAMSkipLogicEngine.swift in Sources */,
+				801322012EC3D0D8001CFF7E /* AppDelegate.swift in Sources */,
 				80AC426C2EC2999C00A06E06 /* SettingsStore.swift in Sources */,
 				80AC426D2EC2999C00A06E06 /* SettingsCoordinator.swift in Sources */,
-				80366ED12EC07582008403F4 /* Assessment.swift in Sources */,
 				80AC41CB2EC25C5400A06E06 /* FlagsSection.swift in Sources */,
 				80D8B9FA2EC3548500D86D32 /* AutofocusTextView.swift in Sources */,
 				80AC41CC2EC25C5400A06E06 /* ClinicalFlagsSection.swift in Sources */,
@@ -575,6 +648,11 @@
 				80AC41CE2EC25C5400A06E06 /* RulesDiagnosticsView.swift in Sources */,
 				80AC41CF2EC25C5400A06E06 /* SubstanceRowSheet.swift in Sources */,
 				80AC41D02EC25C5400A06E06 /* SubstanceSheet.swift in Sources */,
+				8002206F2EC3C6C3006ABEB3 /* ASAMAssessmentApp.swift in Sources */,
+				8013221A2EC3D309001CFF7E /* QuestionnaireRenderer.swift in Sources */,
+				8013221B2EC3D309001CFF7E /* SettingsView.swift in Sources */,
+				8013221C2EC3D309001CFF7E /* ContentView.swift in Sources */,
+				8013221D2EC3D309001CFF7E /* RobustTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -584,7 +662,7 @@
 			files = (
 				80AC420F2EC25D3F00A06E06 /* ExportUtils.swift in Sources */,
 				80AC42102EC25D3F00A06E06 /* Time.swift in Sources */,
-				80AC42112EC25D3F00A06E06 /* PDFMetadataScrubber.swift in Sources */,
+				801322152EC3D2DF001CFF7E /* PDFMetadataScrubber.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -664,7 +742,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -722,7 +800,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -752,8 +830,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = AxxessPhilly.ASAMAssessment;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = AxxessPhilly.TreatmentPlanAssistant;
+				PRODUCT_NAME = "Treatment Plan Assistant";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -784,8 +862,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = AxxessPhilly.ASAMAssessment;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = AxxessPhilly.TreatmentPlanAssistant;
+				PRODUCT_NAME = "Treatment Plan Assistant";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -804,7 +882,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PJ487S8PS6;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = AxxessPhilly.ASAMAssessmentTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -826,7 +904,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PJ487S8PS6;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = AxxessPhilly.ASAMAssessmentTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -27,6 +27,7 @@ struct ASAMAssessmentApp: App {
                 .environmentObject(uploadQueue)  // NEW: Inject upload queue
                 .environmentObject(settings)  // NEW: Inject display settings
                 .dynamicTypeSize(settings.dynamicType)  // NEW: Apply app-wide text size
+                .preferredColorScheme(settings.preferredColorScheme)  // NEW: Apply appearance mode preference
                 .task {
                     // Perform initial network probe
                     await networkChecker.performActiveProbe()

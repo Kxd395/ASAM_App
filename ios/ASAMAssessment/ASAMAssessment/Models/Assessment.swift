@@ -98,15 +98,16 @@ struct Domain: Identifiable, Codable, Hashable {
     var severity: Int  // 0-4 (0=none, 4=extreme)
     var notes: String
     var isComplete: Bool
+    var answers: [String: AnswerValue]  // Store questionnaire answers
 
     static func allDomains() -> [Domain] {
         [
-            Domain(id: UUID(), number: 1, title: "Acute Intoxication/Withdrawal", severity: 0, notes: "", isComplete: false),
-            Domain(id: UUID(), number: 2, title: "Biomedical Conditions", severity: 0, notes: "", isComplete: false),
-            Domain(id: UUID(), number: 3, title: "Emotional/Behavioral Conditions", severity: 0, notes: "", isComplete: false),
-            Domain(id: UUID(), number: 4, title: "Readiness to Change", severity: 0, notes: "", isComplete: false),
-            Domain(id: UUID(), number: 5, title: "Relapse/Continued Use", severity: 0, notes: "", isComplete: false),
-            Domain(id: UUID(), number: 6, title: "Recovery Environment", severity: 0, notes: "", isComplete: false)
+            Domain(id: UUID(), number: 1, title: "Acute Intoxication/Withdrawal", severity: 0, notes: "", isComplete: false, answers: [:]),
+            Domain(id: UUID(), number: 2, title: "Biomedical Conditions", severity: 0, notes: "", isComplete: false, answers: [:]),
+            Domain(id: UUID(), number: 3, title: "Emotional/Behavioral Conditions", severity: 0, notes: "", isComplete: false, answers: [:]),
+            Domain(id: UUID(), number: 4, title: "Readiness to Change", severity: 0, notes: "", isComplete: false, answers: [:]),
+            Domain(id: UUID(), number: 5, title: "Relapse/Continued Use", severity: 0, notes: "", isComplete: false, answers: [:]),
+            Domain(id: UUID(), number: 6, title: "Recovery Environment", severity: 0, notes: "", isComplete: false, answers: [:])
         ]
     }
 }

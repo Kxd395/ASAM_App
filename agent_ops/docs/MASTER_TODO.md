@@ -186,7 +186,46 @@ See: `agent_ops/docs/ASAM_IP_COMPLIANCE_ENFORCEMENT.md`
 - [x] **T-0041  Create Domain A–F questionnaire JSON (neutral) - ASAM assessment forms (P0) ✅ COMPLETE 2025-11-11**
 - [x] **T-0042  Build QuestionnaireRenderer and plug into domain detail (P0) ✅ COMPLETE 2025-11-11**
 - [x] **T-0043  Wire SeverityScoring to domain severities (A..F) (P0) ✅ COMPLETE 2025-11-11**
+
+## 🚨 CRITICAL: Official ASAM Criteria Implementation (P0)
+
+**REF:** `agent_ops/docs/review/asam-paper-criteria---edtitable-final-form (1).pdf`
+**REF:** `agent_ops/docs/review/asam_loc-assessment-guide_fillable-v1.0-2.25.25 (1).pdf`
+
+**IMPORTANT**: Current questionnaires are **placeholder/demo only**. Real implementation must use official ASAM criteria documents above.
+
+### ASAM v3 (2013) Assessment Form - 6 Dimensions, 0-4 severity scale
+### ASAM v4 (2024) Level-of-Care Guide - Subdimensions, skip logic, letter-coded risk ratings
+
+**Implementation Priority:**
+- [ ] **T-0056  Design ASAM v3/v4 data models with skip logic and conditional branching (P0)**
+- [ ] **T-0057  Implement ASAM v3 D1: Acute Intoxication/Withdrawal (substance inventory, CIWA/COWS) (P0)**  
+- [ ] **T-0058  Implement ASAM v3 D2: Biomedical Conditions (medical history, pregnancy, medications) (P0)**
+- [ ] **T-0059  Implement ASAM v3 D3: Emotional/Behavioral/Cognitive (mental health, self-harm, psychosis) (P0)**
+- [ ] **T-0060  Implement ASAM v3 D4: Readiness to Change (impact assessment, stage of change) (P0)**
+- [ ] **T-0061  Implement ASAM v3 D5: Relapse/Continued Use Potential (triggers, abstinence history) (P0)**  
+- [ ] **T-0062  Implement ASAM v3 D6: Recovery Environment (housing, employment, legal, safety) (P0)**
+- [ ] **T-0063  Add ASAM v4 Level-of-Care determination logic (Q11-Q47, risk ratings A-E) (P0)**
+- [ ] **T-0064  Wire ASAM scoring algorithms (v3: 0-4 severity, v4: LOC recommendations) (P0)**
+- [ ] **T-0065  Add version switching (v3 Assessment vs v4 Level-of-Care) with user selection (P0)**
+
+## 📝 Questionnaire System Enhancement (P1-P2)
+
 - [ ] **T-0044  Required-question validation + progress tracking (P1)**
 - [ ] **T-0045  Persist answers to AssessmentStore with per-domain ownership (P1)**
 - [ ] **T-0046  Add schema validation in CI for questionnaires (P1)**
 - [ ] **T-0047  Localize questionnaires (e.g., es-US) + unit preferences (P2)**
+
+## 🏥 Patient Identification & EMR Integration (P1-P2)
+
+**REF:** `agent_ops/docs/review/Patient.md` - Comprehensive patient ID system spec
+**REF:** `agent_ops/docs/review/patients/` - Clinical test cases and fixtures
+
+- [ ] **T-0048  Implement SMART on FHIR patient lookup with two-identifier safety gates (P1)**
+- [ ] **T-0049  Build Patient ID UI (MRN/FIN/Name+DOB/Barcode scan) with tenant config (P1)**  
+- [ ] **T-0050  Add FHIR vitals ingestion (temp, BP, HR, RR, SpO2) with safety thresholds (P1)**
+- [ ] **T-0051  Implement UDS (drug screen) integration with LOINC mapping (P1)**
+- [ ] **T-0052  Build substance intake profiles per-substance (opioids, alcohol, etc) (P2)**
+- [ ] **T-0053  Wire EMR context to assessment rules (vitalsUnstable, suspectedFentanyl) (P2)**
+- [ ] **T-0054  Add patient switching safety gates (discard draft protection) (P2)**
+- [ ] **T-0055  Implement encounter status validation (active/finished) for export gates (P2)**

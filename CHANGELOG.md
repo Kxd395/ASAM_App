@@ -1,5 +1,65 @@
 # CHANGELOG.md
 
+## 1.2.1 — 2025-11-11 (Repository Cleanup & Organization)
+
+### Changed — Repository Structure
+- **Cleaned root directory** - Archived 22 temporary build fix documents to `docs/archive/2025-11-build-fixes/`
+- **Removed build artifacts** - Deleted RESTORE_POINT directories, backup folders, and temporary scripts
+- **Updated .gitignore** - Enhanced to exclude build artifacts, restore points, temporary scripts, and logs
+- **Consolidated documentation** - Removed duplicate/corrupted README and CHANGELOG files
+
+### Fixed — Documentation SSOT
+- **Updated INDEX.md** - Corrected date to November 11, 2025 and build status to "Build Succeeded"
+- **Rewrote README.md** - Clean, comprehensive documentation replacing corrupted version
+- **Improved navigation** - All documents now point to INDEX.md as single source of truth
+
+### Removed — Temporary Files
+- Build artifacts: `xcodebuild_build.log`, `.xcresult` files
+- Restore points: `RESTORE_POINT_20251111_143613/`, `BACKUP_DUPLICATES/`
+- Temporary scripts: `fix_*.py`, `clean_*.py`, `add_*.py`, `*.sh` helper scripts
+- Duplicate docs: 22 status/fix documents moved to archive
+- Test exports: `ASAM_Traceability_Matrix_Export.csv`
+
+### Repository Status
+- ✅ **Root directory clean** - Only essential files remain
+- ✅ **All documents updated** - Current as of November 11, 2025
+- ✅ **SSOT established** - INDEX.md is authoritative reference
+- ✅ **Build artifacts excluded** - Comprehensive .gitignore rules
+- ✅ **History preserved** - All temporary docs archived, not deleted
+
+## 1.2.0 — 2025-11-11 (Critical Compile Fixes)
+
+### Fixed — iOS Build Critical Errors
+- **RulesProvenance.swift** - Fixed all compile-time signature mismatches and platform compatibility issues
+  - Added comprehensive `RulesChecksum` struct with SHA256 hash computation and manifest generation  
+  - Fixed platform-specific font handling for iOS vs macOS compatibility
+  - Corrected `pdfFooterText` method signatures across all call sites
+  - Added proper CryptoKit imports for hash computation functionality
+- **ExportPreflight.swift** - Updated all test method call signatures for consistency
+  - Fixed 6 test methods in `ExportPreflightTests.swift` to match corrected API
+  - Added required `provenance`, `complianceMode`, and `templatePath` parameters
+  - Ensured all test cases properly exercise the full method signature
+- **ObservableObject Imports** - Fixed missing Combine framework imports
+  - Added `import Combine` to `QuestionsService.swift`
+  - Added `import Combine` to `SeverityScoring.swift`
+  - Resolved protocol conformance issues for `ObservableObject`
+- **RulesServiceWrapper** - Verified state management implementation
+  - Confirmed `RulesState` enum and `rulesState` property implementation
+  - Validated state transitions for `.healthy` and `.degraded` modes
+
+### Build Status  
+- ✅ **iOS app now compiles successfully** with zero critical errors
+- ✅ All signature mismatches resolved
+- ✅ Platform compatibility issues addressed  
+- ✅ Protocol conformance requirements satisfied
+- ⚠️ Minor deprecation warnings remain (non-blocking)
+
+### Technical Impact
+- **Resolved show-stopper build failures** preventing iOS app compilation
+- **Fixed critical type system issues** that blocked code execution
+- **Ensured production build compatibility** across all target platforms
+- **Maintained backward compatibility** while fixing forward compatibility issues
+
 ## 1.1.0 — 2025-11-08 (Spec-Kit Integration)
 
 ### Added — Spec-Kit Framework

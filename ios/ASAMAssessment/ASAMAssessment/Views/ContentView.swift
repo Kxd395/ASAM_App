@@ -20,6 +20,8 @@ struct ContentView: View {
 
     @State private var selectedAssessment: Assessment?
     @State private var selectedSection: NavigationSection?
+    @State private var selectedDomain: Domain?  // Track specific domain selection
+    @State private var directDomainNavigation: Bool = false  // Enable direct domain navigation
     @State private var showSafetyBanner: Bool = false
     @State private var safetyBannerDetent: PresentationDetent = .large  // NEW: For resizable sheets
     @State private var showNewAssessmentSheet: Bool = false
@@ -180,6 +182,8 @@ struct ContentView: View {
         ExpandableSidebarView(
             assessment: assessment, 
             selectedSection: $selectedSection,
+            selectedDomain: $selectedDomain,  // Pass selectedDomain binding
+            directDomainNavigation: $directDomainNavigation,  // Pass directDomainNavigation binding
             onSafetyReview: { showSafetyBanner = true },
             onRulesDiagnostics: { showRulesDiagnostics = true },
             onGenerateLOC: { generateLOCRecommendation(for: assessment) }
@@ -194,7 +198,12 @@ struct ContentView: View {
             case .overview:
                 AssessmentOverviewView(assessment: assessment)
             case .domains:
-                DomainsListView(assessment: assessment)
+                // Check if we have a direct domain navigation
+                if directDomainNavigation, let domain = selectedDomain {
+                    DomainDetailView(domain: domain, assessment: assessment)
+                } else {
+                    DomainsListView(assessment: assessment)
+                }
             case .problems:
                 ProblemsListView(assessment: assessment)
             case .locRecommendation:
@@ -205,7 +214,7 @@ struct ContentView: View {
                 ExportView(assessment: assessment)
             }
         }
-        .navigationTitle(section.title)
+        .navigationTitle(directDomainNavigation && selectedDomain != nil ? selectedDomain!.title : section.title)
     }
 
     // MARK: - Actions
@@ -455,6 +464,14 @@ struct DomainDetailView: View {
                     saveDomainAnswers(newAnswers)
                     print("📝 Answers updated for Domain \(domain.number): \(newAnswers.count) answers")
                 }
+                .onChange(of: assessmentStore.currentAssessment) { _, newCurrentAssessment in
+                    // Refresh answers when current assessment changes
+                    if let newAssessment = newCurrentAssessment,
+                       let updatedDomain = newAssessment.domains.first(where: { $0.id == domain.id }) {
+                        answers = updatedDomain.answers
+                        print("🔄 Refreshed answers for Domain \(domain.number) due to current assessment change: \(answers.count) answers")
+                    }
+                }
             } else {
                 VStack(spacing: 16) {
                     Text("No questionnaire data available")
@@ -475,14 +492,24 @@ struct DomainDetailView: View {
             loadQuestionnaire()
         }
         .onAppear {
-            // Load saved answers when view appears and sync current assessment
-            answers = domain.answers
-            print("🔄 Domain \(domain.number) view appeared - loaded \(answers.count) saved answers")
-            
-            // Ensure this assessment is set as current for proper save handling
-            if let currentAssessment = assessmentStore.assessments.first(where: { $0.domains.contains(where: { $0.id == domain.id }) }) {
-                assessmentStore.currentAssessment = currentAssessment
-                print("🔄 Set current assessment to \(String(currentAssessment.id.uuidString.prefix(8))) for domain \(domain.number)")
+            // Always load answers from the current assessment in the store
+            if let currentAssessment = assessmentStore.currentAssessment,
+               let currentDomain = currentAssessment.domains.first(where: { $0.id == domain.id }) {
+                answers = currentDomain.answers
+                print("🔄 Domain \(domain.number) view appeared - loaded \(answers.count) saved answers from current assessment")
+            } else {
+                // Fallback: find the assessment that contains this domain and set it as current
+                if let assessmentWithDomain = assessmentStore.assessments.first(where: { $0.domains.contains(where: { $0.id == domain.id }) }) {
+                    assessmentStore.currentAssessment = assessmentWithDomain
+                    if let domainInAssessment = assessmentWithDomain.domains.first(where: { $0.id == domain.id }) {
+                        answers = domainInAssessment.answers
+                        print("🔄 Domain \(domain.number) view appeared - set current assessment and loaded \(answers.count) answers")
+                    }
+                } else {
+                    // Final fallback to the domain parameter
+                    answers = domain.answers
+                    print("🔄 Domain \(domain.number) view appeared - loaded \(answers.count) answers from domain parameter (final fallback)")
+                }
             }
         }
     }
@@ -519,14 +546,63 @@ struct DomainDetailView: View {
     }
     
     private func saveDomainAnswers(_ newAnswers: [String: AnswerValue]) {
-        // Use the assessment parameter directly instead of relying on currentAssessment
-        var updatedAssessment = assessment
+        // Always get the current assessment from the store to ensure we have the latest version
+        guard let currentAssessment = assessmentStore.currentAssessment else {
+            print("❌ No current assessment available for saving answers")
+            return
+        }
         
-        print("💾 Saving answers for Domain \(domain.number) - Assessment: \(String(assessment.id.uuidString.prefix(8)))")
+        var updatedAssessment = currentAssessment
+        
+        print("💾 Saving answers for Domain \(domain.number) - Current Assessment: \(String(currentAssessment.id.uuidString.prefix(8)))")
+        print("💾 New answers: \(newAnswers.keys.count) questions answered")
         
         // Update the domain with new answers
         if let domainIndex = updatedAssessment.domains.firstIndex(where: { $0.id == domain.id }) {
+            // Store previous answers for comparison
+            let previousAnswers = updatedAssessment.domains[domainIndex].answers
             updatedAssessment.domains[domainIndex].answers = newAnswers
+            
+            // Calculate severity score based on new answers
+            do {
+                let severityScoring = try SeverityScoring()
+                let domainIdentifier = String(UnicodeScalar(64 + domain.number)!) // 1→A, 2→B, etc.
+                
+                // Convert AnswerValue to scoring-compatible format
+                var scoringAnswers: [String: Any] = [:]
+                for (questionId, answerValue) in newAnswers {
+                    switch answerValue {
+                    case .text(let text):
+                        scoringAnswers[questionId] = text
+                    case .number(let num):
+                        scoringAnswers[questionId] = num
+                    case .bool(let bool):
+                        scoringAnswers[questionId] = bool
+                    case .single(let value):
+                        if case .number(let num) = value {
+                            scoringAnswers[questionId] = num
+                        } else if case .string(let str) = value {
+                            scoringAnswers[questionId] = str
+                        }
+                    case .multi(let values):
+                        scoringAnswers[questionId] = Array(values)
+                    case .substanceGrid(_):
+                        // Handle substance grid if needed
+                        break
+                    case .none:
+                        // Don't include empty answers
+                        break
+                    }
+                }
+                
+                let domainSeverity = severityScoring.computeSeverity(forDomain: domainIdentifier, answers: scoringAnswers)
+                updatedAssessment.domains[domainIndex].severity = domainSeverity.severity
+                
+                print("🧮 Calculated severity for Domain \(domain.number): \(domainSeverity.severity) (score: \(String(format: "%.2f", domainSeverity.score)))")
+                
+            } catch {
+                print("⚠️ Failed to calculate severity for Domain \(domain.number): \(error)")
+            }
             
             // Check if domain is complete based on required questions
             let questionnaireCopy = questionnaire
@@ -539,15 +615,13 @@ struct DomainDetailView: View {
             }
             updatedAssessment.domains[domainIndex].isComplete = (answeredRequiredQuestions.count == requiredQuestions.count)
             
-            // Save the updated assessment
+            // Save the updated assessment - this will handle currentAssessment sync internally
             assessmentStore.updateAssessment(updatedAssessment)
             
-            // Also ensure current assessment is updated for real-time sync
-            assessmentStore.currentAssessment = updatedAssessment
-            
-            print("✅ Successfully saved \(newAnswers.count) answers for Domain \(domain.number), Complete: \(updatedAssessment.domains[domainIndex].isComplete)")
+            print("✅ Successfully saved \(newAnswers.count) answers for Domain \(domain.number), Complete: \(updatedAssessment.domains[domainIndex].isComplete), Severity: \(updatedAssessment.domains[domainIndex].severity)")
+            print("🔍 Previous answers count: \(previousAnswers.count), New answers count: \(newAnswers.count)")
         } else {
-            print("❌ Could not find domain \(domain.number) with ID \(domain.id) in assessment")
+            print("❌ Could not find domain \(domain.number) with ID \(domain.id) in current assessment")
         }
     }
 }
@@ -743,6 +817,8 @@ extension ContentView {
 struct ExpandableSidebarView: View {
     let assessment: Assessment
     @Binding var selectedSection: NavigationSection?
+    @Binding var selectedDomain: Domain?  // Change from @State to @Binding
+    @Binding var directDomainNavigation: Bool  // Add binding for direct navigation
     let onSafetyReview: () -> Void
     let onRulesDiagnostics: () -> Void
     let onGenerateLOC: () -> Void
@@ -751,7 +827,6 @@ struct ExpandableSidebarView: View {
     @EnvironmentObject private var uploadQueue: UploadQueue
     
     @State private var expandedSections: Set<String> = ["Assessment"] // Default expanded
-    @State private var selectedDomain: Domain?
     
     var body: some View {
         List(selection: $selectedSection) {
@@ -857,6 +932,28 @@ struct ExpandableSidebarView: View {
             ) {
                 toggleSection("Domains")
             } content: {
+                // All Domains overview option
+                NavigationLink(value: NavigationSection.domains) {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("All Domains")
+                                .font(.subheadline)
+                            Text("Overview of all 6 domains")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    } icon: {
+                        Image(systemName: "square.grid.3x3")
+                            .foregroundStyle(.purple)
+                    }
+                }
+                .simultaneousGesture(TapGesture().onEnded {
+                    // Reset direct navigation when viewing all domains
+                    directDomainNavigation = false
+                    selectedDomain = nil
+                })
+                .accessibilityLabel("All Domains, Overview of all 6 domains")
+                
                 ForEach(assessment.domains) { domain in
                     DomainNavigationRow(
                         domain: domain,
@@ -864,6 +961,7 @@ struct ExpandableSidebarView: View {
                         action: {
                             selectedDomain = domain
                             selectedSection = .domains
+                            directDomainNavigation = true  // Enable direct navigation
                         }
                     )
                 }

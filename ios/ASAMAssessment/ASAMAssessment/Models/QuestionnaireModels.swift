@@ -19,6 +19,94 @@ struct Questionnaire: Codable, Identifiable {
     let questions: [Question]
 }
 
+// MARK: - Substance Assessment Models
+
+struct SubstanceTemplate: Codable {
+    let neverUsed: FieldDefinition
+    let lastUseDate: FieldDefinition?
+    let durationYears: FieldDefinition?
+    let durationMonths: FieldDefinition?
+    let frequency30Days: FieldDefinition
+    let routes: FieldDefinition
+    
+    enum CodingKeys: String, CodingKey {
+        case neverUsed = "never_used"
+        case lastUseDate = "last_use_date"
+        case durationYears = "duration_years"
+        case durationMonths = "duration_months"
+        case frequency30Days = "frequency_30_days"
+        case routes
+    }
+}
+
+struct FieldDefinition: Codable {
+    let type: String
+    let label: String
+    let requiredIfUsed: Bool?
+    let disablesOtherFields: Bool?
+    let validation: Validation?
+    let options: [QuestionOption]?
+    
+    enum CodingKeys: String, CodingKey {
+        case type, label, validation, options
+        case requiredIfUsed = "required_if_used"
+        case disablesOtherFields = "disables_other_fields"
+    }
+}
+
+struct SubstanceDefinition: Codable, Identifiable {
+    let id: String
+    let name: String
+    let conditionalQuestions: [ConditionalQuestion]?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, name
+        case conditionalQuestions = "conditional_questions"
+    }
+}
+
+struct ConditionalQuestion: Codable, Identifiable {
+    let id: String
+    let text: String
+    let type: String
+    let visibleIf: ConditionalVisibility?
+    let validation: Validation?
+    let options: [QuestionOption]?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, text, type, validation, options
+        case visibleIf = "visible_if"
+    }
+}
+
+struct ConditionalVisibility: Codable {
+    let globalCondition: String
+    let `operator`: String
+    let value: String
+    
+    enum CodingKeys: String, CodingKey {
+        case globalCondition = "global_condition"
+        case `operator`
+        case value
+    }
+}
+
+struct SubstanceAssessment: Codable, Hashable, Identifiable {
+    let id: String
+    let substanceId: String
+    let neverUsed: Bool
+    let lastUseDate: Date?
+    let durationYears: Int?
+    let durationMonths: Int?
+    let frequency30Days: String?
+    let routes: Set<String>
+    let conditionalAnswers: [String: QuestionValue]
+    
+    enum CodingKeys: String, CodingKey {
+        case id, substanceId, neverUsed, lastUseDate, durationYears, durationMonths, frequency30Days, routes, conditionalAnswers
+    }
+}
+
 struct Question: Codable, Identifiable {
     let id: String
     let text: String
@@ -28,10 +116,15 @@ struct Question: Codable, Identifiable {
     let visibleIf: VisibilityCondition?
     let options: [QuestionOption]?
     let validation: Validation?
+    let description: String?
+    let substanceTemplate: SubstanceTemplate?
+    let availableSubstances: [SubstanceDefinition]?
     
     enum CodingKeys: String, CodingKey {
-        case id, text, type, required, breadcrumb, options, validation
+        case id, text, type, required, breadcrumb, options, validation, description
         case visibleIf = "visible_if"
+        case substanceTemplate = "substance_template"
+        case availableSubstances = "available_substances"
     }
 }
 
@@ -41,6 +134,7 @@ enum QuestionType: String, Codable, CaseIterable {
     case text = "text"
     case number = "number"
     case boolean = "boolean"
+    case dynamicSubstanceGrid = "dynamic_substance_grid"
 }
 
 struct QuestionOption: Codable, Identifiable {
@@ -128,6 +222,7 @@ enum AnswerValue: Codable, Hashable {
     case bool(Bool)
     case single(QuestionValue)
     case multi(Set<QuestionValue>)
+    case substanceGrid([SubstanceAssessment])
     case none
     
     init(from decoder: Decoder) throws {
@@ -144,6 +239,8 @@ enum AnswerValue: Codable, Hashable {
             self = .number(doubleValue)
         } else if let boolValue = try? container.decode(Bool.self) {
             self = .bool(boolValue)
+        } else if let substanceGridValue = try? container.decode([SubstanceAssessment].self) {
+            self = .substanceGrid(substanceGridValue)
         } else if let arrayValue = try? container.decode([QuestionValue].self) {
             self = .multi(Set(arrayValue))
         } else if let singleValue = try? container.decode(QuestionValue.self) {
@@ -169,6 +266,8 @@ enum AnswerValue: Codable, Hashable {
             try container.encode(value)
         case .multi(let values):
             try container.encode(Array(values))
+        case .substanceGrid(let assessments):
+            try container.encode(assessments)
         case .none:
             try container.encodeNil()
         }
@@ -222,7 +321,7 @@ extension Question {
             answerValue = .number(num)
         case .bool(let bool):
             answerValue = .bool(bool)
-        case .multi, .none:
+        case .multi, .none, .substanceGrid:
             return false
         }
         
@@ -262,6 +361,9 @@ extension Question {
                 if str.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     return false
                 }
+            case .substanceGrid(let assessments):
+                // At least one substance should be assessed if required
+                return !assessments.isEmpty
             default:
                 break
             }

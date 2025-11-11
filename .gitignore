@@ -19,11 +19,25 @@ DerivedData
 
 # Restore points and backups
 RESTORE_POINT_*/
+BACKUP_DUPLICATES/
 *.backup
 *.backup[0-9]
 
 # Build artifacts
 *.xcresult
+xcodebuild*.log
+*.log
+
+# Temporary scripts (should be in tools/ if permanent)
+/fix_*.py
+/clean_*.py
+/add_*.py
+/add_*.sh
+/restore*.sh
+/test_*.swift
+
+# Temporary exports
+*_Export.csv
 
 # macOS
 .DS_Store

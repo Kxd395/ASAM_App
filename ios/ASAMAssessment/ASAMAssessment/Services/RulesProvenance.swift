@@ -18,6 +18,62 @@ import AppKit  // macOS
 typealias PlatformFont = NSFont
 #endif
 
+/// Enhanced rules checksum computation with full hash and manifest
+/// T-0031: Full hash computation and manifest for audit trail
+struct RulesChecksum {
+    let sha256: String      // 64 hex chars
+    let manifest: String    // JSON array of {"file","hash"} sorted by file
+    let version: String
+    let timestamp: Date
+    
+    /// Short form for display (12 chars)
+    var sha256Short: String {
+        String(sha256.prefix(12))
+    }
+    
+    /// Compute comprehensive checksum for all rules files
+    static func compute(bundle: Bundle = .main) -> RulesChecksum? {
+        let files = ["anchors.json", "wm_ladder.json", "loc_indication.guard.json", 
+                     "validation_rules.json", "operators.json", "clinical_thresholds.json"]
+        
+        // Include edition in preimage for version tracking
+        var pieces: [Data] = ["edition:v4\n".data(using: .utf8)!]
+        var manifestItems: [[String: String]] = []
+        
+        for file in files {
+            let resourceName = file.replacingOccurrences(of: ".json", with: "")
+            guard let url = bundle.url(forResource: resourceName, withExtension: "json"),
+                  let data = try? Data(contentsOf: url) else { 
+                print("❌ RulesChecksum: Missing file \(file)")
+                return nil 
+            }
+            
+            pieces.append(data)
+            let fileHash = SHA256.hash(data: data).compactMap { String(format: "%02x", $0) }.joined()
+            manifestItems.append(["file": file, "hash": fileHash])
+        }
+        
+        // Sort manifest for stability
+        manifestItems.sort { $0["file"]! < $1["file"]! }
+        
+        guard let manifestData = try? JSONSerialization.data(withJSONObject: manifestItems, options: []),
+              let manifestString = String(data: manifestData, encoding: .utf8) else {
+            return nil
+        }
+        
+        // Compute full hash
+        let fullData = pieces.reduce(Data(), +)
+        let fullHash = SHA256.hash(data: fullData).compactMap { String(format: "%02x", $0) }.joined()
+        
+        return RulesChecksum(
+            sha256: fullHash,
+            manifest: manifestString,
+            version: "1.1.0",
+            timestamp: Date()
+        )
+    }
+}
+
 /// Rules provenance information for audit trail
 /// FIX #1: Canonical provenance with exact footer format
 struct RulesProvenance: Codable {
@@ -53,7 +109,7 @@ extension RulesChecksum {
     /// Convert to provenance record
     func toProvenance(legalVersion: String = "1.0") -> RulesProvenance {
         RulesProvenance(
-            rulesetHash: self.sha256Full,  // Full 64-char hash for audit
+            rulesetHash: self.sha256,  // Full 64-char hash for audit
             rulesManifest: self.manifest,  // JSON manifest
             rulesVersion: self.version,
             timestamp: self.timestamp,
@@ -181,7 +237,9 @@ extension PDFDocument {
  }
 
  pdfDocument.stampProvenanceFooter(
+     planId: planId,
      planHash: planHash,
+     complianceMode: complianceMode,
      rulesProvenance: provenance
  )
  */

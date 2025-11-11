@@ -10,6 +10,14 @@
 import Foundation
 import PDFKit
 
+#if canImport(UIKit)
+import UIKit
+typealias PlatformFont = UIFont
+#elseif canImport(AppKit)
+import AppKit
+typealias PlatformFont = NSFont
+#endif
+
 /// Scrub PHI and device info from PDF metadata
 final class PDFMetadataScrubber {
 
@@ -90,7 +98,7 @@ final class PDFMetadataScrubber {
         )
 
         let annotation = PDFAnnotation(bounds: footerRect, forType: .freeText, withProperties: nil)
-        annotation.font = NSFont.systemFont(ofSize: 8)
+        annotation.font = PlatformFont.systemFont(ofSize: 8)
         annotation.fontColor = .gray
         annotation.contents = footer
         annotation.alignment = .center
@@ -100,11 +108,3 @@ final class PDFMetadataScrubber {
         page.addAnnotation(annotation)
     }
 }
-
-/// NSFont wrapper for cross-platform compatibility
-#if os(iOS)
-import UIKit
-typealias NSFont = UIFont
-#else
-import AppKit
-#endif

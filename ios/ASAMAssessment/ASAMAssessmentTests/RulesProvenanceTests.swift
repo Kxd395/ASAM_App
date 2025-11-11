@@ -48,10 +48,16 @@ final class RulesProvenanceTests: XCTestCase {
             legalNoticeVersion: "1.0"
         )
 
+        let planId = "plan-12345"
         let planHash = "7f9c2a1b3d4e"
+        let complianceMode = "internal_neutral"
 
         // When: Generate PDF footer text
-        let footerText = provenance.pdfFooterText(planHash: planHash)
+        let footerText = provenance.pdfFooterText(
+            planId: planId,
+            planHash: planHash, 
+            complianceMode: complianceMode
+        )
 
         // Then: Contains all required fields
         XCTAssertTrue(footerText.contains("Plan:"))
@@ -131,8 +137,14 @@ final class RulesProvenanceTests: XCTestCase {
             return
         }
 
+        let planId = "test-plan-456" 
         let planHash = "abc123def456"
-        let footerText = provenance.pdfFooterText(planHash: planHash)
+        let complianceMode = "internal_neutral"
+        let footerText = provenance.pdfFooterText(
+            planId: planId,
+            planHash: planHash,
+            complianceMode: complianceMode
+        )
 
         // Then: Footer contains all hashes
         XCTAssertTrue(footerText.contains(String(planHash.prefix(8))))

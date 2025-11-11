@@ -35,7 +35,10 @@ final class ExportPreflightTests: XCTestCase {
         // When: Check preflight
         let result = ExportPreflight.check(
             assessment: assessment,
-            rulesService: rulesService
+            rulesService: rulesService,
+            provenance: nil,
+            complianceMode: .internal_neutral,
+            templatePath: nil
         )
 
         // Then: Export blocked
@@ -62,7 +65,10 @@ final class ExportPreflightTests: XCTestCase {
         // When: Check preflight
         let result = ExportPreflight.check(
             assessment: assessment,
-            rulesService: rulesService
+            rulesService: rulesService,
+            provenance: nil,
+            complianceMode: .internal_neutral,
+            templatePath: nil
         )
 
         // Then: Export blocked
@@ -100,7 +106,10 @@ final class ExportPreflightTests: XCTestCase {
         // When: Check preflight
         let result = ExportPreflight.check(
             assessment: assessment,
-            rulesService: rulesService
+            rulesService: rulesService,
+            provenance: nil,
+            complianceMode: .internal_neutral,
+            templatePath: nil
         )
 
         // Then: Export allowed
@@ -135,7 +144,10 @@ final class ExportPreflightTests: XCTestCase {
         // When: Check preflight
         let result = ExportPreflight.check(
             assessment: assessment,
-            rulesService: rulesService
+            rulesService: rulesService,
+            provenance: nil,
+            complianceMode: .internal_neutral,
+            templatePath: nil
         )
 
         // Then: Export blocked
@@ -176,7 +188,10 @@ final class ExportPreflightTests: XCTestCase {
 
         let fullResult = ExportPreflight.check(
             assessment: assessment,
-            rulesService: rulesService
+            rulesService: rulesService,
+            provenance: nil,
+            complianceMode: .internal_neutral,
+            templatePath: nil
         )
 
         switch fullResult {
@@ -210,7 +225,10 @@ final class ExportPreflightTests: XCTestCase {
         measure {
             _ = ExportPreflight.check(
                 assessment: assessment,
-                rulesService: rulesService
+                rulesService: rulesService,
+                provenance: nil,
+                complianceMode: .internal_neutral,
+                templatePath: nil
             )
         }
     }

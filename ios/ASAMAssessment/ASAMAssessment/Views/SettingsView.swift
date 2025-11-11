@@ -14,10 +14,11 @@ struct SettingsView: View {
                 Section {
                     textSizeControl
                     sheetSizePicker
+                    appearanceModePicker
                 } header: {
                     Text("Display")
                 } footer: {
-                    Text("Text size applies to all app content. Sheet size sets the default height for review screens.")
+                    Text("Text size applies to all app content. Sheet size sets the default height for review screens. Appearance controls light/dark mode.")
                 }
                 
                 // Future controls section (placeholder)
@@ -103,6 +104,27 @@ struct SettingsView: View {
             .pickerStyle(.segmented)
             
             Text("Sheets can be resized by dragging the handle.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding(.vertical, 4)
+    }
+    
+    // MARK: - Appearance Mode Picker
+    
+    private var appearanceModePicker: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Appearance")
+                .font(.headline)
+            
+            Picker("Appearance", selection: $settings.appearanceMode) {
+                Text("System").tag("system")    // Follow device setting
+                Text("Light").tag("light")      // Always light mode
+                Text("Dark").tag("dark")        // Always dark mode
+            }
+            .pickerStyle(.segmented)
+            
+            Text("System follows your device's appearance settings.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }

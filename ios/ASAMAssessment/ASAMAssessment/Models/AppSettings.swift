@@ -13,6 +13,9 @@ final class AppSettings: ObservableObject {
     @AppStorage("ui.defaultSheetDetentIndex") var defaultSheetDetentIndex: Int = 1 {
         didSet { objectWillChange.send() }
     }
+    @AppStorage("ui.appearanceMode") var appearanceMode: String = "system" {
+        didSet { objectWillChange.send() }
+    }
     @AppStorage("ui.highContrast") var highContrast: Bool = false {
         didSet { objectWillChange.send() }
     }
@@ -155,6 +158,15 @@ final class AppSettings: ObservableObject {
         case 0: return .fraction(0.6)   // Compact
         case 1: return .fraction(0.8)   // Comfort (default)
         default: return .large          // Full
+        }
+    }
+    
+    /// Map appearanceMode to ColorScheme preference
+    var preferredColorScheme: ColorScheme? {
+        switch appearanceMode {
+        case "light": return .light
+        case "dark": return .dark
+        default: return nil  // System default
         }
     }
     

@@ -165,6 +165,8 @@ struct QuestionView: View {
     @State private var boolInput: Bool = false
     @State private var singleSelection: QuestionValue?
     @State private var multipleSelection: Set<QuestionValue> = []
+    @FocusState private var isTextFieldFocused: Bool  // NEW: Focus state for text input fix
+    @State private var hasAppearedOnce = false  // NEW: Track initial appearance
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -217,6 +219,18 @@ struct QuestionView: View {
         )
         .onAppear {
             setupInitialValues()
+            
+            // NEW: Text input fix - ensure proper focus state initialization
+            if !hasAppearedOnce {
+                hasAppearedOnce = true
+                // Small delay to ensure UI is properly laid out before enabling focus
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    if question.type == QuestionType.text || question.type == QuestionType.number {
+                        // Enable keyboard interaction by preparing focus state
+                        print("📝 Text input ready for question: \(question.id)")
+                    }
+                }
+            }
         }
         .onChange(of: answer) { _, _ in
             updateLocalState()
@@ -262,14 +276,53 @@ struct QuestionView: View {
                     .buttonStyle(.bordered)
                     .controlSize(.small)
                     .foregroundColor(.red)
+                    
+                    Button("⌨️ ACTIVATE KEYBOARD") {
+                        // NEW: Force focus for testing text input
+                        isTextFieldFocused = true
+                        // Force keyboard activation with a small delay
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            isTextFieldFocused = false
+                            isTextFieldFocused = true
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.regular)
+                    .foregroundColor(.white)
+                    .background(Color.blue)
                 }
                 
-                // Text field for custom input
-                TextField("Enter your answer or use quick responses above", text: $textInput)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .onChange(of: textInput) { _, _ in
-                        answer = .text(textInput)
-                    }
+                // Text field for custom input with focus management
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("💡 Tap the field below to type, or use the keyboard button above")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                    
+                    TextField("Enter your answer or use quick responses above", text: $textInput)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .focused($isTextFieldFocused)
+                        .padding(8)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(isTextFieldFocused ? Color.blue.opacity(0.1) : Color.gray.opacity(0.1))
+                                .stroke(isTextFieldFocused ? Color.blue : Color.gray, lineWidth: 2)
+                        )
+                        .onTapGesture {
+                            // Force focus when tapped
+                            print("🔥 Text field tapped - forcing focus")
+                            isTextFieldFocused = true
+                        }
+                        .onSubmit {
+                            // Handle return key
+                            answer = .text(textInput)
+                        }
+                        .onChange(of: textInput) { _, _ in
+                            answer = .text(textInput)
+                        }
+                        .onChange(of: isTextFieldFocused) { _, focused in
+                            print("🔍 Focus state changed: \(focused)")
+                        }
+                }
             }
             
         case .number:
@@ -277,6 +330,15 @@ struct QuestionView: View {
                 TextField("Enter number", value: $numberInput, format: .number)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .keyboardType(.decimalPad)
+                    .focused($isTextFieldFocused)
+                    .onTapGesture {
+                        // Force focus when tapped
+                        isTextFieldFocused = true
+                    }
+                    .onSubmit {
+                        // Handle return key
+                        answer = .number(numberInput)
+                    }
                     .onChange(of: numberInput) { _, _ in
                         answer = .number(numberInput)
                     }

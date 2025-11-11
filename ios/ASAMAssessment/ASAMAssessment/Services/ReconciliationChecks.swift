@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 struct ReconciliationCheck {
     let id: String
@@ -99,16 +100,16 @@ struct ReconciliationValidator {
     static func validateVitalsStableForAmbulatoryWM(
         flags: ClinicalFlags,
         wmCandidates: [String],  // FIXED: Accept WM candidates, not LOC string
-        asamVersion: ASAMVersion = .v4
+        asamVersion: ASAMVersion = .v4_2024
     ) -> [ReconciliationCheck] {
         var checks: [ReconciliationCheck] = []
         
         // Define ambulatory WM levels by edition
         let ambulatoryWMLevels: [String]
         switch asamVersion {
-        case .v3:
+        case .v3_2013:
             ambulatoryWMLevels = ["1-WM", "2-WM", "3.2-WM"]  // v3 non-residential WM
-        case .v4:
+        case .v4_2024:
             ambulatoryWMLevels = ["1.7", "2.7"]  // v4 integrated ambulatory WM
         }
         

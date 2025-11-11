@@ -58,95 +58,6 @@ enum RulesPreflight {
     }
 }
 
-// MARK: - Rules Checksum
-
-struct RulesChecksum: Codable {
-    let sha256Full: String   // Full 64-char hex for audit/provenance
-    let version: String
-    let timestamp: Date
-    let manifest: String     // JSON array of {file, sha256, bytes}
-
-    /// Short 12-char hash for display in footers
-    var sha256Short: String {
-        String(sha256Full.prefix(12)).uppercased()
-    }
-
-    /// Canonical data read: normalize line endings to LF, ensure UTF-8
-    private static func canonicalData(for url: URL) throws -> Data {
-        var data = try Data(contentsOf: url)
-        // Normalize line endings for cross-platform determinism
-        if let str = String(data: data, encoding: .utf8)?
-            .replacingOccurrences(of: "\r\n", with: "\n")
-            .replacingOccurrences(of: "\r", with: "\n"),
-           let normalized = str.data(using: .utf8) {
-            data = normalized
-        }
-        return data
-    }
-
-    static func compute(bundle: Bundle = .main, subdir: String = "rules") -> RulesChecksum? {
-        // Canonical file list (must match documented audit inputs)
-        // Order matters for deterministic hash
-        let filenames = ["anchors.json",
-                        "wm_ladder.json",
-                        "loc_indication.guard.json",
-                        "validation_rules.json",
-                        "operators.json"]
-
-        var manifestEntries: [[String: Any]] = []
-        var concat = Data()
-
-        for filename in filenames {
-            let resource = filename.replacingOccurrences(of: ".json", with: "")
-
-            // Use resilient resolver instead of strict subdirectory lookup
-            guard let url = resolveJSON(resource, bundle: bundle) else {
-                print("❌ Missing file: \(filename) (tried rules/, root, and full scan)")
-                return nil
-            }
-
-            guard let data = try? canonicalData(for: url) else {
-                print("❌ Cannot read file: \(filename)")
-                return nil
-            }
-
-            concat.append(data)
-            let fileHash = SHA256.hash(data: data)
-            let fileHashString = fileHash.compactMap { String(format: "%02x", $0) }.joined()
-
-            manifestEntries.append([
-                "file": filename,
-                "sha256": fileHashString,
-                "bytes": data.count
-            ])
-        }
-
-        let fullHash = SHA256.hash(data: concat)
-        let fullHashString = fullHash.compactMap { String(format: "%02x", $0) }.joined()
-
-        // Pretty-print manifest for auditors
-        let manifestData = try? JSONSerialization.data(
-            withJSONObject: manifestEntries,
-            options: [.prettyPrinted, .sortedKeys]
-        )
-        let manifestJSON = manifestData.flatMap { String(data: $0, encoding: .utf8) } ?? "[]"
-
-        return RulesChecksum(
-            sha256Full: fullHashString,  // Full 64-char
-            version: "v4",
-            timestamp: Date(),
-            manifest: manifestJSON
-        )
-    }
-}
-
-// MARK: - ASAM Version
-
-enum ASAMVersion: String, CaseIterable {
-    case v3 = "ASAM 3"
-    case v4 = "ASAM 4"
-}
-
 // MARK: - Rules Service Wrapper
 
 /// COMPILE FIX #3: Rules state enum for preflight checks
@@ -163,7 +74,7 @@ final class RulesServiceWrapper: ObservableObject {
     @Published var rulesState: RulesState = .degraded("Uninitialized")  // COMPILE FIX #3
     @Published var loadedAt: Date?  // Track when rules loaded successfully
 
-    @AppStorage("asam_version") var asamVersion: ASAMVersion = .v4
+    @AppStorage("asam_version") var asamVersion: ASAMVersion = .v4_2024
 
     private var svc: RulesService?
     private var debounceTask: Task<Void, Never>?
@@ -212,7 +123,7 @@ final class RulesServiceWrapper: ObservableObject {
                 if let checksum = self.checksum {
                     print("✅ Rules engine loaded successfully")
                     print("🔒 Rules: v\(checksum.version) [\(checksum.sha256Short)]")
-                    print("📋 Full hash: \(checksum.sha256Full)")
+                    print("📋 Full hash: \(checksum.sha256)")
                     print("📄 Manifest: \(checksum.manifest)")
                 }
             } catch {
@@ -326,7 +237,7 @@ final class RulesServiceWrapper: ObservableObject {
         case "3.1":
             return "3.1 Clinically Managed Low-Intensity Residential"
         case "3.3":
-            if asamVersion == .v3 {
+            if asamVersion == .v3_2013 {
                 return "3.3 Clinically Managed Medium-Intensity Residential"
             } else {
                 return "Level 3.3 (deprecated in ASAM 4)"

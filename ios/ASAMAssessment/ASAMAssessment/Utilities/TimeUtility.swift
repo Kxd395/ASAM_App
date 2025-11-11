@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 /// Time formatting utilities
 struct Time {

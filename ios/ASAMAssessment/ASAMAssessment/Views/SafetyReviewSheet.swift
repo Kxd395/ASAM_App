@@ -44,7 +44,7 @@ struct SafetyReviewSheet: View {
         NavigationStack {
             ScrollViewReader { proxy in
                 ScrollView {
-                    VStack(spacing: 16) {
+                    VStack(spacing: 12) {
 
                         // --- Header / Alert
                         headerCard
@@ -90,7 +90,9 @@ struct SafetyReviewSheet: View {
                         // --- Helper text showing what's needed
                         continueHelper
                     }
-                    .padding(20)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 40)  // Extra bottom padding to ensure acknowledgment is visible
+                    .padding(.top, 20)
                 }
                 .scrollDismissesKeyboard(.interactively)
                 .ignoresSafeArea(.keyboard, edges: .bottom)     // prevents sheet "jump"
@@ -220,7 +222,7 @@ struct SafetyReviewSheet: View {
 
     @ViewBuilder private var notesEditor: some View {
         TextEditor(text: $notes)
-            .frame(minHeight: 160)
+            .frame(minHeight: 80, maxHeight: 120)
             .padding(12)
             .background(.background, in: .rect(cornerRadius: 12))
             .overlay(

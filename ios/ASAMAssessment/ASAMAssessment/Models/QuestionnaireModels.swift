@@ -107,6 +107,18 @@ struct SubstanceAssessment: Codable, Hashable, Identifiable {
     }
 }
 
+// MARK: - Repeater Field Definition
+
+struct RepeaterField: Codable, Identifiable {
+    let id: String
+    let label: String
+    let type: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id, label, type
+    }
+}
+
 struct Question: Codable, Identifiable {
     let id: String
     let text: String
@@ -117,12 +129,16 @@ struct Question: Codable, Identifiable {
     let options: [QuestionOption]?
     let validation: Validation?
     let description: String?
+    let helpText: String?  // Support both description and helpText
+    let repeaterFields: [RepeaterField]?  // For repeater type questions
     let substanceTemplate: SubstanceTemplate?
     let availableSubstances: [SubstanceDefinition]?
     
     enum CodingKeys: String, CodingKey {
         case id, text, type, required, breadcrumb, options, validation, description
+        case helpText = "helpText"
         case visibleIf = "visible_if"
+        case repeaterFields = "repeater_fields"
         case substanceTemplate = "substance_template"
         case availableSubstances = "available_substances"
     }
@@ -132,8 +148,11 @@ enum QuestionType: String, Codable, CaseIterable {
     case singleChoice = "single_choice"
     case multipleChoice = "multiple_choice"
     case text = "text"
+    case textarea = "textarea"
     case number = "number"
     case boolean = "boolean"
+    case repeater = "repeater"
+    case monthYear = "month_year"
     case dynamicSubstanceGrid = "dynamic_substance_grid"
 }
 

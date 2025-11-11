@@ -439,6 +439,76 @@ struct QuestionView: View {
                 answer: $answer,
                 validationError: validationError
             )
+        
+        case .textarea:
+            // Render textarea as multi-line text field
+            VStack(alignment: .leading, spacing: 8) {
+                TextEditor(text: $textInput)
+                    .frame(minHeight: 100, maxHeight: 200)
+                    .padding(8)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                    )
+                    .onChange(of: textInput) { _, newValue in
+                        answer = .text(newValue)
+                    }
+            }
+        
+        case .repeater:
+            // Render repeater as a simple text note for now (full implementation would need table UI)
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Repeater field (table format)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                
+                TextEditor(text: $textInput)
+                    .frame(minHeight: 80, maxHeight: 150)
+                    .padding(8)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                    )
+                    .onChange(of: textInput) { _, newValue in
+                        answer = .text(newValue)
+                    }
+                
+                Text("Note: Enter items one per line or separated by commas")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
+        
+        case .monthYear:
+            // Render month/year picker
+            VStack(alignment: .leading, spacing: 8) {
+                DatePicker(
+                    "Select month and year",
+                    selection: Binding(
+                        get: {
+                            // Parse stored text date or use current date
+                            if case .text(let dateStr) = answer, !dateStr.isEmpty {
+                                let formatter = DateFormatter()
+                                formatter.dateFormat = "yyyy-MM"
+                                return formatter.date(from: dateStr) ?? Date()
+                            }
+                            return Date()
+                        },
+                        set: { newDate in
+                            let formatter = DateFormatter()
+                            formatter.dateFormat = "yyyy-MM"
+                            let dateString = formatter.string(from: newDate)
+                            textInput = dateString
+                            answer = .text(dateString)
+                        }
+                    ),
+                    displayedComponents: [.date]
+                )
+                .datePickerStyle(.compact)
+            }
         }
     }
     

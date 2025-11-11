@@ -1,0 +1,101 @@
+{
+  "id": "e5_relapse_neutral",
+  "title": "Domain E: Relapse, Continued Use, or Continued Problem Potential",
+  "domain": "E",
+  "version": "1.0.0",
+  "description": "Assessment of factors that may contribute to relapse or continued use",
+  "questions": [
+    {
+      "id": "e01",
+      "text": "What is the patient's history of relapse?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "relapse_history",
+      "options": [
+        {"value": "no_history", "label": "No previous relapse history", "score": 1},
+        {"value": "rare", "label": "Rare relapses with long periods of abstinence", "score": 2},
+        {"value": "occasional", "label": "Occasional relapses", "score": 3},
+        {"value": "frequent", "label": "Frequent relapses or inability to maintain abstinence", "score": 4}
+      ]
+    },
+    {
+      "id": "e02",
+      "text": "How strong are the patient's cravings currently?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "current_cravings",
+      "options": [
+        {"value": "none", "label": "No cravings", "score": 1},
+        {"value": "mild", "label": "Mild, manageable cravings", "score": 2},
+        {"value": "moderate", "label": "Moderate cravings, some difficulty managing", "score": 3},
+        {"value": "severe", "label": "Severe, overwhelming cravings", "score": 4}
+      ]
+    },
+    {
+      "id": "e03",
+      "text": "What triggers or high-risk situations has the patient identified?",
+      "type": "multiple_choice",
+      "required": true,
+      "breadcrumb": "relapse_triggers",
+      "options": [
+        {"value": "none_identified", "label": "No triggers identified", "score": 3},
+        {"value": "stress", "label": "Stress or emotional distress", "score": 2},
+        {"value": "social", "label": "Social situations or peer pressure", "score": 2},
+        {"value": "environmental", "label": "Environmental cues or locations", "score": 2},
+        {"value": "medical", "label": "Physical pain or medical issues", "score": 3},
+        {"value": "psychiatric", "label": "Psychiatric symptoms", "score": 3},
+        {"value": "financial", "label": "Financial problems", "score": 2}
+      ]
+    },
+    {
+      "id": "e04",
+      "text": "How does the patient typically cope with stress?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "stress_coping",
+      "options": [
+        {"value": "healthy", "label": "Uses healthy coping strategies", "score": 1},
+        {"value": "mixed", "label": "Mix of healthy and unhealthy strategies", "score": 2},
+        {"value": "unhealthy", "label": "Primarily unhealthy coping strategies", "score": 3},
+        {"value": "substance_use", "label": "Primarily uses substances to cope", "score": 4}
+      ]
+    },
+    {
+      "id": "e05",
+      "text": "Rate the patient's confidence in maintaining sobriety (0-10 scale)",
+      "type": "number",
+      "required": true,
+      "breadcrumb": "sobriety_confidence",
+      "validation": {
+        "min": 0,
+        "max": 10
+      }
+    },
+    {
+      "id": "e06",
+      "text": "How much time does the patient spend thinking about substance use?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "substance_preoccupation",
+      "options": [
+        {"value": "rarely", "label": "Rarely or never", "score": 1},
+        {"value": "occasionally", "label": "Occasionally", "score": 2},
+        {"value": "frequently", "label": "Frequently throughout the day", "score": 3},
+        {"value": "constantly", "label": "Constantly preoccupied", "score": 4}
+      ]
+    },
+    {
+      "id": "e07",
+      "text": "What is the patient's plan for maintaining sobriety?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "sobriety_plan",
+      "options": [
+        {"value": "detailed", "label": "Detailed, realistic plan", "score": 1},
+        {"value": "basic", "label": "Basic plan with some specifics", "score": 2},
+        {"value": "vague", "label": "Vague or unrealistic plan", "score": 3},
+        {"value": "none", "label": "No plan for maintaining sobriety", "score": 4}
+      ]
+    }
+  ]
+}

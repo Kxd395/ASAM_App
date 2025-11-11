@@ -441,7 +441,7 @@ struct DomainsListView: View {
     }
 }
 
-/// Placeholder view for domain details until questionnaire is implemented
+/// Domain detail view - questionnaire integration pending Xcode target inclusion
 struct DomainDetailPlaceholderView: View {
     let domain: Domain
     
@@ -462,17 +462,62 @@ struct DomainDetailPlaceholderView: View {
             } header: {
                 Text("CURRENT SEVERITY")
             } footer: {
-                Text("Questionnaire implementation pending. Domain assessment forms will be available here.")
+                Text("Questionnaire files ready - pending Xcode target membership integration.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
             
             Section {
-                Text("This domain requires structured questionnaire data to enable full assessment.")
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                        Text("✅ Questionnaire JSON files created")
+                            .font(.callout)
+                    }
+                    
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                        Text("✅ Swift models and services ready")
+                            .font(.callout)
+                    }
+                    
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                        Text("✅ Scoring engine implemented")
+                            .font(.callout)
+                    }
+                    
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundColor(.blue)
+                        Text("Add Swift files to Xcode project target to activate")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             } header: {
-                Text("PENDING IMPLEMENTATION")
+                Text("QUESTIONNAIRE INTEGRATION STATUS")
+            }
+            
+            Section {
+                Text("Files Location:")
+                    .font(.callout)
+                    .fontWeight(.medium)
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("• Models/QuestionnaireModels.swift")
+                    Text("• Services/QuestionsService.swift") 
+                    Text("• Services/SeverityScoring.swift")
+                    Text("• Views/QuestionnaireRenderer.swift")
+                    Text("• questionnaires/ directory")
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            } header: {
+                Text("READY FOR XCODE INTEGRATION")
             }
         }
         .navigationTitle("Domain \(domain.number)")

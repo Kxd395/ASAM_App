@@ -1,0 +1,114 @@
+{
+  "id": "f6_environment_neutral",
+  "title": "Domain F: Recovery/Living Environment",
+  "domain": "F",
+  "version": "1.0.0",
+  "description": "Assessment of environmental factors that support or hinder recovery",
+  "questions": [
+    {
+      "id": "f01",
+      "text": "What is the patient's current living situation?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "living_situation",
+      "options": [
+        {"value": "stable_supportive", "label": "Stable, supportive housing", "score": 1},
+        {"value": "stable_neutral", "label": "Stable housing, neutral environment", "score": 2},
+        {"value": "unstable", "label": "Unstable housing situation", "score": 3},
+        {"value": "high_risk", "label": "High-risk environment (substance use present)", "score": 4}
+      ]
+    },
+    {
+      "id": "f02",
+      "text": "How would you rate the patient's family and social support?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "social_support",
+      "options": [
+        {"value": "strong", "label": "Strong, recovery-supportive network", "score": 1},
+        {"value": "moderate", "label": "Moderate support with some recovery allies", "score": 2},
+        {"value": "limited", "label": "Limited support, mixed influences", "score": 3},
+        {"value": "negative", "label": "Negative influences, enabling relationships", "score": 4}
+      ]
+    },
+    {
+      "id": "f03",
+      "text": "Are substances easily accessible in the patient's environment?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "substance_accessibility",
+      "options": [
+        {"value": "not_accessible", "label": "Substances not easily accessible", "score": 1},
+        {"value": "somewhat_accessible", "label": "Somewhat accessible with effort", "score": 2},
+        {"value": "easily_accessible", "label": "Easily accessible", "score": 3},
+        {"value": "readily_available", "label": "Readily available in immediate environment", "score": 4}
+      ]
+    },
+    {
+      "id": "f04",
+      "text": "What is the patient's employment or educational status?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "employment_status",
+      "options": [
+        {"value": "stable_employment", "label": "Stable employment or education", "score": 1},
+        {"value": "part_time", "label": "Part-time or intermittent work", "score": 2},
+        {"value": "unemployed_seeking", "label": "Unemployed but actively seeking work", "score": 3},
+        {"value": "unemployed_not_seeking", "label": "Unemployed, not seeking work", "score": 4}
+      ]
+    },
+    {
+      "id": "f05",
+      "text": "How does the patient spend their free time?",
+      "type": "multiple_choice",
+      "required": true,
+      "breadcrumb": "leisure_activities",
+      "options": [
+        {"value": "healthy_activities", "label": "Healthy recreational activities", "score": 1},
+        {"value": "social_sober", "label": "Social activities with sober friends", "score": 1},
+        {"value": "isolated", "label": "Tends to be isolated", "score": 3},
+        {"value": "substance_related", "label": "Activities often involve substances", "score": 4},
+        {"value": "risky_behaviors", "label": "Engages in other risky behaviors", "score": 3}
+      ]
+    },
+    {
+      "id": "f06",
+      "text": "What transportation options does the patient have for attending treatment?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "transportation_access",
+      "options": [
+        {"value": "reliable", "label": "Reliable personal or public transportation", "score": 1},
+        {"value": "limited", "label": "Limited but manageable transportation", "score": 2},
+        {"value": "difficult", "label": "Transportation is difficult to arrange", "score": 3},
+        {"value": "no_access", "label": "No reliable transportation access", "score": 4}
+      ]
+    },
+    {
+      "id": "f07",
+      "text": "Are there any legal issues that might affect treatment?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "legal_issues",
+      "options": [
+        {"value": "none", "label": "No legal issues", "score": 1},
+        {"value": "minor", "label": "Minor legal issues, not interfering", "score": 2},
+        {"value": "moderate", "label": "Legal issues may affect treatment attendance", "score": 3},
+        {"value": "severe", "label": "Serious legal issues significantly affecting treatment", "score": 4}
+      ]
+    },
+    {
+      "id": "f08",
+      "text": "Rate the overall recovery supportiveness of the patient's environment (1-4 scale)",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "environment_supportiveness",
+      "options": [
+        {"value": "highly_supportive", "label": "Highly supportive of recovery", "score": 1},
+        {"value": "moderately_supportive", "label": "Moderately supportive", "score": 2},
+        {"value": "minimally_supportive", "label": "Minimally supportive", "score": 3},
+        {"value": "not_supportive", "label": "Not supportive or actively hindering", "score": 4}
+      ]
+    }
+  ]
+}

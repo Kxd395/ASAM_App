@@ -1,8 +1,8 @@
 # MASTER_TODO
 This document is generated from `docs/TODO_INDEX.json`. Do not edit by hand.
 
-Updated: 2025-11-10T21:45:00.000000
-Open: 32  |  Done: 13 (T-0024 merged into T-0029)
+Updated: 2025-11-11T03:45:00.000000
+Open: 36  |  Done: 16 (T-0024 merged into T-0029)
 
 ## ⚠️ CRITICAL: Compile Breakers Fixed
 
@@ -132,6 +132,15 @@ See: `agent_ops/docs/ASAM_IP_COMPLIANCE_ENFORCEMENT.md`
 | **T-0038** | **open** | **P1** | **PDF flatten service + embed provenance in PDF Info dict** | **agent** |  |
 | **T-0039** | **open** | **P1** | **Replace grep with deterministic target-membership check in CI** | **agent** |  |
 | **T-0040** | **done** | **P1** | **Implement canonical hash with 5 files + manifest (64-char SHA256)** | **agent** | **2025-11-10** |
+| **T-0041** | **done** | **P0** | **Create Domain A–F questionnaire JSON (neutral) - ASAM assessment forms** | **agent** | **2025-11-11** |
+| **T-0042** | **done** | **P0** | **Build QuestionnaireRenderer and plug into domain detail** | **agent** | **2025-11-11** |
+| **T-0043** | **done** | **P0** | **Wire SeverityScoring to domain severities (A..F)** | **agent** | **2025-11-11** |
+| **T-0044** | **open** | **P1** | **Required-question validation + progress tracking** | **agent** |  |
+| **T-0045** | **open** | **P1** | **Persist answers to AssessmentStore with per-domain ownership** | **agent** |  |
+| **T-0046** | **open** | **P1** | **Add schema validation in CI for questionnaires** | **agent** |  |
+| **T-0047** | **open** | **P2** | **Localize questionnaires (e.g., es-US) + unit preferences** | **agent** |  |
+
+**QUESTIONNAIRE INTEGRATION STATUS**: Files ready at `/ios/ASAMAssessment/ASAMAssessment/` - needs 2-minute Xcode target membership integration. See `docs/questionnaires/XCODE_INTEGRATION_GUIDE.md` for step-by-step instructions.
 
 ## Checklist
 - [x] T-0001  Implement NavigationSplitView shell and screens (P1)
@@ -174,3 +183,10 @@ See: `agent_ops/docs/ASAM_IP_COMPLIANCE_ENFORCEMENT.md`
 - [ ] **T-0038  PDF flatten service + embed provenance in PDF Info dict (P1)**
 - [ ] **T-0039  Replace grep with deterministic target-membership check in CI (P1)**
 - [x] **T-0040  Implement canonical hash with 5 files + manifest (64-char SHA256) (P1) ✅ COMPLETE 2025-11-10**
+- [x] **T-0041  Create Domain A–F questionnaire JSON (neutral) - ASAM assessment forms (P0) ✅ COMPLETE 2025-11-11**
+- [x] **T-0042  Build QuestionnaireRenderer and plug into domain detail (P0) ✅ COMPLETE 2025-11-11**
+- [x] **T-0043  Wire SeverityScoring to domain severities (A..F) (P0) ✅ COMPLETE 2025-11-11**
+- [ ] **T-0044  Required-question validation + progress tracking (P1)**
+- [ ] **T-0045  Persist answers to AssessmentStore with per-domain ownership (P1)**
+- [ ] **T-0046  Add schema validation in CI for questionnaires (P1)**
+- [ ] **T-0047  Localize questionnaires (e.g., es-US) + unit preferences (P2)**

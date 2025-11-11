@@ -1,0 +1,100 @@
+{
+  "id": "d4_readiness_neutral",
+  "title": "Domain D: Readiness to Change",
+  "domain": "D",
+  "version": "1.0.0",
+  "description": "Assessment of patient's motivation and readiness for treatment",
+  "questions": [
+    {
+      "id": "d01",
+      "text": "How does the patient view their substance use?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "substance_use_awareness",
+      "options": [
+        {"value": "no_problem", "label": "Does not see substance use as a problem", "score": 4},
+        {"value": "minimal_problem", "label": "Sees minimal problems from substance use", "score": 3},
+        {"value": "some_problems", "label": "Acknowledges some problems", "score": 2},
+        {"value": "significant_problems", "label": "Recognizes significant problems", "score": 1}
+      ]
+    },
+    {
+      "id": "d02",
+      "text": "What is the patient's motivation for treatment?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "treatment_motivation",
+      "options": [
+        {"value": "high_internal", "label": "High motivation, internal reasons", "score": 1},
+        {"value": "moderate_internal", "label": "Moderate motivation, internal reasons", "score": 2},
+        {"value": "external_pressure", "label": "Motivated primarily by external pressure", "score": 3},
+        {"value": "no_motivation", "label": "No apparent motivation for treatment", "score": 4}
+      ]
+    },
+    {
+      "id": "d03",
+      "text": "Has the patient made previous attempts to change their substance use?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "change_attempts",
+      "options": [
+        {"value": "multiple_successful", "label": "Multiple attempts with periods of success", "score": 2},
+        {"value": "some_attempts", "label": "Some attempts with mixed results", "score": 2},
+        {"value": "few_attempts", "label": "Few attempts, mostly unsuccessful", "score": 3},
+        {"value": "no_attempts", "label": "No previous attempts to change", "score": 4}
+      ]
+    },
+    {
+      "id": "d04",
+      "text": "How does the patient respond to treatment recommendations?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "treatment_response",
+      "options": [
+        {"value": "eager", "label": "Eager and cooperative", "score": 1},
+        {"value": "willing", "label": "Willing but somewhat hesitant", "score": 2},
+        {"value": "reluctant", "label": "Reluctant but not oppositional", "score": 3},
+        {"value": "resistant", "label": "Resistant or oppositional", "score": 4}
+      ]
+    },
+    {
+      "id": "d05",
+      "text": "What stage of change is the patient currently in?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "change_stage",
+      "options": [
+        {"value": "precontemplation", "label": "Precontemplation (not considering change)", "score": 4},
+        {"value": "contemplation", "label": "Contemplation (considering change)", "score": 3},
+        {"value": "preparation", "label": "Preparation (planning to change)", "score": 2},
+        {"value": "action", "label": "Action (actively making changes)", "score": 1}
+      ]
+    },
+    {
+      "id": "d06",
+      "text": "Rate the patient's insight into their condition (1-4 scale)",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "insight_level",
+      "options": [
+        {"value": "excellent", "label": "Excellent insight and understanding", "score": 1},
+        {"value": "good", "label": "Good insight with minor gaps", "score": 2},
+        {"value": "limited", "label": "Limited insight", "score": 3},
+        {"value": "poor", "label": "Poor or no insight", "score": 4}
+      ]
+    },
+    {
+      "id": "d07",
+      "text": "How committed is the patient to following treatment recommendations?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "treatment_commitment",
+      "options": [
+        {"value": "high", "label": "High commitment", "score": 1},
+        {"value": "moderate", "label": "Moderate commitment", "score": 2},
+        {"value": "low", "label": "Low commitment", "score": 3},
+        {"value": "none", "label": "No commitment", "score": 4}
+      ]
+    }
+  ]
+}

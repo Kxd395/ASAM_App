@@ -1,0 +1,99 @@
+{
+  "id": "c3_emotional_neutral",
+  "title": "Domain C: Emotional, Behavioral, or Cognitive Conditions",
+  "domain": "C",
+  "version": "1.0.0",
+  "description": "Assessment of psychological and psychiatric conditions",
+  "questions": [
+    {
+      "id": "c01",
+      "text": "How would you rate the patient's current mood?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "current_mood",
+      "options": [
+        {"value": "stable", "label": "Stable and appropriate", "score": 1},
+        {"value": "mildly_depressed", "label": "Mildly depressed or anxious", "score": 2},
+        {"value": "moderately_depressed", "label": "Moderately depressed or anxious", "score": 3},
+        {"value": "severely_depressed", "label": "Severely depressed, suicidal thoughts", "score": 4}
+      ]
+    },
+    {
+      "id": "c02",
+      "text": "Is the patient currently experiencing any suicidal or homicidal ideation?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "suicidal_ideation",
+      "options": [
+        {"value": "none", "label": "No suicidal or homicidal thoughts", "score": 1},
+        {"value": "passive", "label": "Passive thoughts, no plan", "score": 2},
+        {"value": "active_no_plan", "label": "Active thoughts, no specific plan", "score": 3},
+        {"value": "active_with_plan", "label": "Active thoughts with plan or intent", "score": 4}
+      ]
+    },
+    {
+      "id": "c03",
+      "text": "Does the patient have a history of mental health treatment?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "mental_health_history",
+      "options": [
+        {"value": "none", "label": "No prior mental health treatment", "score": 1},
+        {"value": "outpatient", "label": "Previous outpatient counseling", "score": 2},
+        {"value": "inpatient", "label": "Previous psychiatric hospitalization", "score": 3},
+        {"value": "multiple", "label": "Multiple psychiatric hospitalizations", "score": 4}
+      ]
+    },
+    {
+      "id": "c04",
+      "text": "Is the patient currently taking psychiatric medications?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "psychiatric_medications",
+      "options": [
+        {"value": "none", "label": "No psychiatric medications", "score": 1},
+        {"value": "stable", "label": "Stable on current medications", "score": 2},
+        {"value": "adjusting", "label": "Recently started or adjusting medications", "score": 3},
+        {"value": "non_compliant", "label": "Non-compliant with medications", "score": 4}
+      ]
+    },
+    {
+      "id": "c05",
+      "text": "How is the patient's cognitive functioning?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "cognitive_functioning",
+      "options": [
+        {"value": "normal", "label": "Normal cognitive function", "score": 1},
+        {"value": "mild_impairment", "label": "Mild cognitive impairment", "score": 2},
+        {"value": "moderate_impairment", "label": "Moderate cognitive impairment", "score": 3},
+        {"value": "severe_impairment", "label": "Severe cognitive impairment", "score": 4}
+      ]
+    },
+    {
+      "id": "c06",
+      "text": "Rate the patient's anxiety level (0-10 scale)",
+      "type": "number",
+      "required": true,
+      "breadcrumb": "anxiety_score",
+      "validation": {
+        "min": 0,
+        "max": 10
+      }
+    },
+    {
+      "id": "c07",
+      "text": "Does the patient exhibit any behavioral concerns?",
+      "type": "multiple_choice",
+      "required": true,
+      "breadcrumb": "behavioral_concerns",
+      "options": [
+        {"value": "none", "label": "No behavioral concerns", "score": 1},
+        {"value": "agitation", "label": "Agitation or restlessness", "score": 2},
+        {"value": "aggression", "label": "Verbal or physical aggression", "score": 3},
+        {"value": "self_harm", "label": "Self-harming behaviors", "score": 4},
+        {"value": "psychosis", "label": "Psychotic symptoms", "score": 4}
+      ]
+    }
+  ]
+}

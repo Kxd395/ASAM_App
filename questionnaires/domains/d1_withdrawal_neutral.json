@@ -1,0 +1,95 @@
+{
+  "id": "a1_withdrawal_neutral",
+  "title": "Domain A: Acute Intoxication and/or Withdrawal Potential",
+  "domain": "A",
+  "version": "1.0.0",
+  "description": "Assessment of current acute intoxication and withdrawal potential",
+  "questions": [
+    {
+      "id": "a01",
+      "text": "Is the patient currently showing signs of intoxication?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "intoxication_present",
+      "options": [
+        {"value": "none", "label": "No signs of intoxication", "score": 1},
+        {"value": "mild", "label": "Mild intoxication signs", "score": 2},
+        {"value": "moderate", "label": "Moderate intoxication", "score": 3},
+        {"value": "severe", "label": "Severe intoxication", "score": 4}
+      ]
+    },
+    {
+      "id": "a02",
+      "text": "What is the patient's current level of consciousness?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "consciousness_level",
+      "options": [
+        {"value": "alert", "label": "Alert and oriented", "score": 1},
+        {"value": "drowsy", "label": "Drowsy but responsive", "score": 2},
+        {"value": "confused", "label": "Confused or disoriented", "score": 3},
+        {"value": "unconscious", "label": "Unconscious or unresponsive", "score": 4}
+      ]
+    },
+    {
+      "id": "a03",
+      "text": "Has the patient experienced withdrawal symptoms in the past 24 hours?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "recent_withdrawal",
+      "options": [
+        {"value": "none", "label": "No withdrawal symptoms", "score": 1},
+        {"value": "mild", "label": "Mild symptoms (anxiety, restlessness)", "score": 2},
+        {"value": "moderate", "label": "Moderate symptoms (tremors, sweating)", "score": 3},
+        {"value": "severe", "label": "Severe symptoms (seizures, hallucinations)", "score": 4}
+      ]
+    },
+    {
+      "id": "a04",
+      "text": "What substances has the patient used in the last 24 hours?",
+      "type": "multiple_choice",
+      "required": true,
+      "breadcrumb": "recent_substance_use",
+      "options": [
+        {"value": "alcohol", "label": "Alcohol", "score": 2},
+        {"value": "opioids", "label": "Opioids", "score": 3},
+        {"value": "benzodiazepines", "label": "Benzodiazepines", "score": 3},
+        {"value": "stimulants", "label": "Stimulants (cocaine, amphetamines)", "score": 2},
+        {"value": "cannabis", "label": "Cannabis", "score": 1},
+        {"value": "other", "label": "Other substances", "score": 2},
+        {"value": "none", "label": "No recent substance use", "score": 1}
+      ]
+    },
+    {
+      "id": "a05",
+      "text": "Does the patient have a history of medically managed withdrawal?",
+      "type": "boolean",
+      "required": true,
+      "breadcrumb": "withdrawal_history"
+    },
+    {
+      "id": "a06",
+      "text": "Rate the patient's current physical distress level (0-10 scale)",
+      "type": "number",
+      "required": true,
+      "breadcrumb": "physical_distress_score",
+      "validation": {
+        "min": 0,
+        "max": 10
+      }
+    },
+    {
+      "id": "a07",
+      "text": "Are there any medical complications present?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "medical_complications",
+      "options": [
+        {"value": "none", "label": "No complications", "score": 1},
+        {"value": "minor", "label": "Minor complications manageable outpatient", "score": 2},
+        {"value": "moderate", "label": "Complications requiring monitoring", "score": 3},
+        {"value": "severe", "label": "Life-threatening complications", "score": 4}
+      ]
+    }
+  ]
+}

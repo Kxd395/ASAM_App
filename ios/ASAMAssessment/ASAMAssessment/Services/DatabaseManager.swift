@@ -213,9 +213,9 @@ final class DatabaseManager {
 extension DatabaseManager {
     func weeklyMaintenance() async throws {
         try checkpoint()
-        try await Task.detached {
+        try await MainActor.run {
             try self.fullIntegrityCheck()
-        }.value
+        }
         print("✅ Weekly maintenance completed")
     }
 }

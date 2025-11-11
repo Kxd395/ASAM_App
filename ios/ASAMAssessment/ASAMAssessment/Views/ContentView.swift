@@ -143,6 +143,13 @@ struct ContentView: View {
                 UserDefaults.standard.set(true, forKey: "safety_banner_shown")
             }
         }
+        .onChange(of: selectedAssessment) { _, newSelection in
+            // Keep currentAssessment in sync with selectedAssessment
+            if let assessment = newSelection {
+                assessmentStore.currentAssessment = assessment
+                print("🔄 ContentView: Selected assessment changed to \(String(assessment.id.uuidString.prefix(8)))")
+            }
+        }
         } // Close VStack
     }
 
@@ -170,70 +177,13 @@ struct ContentView: View {
     // MARK: - Section Navigation View
 
     private func sectionNavigationView(for assessment: Assessment) -> some View {
-        List(selection: $selectedSection) {
-            Section("Assessment") {
-                ForEach(NavigationSection.allCases) { section in
-                    NavigationLink(value: section) {
-                        Label {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(section.title)
-                                    .font(.subheadline)
-                                Text(section.description)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        } icon: {
-                            Image(systemName: section.icon)
-                                .foregroundStyle(section.color)
-                        }
-                    }
-                    .accessibilityLabel("\(section.title), \(section.description)")
-                }
-            }
-
-            Section("Actions") {
-                Button {
-                    showSafetyBanner = true
-                } label: {
-                    Label("Review Safety", systemImage: "exclamationmark.shield")
-                        .foregroundStyle(.red)
-                }
-                .accessibilityLabel("Review safety criteria")
-
-                Button {
-                    generateLOCRecommendation(for: assessment)
-                } label: {
-                    Label("Calculate LOC", systemImage: "function")
-                }
-                .disabled(!assessment.isComplete)
-                .accessibilityLabel("Calculate level of care recommendation")
-                .accessibilityHint(assessment.isComplete ? "Generate recommendation" : "Complete all domains first")
-
-                // NEW: Rules diagnostics button
-                Button {
-                    showRulesDiagnostics = true
-                } label: {
-                    Label("Rules Diagnostics", systemImage: "stethoscope")
-                        .foregroundStyle(rulesService.isAvailable ? .blue : .orange)
-                }
-                .accessibilityLabel("View rules engine diagnostics")
-
-                // NEW: Upload queue status
-                if !uploadQueue.jobs.isEmpty {
-                    HStack {
-                        Label("\(uploadQueue.jobs.count) uploads queued", systemImage: "arrow.up.circle")
-                            .foregroundStyle(.orange)
-                        Spacer()
-                        if uploadQueue.jobs.contains(where: { $0.attempt > 0 }) {
-                            Image(systemName: "exclamationmark.triangle")
-                                .foregroundStyle(.red)
-                                .font(.caption)
-                        }
-                    }
-                    .font(.caption)
-                }
-            }
-        }
+        ExpandableSidebarView(
+            assessment: assessment, 
+            selectedSection: $selectedSection,
+            onSafetyReview: { showSafetyBanner = true },
+            onRulesDiagnostics: { showRulesDiagnostics = true },
+            onGenerateLOC: { generateLOCRecommendation(for: assessment) }
+        )
     }
 
     // MARK: - Section Detail View
@@ -264,6 +214,9 @@ struct ContentView: View {
         let assessment = assessmentStore.createAssessment()
         selectedAssessment = assessment
         selectedSection = .overview
+        
+        // Ensure currentAssessment is set immediately
+        assessmentStore.currentAssessment = assessment
 
         auditService.logEvent(
             .assessmentCreated,
@@ -324,7 +277,7 @@ enum NavigationSection: String, CaseIterable, Identifiable {
     var description: String {
         switch self {
         case .overview: return "Assessment summary"
-        case .domains: return "6 ASAM dimensions"
+        case .domains: return "6 clinical domains"
         case .problems: return "Clinical problems"
         case .locRecommendation: return "Level of care"
         case .validation: return "Completeness check"
@@ -404,6 +357,7 @@ struct AssessmentOverviewView: View {
 
 struct DomainsListView: View {
     let assessment: Assessment
+    @EnvironmentObject private var assessmentStore: AssessmentStore
     @State private var path: [Int] = []  // Navigation path by domain number
     
     var body: some View {
@@ -418,6 +372,13 @@ struct DomainsListView: View {
                                 Text("Severity: \(domain.severity)")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
+                                
+                                // Show answer count for debugging
+                                if !domain.answers.isEmpty {
+                                    Text("Answers: \(domain.answers.count)")
+                                        .font(.caption2)
+                                        .foregroundStyle(.blue)
+                                }
                             }
                             Spacer()
                             Image(systemName: "chevron.right")
@@ -432,96 +393,162 @@ struct DomainsListView: View {
             .navigationTitle("Domains")
             .navigationDestination(for: Int.self) { domainNumber in
                 if let domain = assessment.domains.first(where: { $0.number == domainNumber }) {
-                    DomainDetailPlaceholderView(domain: domain)
+                    DomainDetailView(domain: domain, assessment: assessment)
                 } else {
                     Text("Domain not found")
                 }
+            }
+            .onAppear {
+                // Set current assessment when domains list appears
+                assessmentStore.currentAssessment = assessment
+                print("🔄 DomainsListView appeared - set current assessment to \(String(assessment.id.uuidString.prefix(8)))")
             }
         }
     }
 }
 
-/// Domain detail view - questionnaire integration pending Xcode target inclusion
-struct DomainDetailPlaceholderView: View {
+/// Domain detail view with actual questionnaire loading
+struct DomainDetailView: View {
     let domain: Domain
+    let assessment: Assessment  // Add assessment parameter
+    @EnvironmentObject private var assessmentStore: AssessmentStore
+    @StateObject private var questionsService = QuestionsService()
+    @State private var isLoading = true
+    @State private var errorMessage: String?
+    @State private var questionnaire: Questionnaire?
+    @State private var answers: [String: AnswerValue] = [:]
     
     var body: some View {
-        Form {
-            Section {
-                Text("Domain \(domain.number)")
-                    .font(.headline)
-                Text(domain.title)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            
-            Section {
-                Text("Severity: \(domain.severity)")
-                Stepper("Adjust Severity", value: .constant(domain.severity), in: 0...4)
-                    .disabled(true)
-            } header: {
-                Text("CURRENT SEVERITY")
-            } footer: {
-                Text("Questionnaire files ready - pending Xcode target membership integration.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            
-            Section {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green)
-                        Text("✅ Questionnaire JSON files created")
-                            .font(.callout)
-                    }
-                    
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green)
-                        Text("✅ Swift models and services ready")
-                            .font(.callout)
-                    }
-                    
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green)
-                        Text("✅ Scoring engine implemented")
-                            .font(.callout)
-                    }
-                    
-                    HStack {
-                        Image(systemName: "info.circle")
-                            .foregroundColor(.blue)
-                        Text("Add Swift files to Xcode project target to activate")
-                            .font(.callout)
-                            .foregroundStyle(.secondary)
-                    }
+        Group {
+            if isLoading {
+                VStack(spacing: 16) {
+                    ProgressView()
+                    Text("Loading questionnaire...")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
-            } header: {
-                Text("QUESTIONNAIRE INTEGRATION STATUS")
-            }
-            
-            Section {
-                Text("Files Location:")
-                    .font(.callout)
-                    .fontWeight(.medium)
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("• Models/QuestionnaireModels.swift")
-                    Text("• Services/QuestionsService.swift") 
-                    Text("• Services/SeverityScoring.swift")
-                    Text("• Views/QuestionnaireRenderer.swift")
-                    Text("• questionnaires/ directory")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if let errorMessage = errorMessage {
+                VStack(spacing: 16) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.largeTitle)
+                        .foregroundColor(.orange)
+                    Text("Failed to load questionnaire")
+                        .font(.headline)
+                    Text(errorMessage)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                    
+                    Button("Retry") {
+                        loadQuestionnaire()
+                    }
+                    .buttonStyle(.bordered)
                 }
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            } header: {
-                Text("READY FOR XCODE INTEGRATION")
+                .padding()
+            } else if let questionnaire = questionnaire {
+                QuestionnaireRenderer(
+                    questionnaire: questionnaire,
+                    initialAnswers: answers  // Pass saved answers
+                ) { newAnswers in
+                    self.answers = newAnswers
+                    saveDomainAnswers(newAnswers)
+                    print("📝 Answers updated for Domain \(domain.number): \(newAnswers.count) answers")
+                }
+            } else {
+                VStack(spacing: 16) {
+                    Text("No questionnaire data available")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                    
+                    Button("Load Questionnaire") {
+                        loadQuestionnaire()
+                    }
+                    .buttonStyle(.bordered)
+                }
+                .padding()
             }
         }
         .navigationTitle("Domain \(domain.number)")
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            loadQuestionnaire()
+        }
+        .onAppear {
+            // Load saved answers when view appears and sync current assessment
+            answers = domain.answers
+            print("🔄 Domain \(domain.number) view appeared - loaded \(answers.count) saved answers")
+            
+            // Ensure this assessment is set as current for proper save handling
+            if let currentAssessment = assessmentStore.assessments.first(where: { $0.domains.contains(where: { $0.id == domain.id }) }) {
+                assessmentStore.currentAssessment = currentAssessment
+                print("🔄 Set current assessment to \(String(currentAssessment.id.uuidString.prefix(8))) for domain \(domain.number)")
+            }
+        }
+    }
+    
+    private func loadQuestionnaire() {
+        isLoading = true
+        errorMessage = nil
+        questionnaire = nil
+        
+        Task {
+            do {
+                let domainIdentifier = "\(domain.number)" // Pass domain number as string
+                let jsonData = try questionsService.loadQuestionnaireData(forDomain: domainIdentifier)
+                
+                // Parse JSON data into Questionnaire object
+                let decoder = JSONDecoder()
+                let parsedQuestionnaire = try decoder.decode(Questionnaire.self, from: jsonData)
+                
+                await MainActor.run {
+                    self.questionnaire = parsedQuestionnaire
+                    self.isLoading = false
+                    // Load saved answers after questionnaire loads
+                    self.answers = domain.answers
+                    print("✅ Successfully loaded questionnaire for Domain \(domain.number): \(parsedQuestionnaire.questions.count) questions")
+                }
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = error.localizedDescription
+                    self.isLoading = false
+                }
+                print("🚫 Failed to load questionnaire for domain \(domain.number): \(error)")
+            }
+        }
+    }
+    
+    private func saveDomainAnswers(_ newAnswers: [String: AnswerValue]) {
+        // Use the assessment parameter directly instead of relying on currentAssessment
+        var updatedAssessment = assessment
+        
+        print("💾 Saving answers for Domain \(domain.number) - Assessment: \(String(assessment.id.uuidString.prefix(8)))")
+        
+        // Update the domain with new answers
+        if let domainIndex = updatedAssessment.domains.firstIndex(where: { $0.id == domain.id }) {
+            updatedAssessment.domains[domainIndex].answers = newAnswers
+            
+            // Check if domain is complete based on required questions
+            let questionnaireCopy = questionnaire
+            let requiredQuestions = questionnaireCopy?.questions.filter { $0.required } ?? []
+            let answeredRequiredQuestions = requiredQuestions.filter { question in
+                if let answer = newAnswers[question.id], case .none = answer {
+                    return false
+                }
+                return newAnswers[question.id] != nil
+            }
+            updatedAssessment.domains[domainIndex].isComplete = (answeredRequiredQuestions.count == requiredQuestions.count)
+            
+            // Save the updated assessment
+            assessmentStore.updateAssessment(updatedAssessment)
+            
+            // Also ensure current assessment is updated for real-time sync
+            assessmentStore.currentAssessment = updatedAssessment
+            
+            print("✅ Successfully saved \(newAnswers.count) answers for Domain \(domain.number), Complete: \(updatedAssessment.domains[domainIndex].isComplete)")
+        } else {
+            print("❌ Could not find domain \(domain.number) with ID \(domain.id) in assessment")
+        }
     }
 }
 
@@ -709,4 +736,338 @@ extension ContentView {
         .environmentObject(AssessmentStore())
         .environmentObject(AuditService())
         .environmentObject(LOCService())
+}
+
+// MARK: - Expandable Sidebar View
+
+struct ExpandableSidebarView: View {
+    let assessment: Assessment
+    @Binding var selectedSection: NavigationSection?
+    let onSafetyReview: () -> Void
+    let onRulesDiagnostics: () -> Void
+    let onGenerateLOC: () -> Void
+    
+    @EnvironmentObject private var rulesService: RulesServiceWrapper
+    @EnvironmentObject private var uploadQueue: UploadQueue
+    
+    @State private var expandedSections: Set<String> = ["Assessment"] // Default expanded
+    @State private var selectedDomain: Domain?
+    
+    var body: some View {
+        List(selection: $selectedSection) {
+            // Main Assessment Sections
+            ExpandableSection(
+                title: "Assessment",
+                icon: "doc.text",
+                isExpanded: expandedSections.contains("Assessment")
+            ) {
+                toggleSection("Assessment")
+            } content: {
+                // Overview
+                NavigationLink(value: NavigationSection.overview) {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Overview")
+                                .font(.subheadline)
+                            Text("Assessment summary")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    } icon: {
+                        Image(systemName: "doc.text")
+                            .foregroundStyle(.blue)
+                    }
+                }
+                .accessibilityLabel("Overview, Assessment summary")
+                
+                // Problems
+                NavigationLink(value: NavigationSection.problems) {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Problems")
+                                .font(.subheadline)
+                            Text("Clinical problems")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    } icon: {
+                        Image(systemName: "exclamationmark.triangle")
+                            .foregroundStyle(.orange)
+                    }
+                }
+                .accessibilityLabel("Problems, Clinical problems")
+                
+                // LOC Recommendation
+                NavigationLink(value: NavigationSection.locRecommendation) {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("LOC Recommendation")
+                                .font(.subheadline)
+                            Text("Level of care")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    } icon: {
+                        Image(systemName: "chart.bar.doc.horizontal")
+                            .foregroundStyle(.green)
+                    }
+                }
+                .accessibilityLabel("LOC Recommendation, Level of care")
+                
+                // Validation
+                NavigationLink(value: NavigationSection.validation) {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Validation")
+                                .font(.subheadline)
+                            Text("Completeness check")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    } icon: {
+                        Image(systemName: "checkmark.seal")
+                            .foregroundStyle(.indigo)
+                    }
+                }
+                .accessibilityLabel("Validation, Completeness check")
+                
+                // Export
+                NavigationLink(value: NavigationSection.export) {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Export")
+                                .font(.subheadline)
+                            Text("Generate PDF")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    } icon: {
+                        Image(systemName: "square.and.arrow.up")
+                            .foregroundStyle(.teal)
+                    }
+                }
+                .accessibilityLabel("Export, Generate PDF")
+            }
+            
+            // Clinical Domains Section
+            ExpandableSection(
+                title: "Clinical Domains",
+                icon: "square.grid.3x3",
+                isExpanded: expandedSections.contains("Domains")
+            ) {
+                toggleSection("Domains")
+            } content: {
+                ForEach(assessment.domains) { domain in
+                    DomainNavigationRow(
+                        domain: domain,
+                        isSelected: selectedSection == .domains && selectedDomain?.id == domain.id,
+                        action: {
+                            selectedDomain = domain
+                            selectedSection = .domains
+                        }
+                    )
+                }
+            }
+            
+            // Actions Section
+            ExpandableSection(
+                title: "Actions",
+                icon: "wrench.and.screwdriver",
+                isExpanded: expandedSections.contains("Actions")
+            ) {
+                toggleSection("Actions")
+            } content: {
+                // Safety Review
+                Button {
+                    onSafetyReview()
+                } label: {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Review Safety")
+                                .font(.subheadline)
+                            Text("Safety criteria check")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    } icon: {
+                        Image(systemName: "exclamationmark.shield")
+                            .foregroundStyle(.red)
+                    }
+                }
+                .accessibilityLabel("Review safety criteria")
+                
+                // Calculate LOC
+                Button {
+                    onGenerateLOC()
+                } label: {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Calculate LOC")
+                                .font(.subheadline)
+                            Text(assessment.isComplete ? "Generate recommendation" : "Complete domains first")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    } icon: {
+                        Image(systemName: "function")
+                            .foregroundStyle(assessment.isComplete ? .blue : .gray)
+                    }
+                }
+                .disabled(!assessment.isComplete)
+                .accessibilityLabel("Calculate level of care recommendation")
+                .accessibilityHint(assessment.isComplete ? "Generate recommendation" : "Complete all domains first")
+                
+                // Rules Diagnostics
+                Button {
+                    onRulesDiagnostics()
+                } label: {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Rules Diagnostics")
+                                .font(.subheadline)
+                            Text("Engine status check")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    } icon: {
+                        Image(systemName: "stethoscope")
+                            .foregroundStyle(rulesService.isAvailable ? .blue : .orange)
+                    }
+                }
+                .accessibilityLabel("View rules engine diagnostics")
+                
+                // Upload Queue Status
+                if !uploadQueue.jobs.isEmpty {
+                    HStack {
+                        Label("\(uploadQueue.jobs.count) uploads queued", systemImage: "arrow.up.circle")
+                            .foregroundStyle(.orange)
+                        Spacer()
+                        if uploadQueue.jobs.contains(where: { $0.attempt > 0 }) {
+                            Image(systemName: "exclamationmark.triangle")
+                                .foregroundStyle(.red)
+                                .font(.caption)
+                        }
+                    }
+                    .font(.caption)
+                    .padding(.leading, 32) // Align with other items
+                }
+            }
+        }
+        .listStyle(SidebarListStyle())
+    }
+    
+    private func toggleSection(_ section: String) {
+        if expandedSections.contains(section) {
+            expandedSections.remove(section)
+        } else {
+            expandedSections.insert(section)
+        }
+    }
+}
+
+// MARK: - Expandable Section View
+
+struct ExpandableSection<Content: View>: View {
+    let title: String
+    let icon: String
+    let isExpanded: Bool
+    let toggleAction: () -> Void
+    @ViewBuilder let content: Content
+    
+    var body: some View {
+        Section {
+            if isExpanded {
+                content
+            }
+        } header: {
+            Button(action: toggleAction) {
+                HStack {
+                    Label {
+                        Text(title)
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                    } icon: {
+                        Image(systemName: icon)
+                            .foregroundStyle(.blue)  // Use .blue instead of .accent
+                    }
+                    
+                    Spacer()
+                    
+                    Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .animation(.easeInOut(duration: 0.2), value: isExpanded)
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(PlainButtonStyle())
+        }
+    }
+}
+
+// MARK: - Domain Navigation Row
+
+struct DomainNavigationRow: View {
+    let domain: Domain
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Domain \(domain.number)")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                    
+                    Text(domain.title)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                    
+                    HStack {
+                        // Completion Status
+                        Label {
+                            Text(domain.isComplete ? "Complete" : "In Progress")
+                                .font(.caption2)
+                        } icon: {
+                            Image(systemName: domain.isComplete ? "checkmark.circle.fill" : "circle.dotted")
+                        }
+                        .foregroundStyle(domain.isComplete ? .green : .orange)
+                        
+                        Spacer()
+                        
+                        // Answer Count Indicator
+                        if !domain.answers.isEmpty {
+                            Text("\(domain.answers.count) answers")
+                                .font(.caption2)
+                                .foregroundStyle(.blue)
+                        }
+                        
+                        // Severity Indicator
+                        if domain.severity > 0 {
+                            Text("Severity: \(domain.severity)")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                
+                Spacer()
+                
+                if isSelected {
+                    Image(systemName: "checkmark")
+                        .foregroundStyle(.blue)  // Use .blue instead of .accent
+                        .font(.caption)
+                }
+            }
+            .padding(.vertical, 4)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(PlainButtonStyle())
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(isSelected ? Color.blue.opacity(0.1) : Color.clear)  // Use .blue instead of .accent
+        )
+    }
 }

@@ -13,11 +13,24 @@ struct QuestionnaireRenderer: View {
     // MARK: - Properties
     
     let questionnaire: Questionnaire
+    let initialAnswers: [String: AnswerValue]  // Initial answers to load
     let onAnswersChanged: ([String: AnswerValue]) -> Void
     
     @State private var answers: [String: AnswerValue] = [:]
     @State private var validationErrors: [String: String] = [:]
     @Environment(\.colorScheme) var colorScheme
+    
+    // MARK: - Initializers
+    
+    init(
+        questionnaire: Questionnaire,
+        initialAnswers: [String: AnswerValue] = [:],
+        onAnswersChanged: @escaping ([String: AnswerValue]) -> Void
+    ) {
+        self.questionnaire = questionnaire
+        self.initialAnswers = initialAnswers
+        self.onAnswersChanged = onAnswersChanged
+    }
     
     // MARK: - Body
     
@@ -111,11 +124,17 @@ struct QuestionnaireRenderer: View {
     }
     
     private func initializeAnswers() {
+        // Initialize with provided initial answers first, then fill gaps with .none
+        answers = initialAnswers
+        
         for question in questionnaire.questions {
             if answers[question.id] == nil {
-                answers[question.id] = .none
+                answers[question.id] = AnswerValue.none
             }
         }
+        
+        // Notify about initial state
+        onAnswersChanged(answers)
     }
     
     private func validateQuestion(_ question: Question) {
@@ -199,7 +218,7 @@ struct QuestionView: View {
         .onAppear {
             setupInitialValues()
         }
-        .onChange(of: answer) { _ in
+        .onChange(of: answer) { _, _ in
             updateLocalState()
         }
     }
@@ -208,18 +227,57 @@ struct QuestionView: View {
     private var questionInputView: some View {
         switch question.type {
         case .text:
-            TextField("Enter your answer", text: $textInput)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .onChange(of: textInput) { _ in
-                    answer = .text(textInput)
+            VStack(alignment: .leading, spacing: 12) {
+                // Quick response checkboxes
+                Text("Quick responses:")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                
+                HStack {
+                    Button("N/A") {
+                        textInput = "N/A"
+                        answer = .text(textInput)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    
+                    Button("Did not answer") {
+                        textInput = "Did not answer"
+                        answer = .text(textInput)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    
+                    Button("Other") {
+                        textInput = "Other"
+                        answer = .text(textInput)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    
+                    Button("Clear") {
+                        textInput = ""
+                        answer = .text(textInput)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    .foregroundColor(.red)
                 }
+                
+                // Text field for custom input
+                TextField("Enter your answer or use quick responses above", text: $textInput)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .onChange(of: textInput) { _, _ in
+                        answer = .text(textInput)
+                    }
+            }
             
         case .number:
             HStack {
                 TextField("Enter number", value: $numberInput, format: .number)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .keyboardType(.decimalPad)
-                    .onChange(of: numberInput) { _ in
+                    .onChange(of: numberInput) { _, _ in
                         answer = .number(numberInput)
                     }
                 
@@ -243,7 +301,7 @@ struct QuestionView: View {
             Toggle(isOn: $boolInput) {
                 Text("Yes")
             }
-            .onChange(of: boolInput) { _ in
+            .onChange(of: boolInput) { _, _ in
                 answer = .bool(boolInput)
             }
             
@@ -312,6 +370,13 @@ struct QuestionView: View {
                     }
                 }
             }
+            
+        case .dynamicSubstanceGrid:
+            SubstanceGridView(
+                question: question,
+                answer: $answer,
+                validationError: validationError
+            )
         }
     }
     
@@ -327,6 +392,9 @@ struct QuestionView: View {
             singleSelection = value
         case .multi(let values):
             multipleSelection = values
+        case .substanceGrid:
+            // Handled by SubstanceGridView
+            break
         case .none:
             // Keep defaults
             break
@@ -345,6 +413,9 @@ struct QuestionView: View {
             singleSelection = value
         case .multi(let values):
             multipleSelection = values
+        case .substanceGrid:
+            // Handled by SubstanceGridView
+            break
         case .none:
             textInput = ""
             numberInput = 0
@@ -390,7 +461,10 @@ struct QuestionnaireRenderer_Previews: PreviewProvider {
                         QuestionOption(value: .string("moderate"), label: "Moderate intoxication", score: 3),
                         QuestionOption(value: .string("severe"), label: "Severe intoxication", score: 4)
                     ],
-                    validation: nil
+                    validation: nil,
+                    description: nil,
+                    substanceTemplate: nil,
+                    availableSubstances: nil
                 )
             ]
         )

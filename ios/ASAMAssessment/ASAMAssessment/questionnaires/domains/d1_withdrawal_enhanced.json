@@ -1,0 +1,525 @@
+{
+  "id": "d1_withdrawal_enhanced",
+  "title": "Domain 1: Acute Intoxication and/or Withdrawal Potential",
+  "domain": "1",
+  "version": "2.0.0",
+  "description": "Complete assessment of current acute intoxication and withdrawal potential with comprehensive substance history, clinical assessment, and severity rating",
+  "questions": [
+    {
+      "id": "d1_01",
+      "text": "Is the patient currently showing signs of intoxication?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "intoxication_present",
+      "options": [
+        {"value": "none", "label": "No signs of intoxication", "score": 1},
+        {"value": "mild", "label": "Mild intoxication signs", "score": 2},
+        {"value": "moderate", "label": "Moderate intoxication", "score": 3},
+        {"value": "severe", "label": "Severe intoxication", "score": 4}
+      ]
+    },
+    {
+      "id": "d1_04",
+      "text": "Part 1: Substance-Specific Assessment Grid",
+      "type": "dynamic_substance_grid",
+      "required": true,
+      "breadcrumb": "substance_assessment",
+      "description": "For each substance used, complete the detailed assessment below. Use 'Add Substance' to assess additional substances.",
+      "substance_template": {
+        "never_used": {
+          "type": "boolean",
+          "label": "Never Used",
+          "disables_other_fields": true
+        },
+        "last_use_date": {
+          "type": "date",
+          "label": "Date of last use",
+          "required_if_used": true
+        },
+        "duration_years": {
+          "type": "number",
+          "label": "Years of continuous use",
+          "validation": {"min": 0, "max": 100}
+        },
+        "duration_months": {
+          "type": "number", 
+          "label": "Months of continuous use",
+          "validation": {"min": 0, "max": 11}
+        },
+        "frequency_30_days": {
+          "type": "single_choice",
+          "label": "Frequency in last 30 days",
+          "required_if_used": true,
+          "options": [
+            {"value": "daily", "label": "4-7 days/week", "score": 4},
+            {"value": "regular", "label": "1-3 days/week", "score": 3},
+            {"value": "occasional", "label": "3 or less days/month", "score": 2},
+            {"value": "not_used", "label": "Not used", "score": 1}
+          ]
+        },
+        "routes": {
+          "type": "multiple_choice",
+          "label": "Route (Select all that apply)",
+          "options": [
+            {"value": "oral", "label": "Oral"},
+            {"value": "nasal", "label": "Nasal/snort"},
+            {"value": "smoke", "label": "Smoke"},
+            {"value": "inject", "label": "Inject"},
+            {"value": "other", "label": "Other (rectal, patches, etc.)"}
+          ]
+        }
+      },
+      "available_substances": [
+        {
+          "id": "alcohol",
+          "name": "Alcohol",
+          "conditional_questions": [
+            {
+              "id": "alcohol_avg_drinks",
+              "text": "Average drinks per drinking day",
+              "type": "number",
+              "validation": {"min": 0, "max": 50}
+            },
+            {
+              "id": "alcohol_binge_female",
+              "text": "In the last 30 days, how often have you had 4 or more drinks on one occasion?",
+              "type": "number",
+              "visible_if": {
+                "global_condition": "patient_gender",
+                "operator": "equals",
+                "value": "female"
+              },
+              "validation": {"min": 0, "max": 30}
+            },
+            {
+              "id": "alcohol_binge_male",
+              "text": "In the last 30 days, how often have you had 5 or more drinks on one occasion?",
+              "type": "number",
+              "visible_if": {
+                "global_condition": "patient_gender",
+                "operator": "equals", 
+                "value": "male"
+              },
+              "validation": {"min": 0, "max": 30}
+            }
+          ]
+        },
+        {
+          "id": "cannabis",
+          "name": "Cannabis/Marijuana",
+          "conditional_questions": [
+            {
+              "id": "cannabis_primary_form",
+              "text": "Primary form used",
+              "type": "single_choice",
+              "options": [
+                {"value": "flower", "label": "Flower/Bud"},
+                {"value": "concentrate", "label": "Concentrate/Dab/Oil"},
+                {"value": "edible", "label": "Edible"},
+                {"value": "vape", "label": "Vape cartridge"},
+                {"value": "synthetic", "label": "Synthetic (K2/Spice)"}
+              ]
+            },
+            {
+              "id": "cannabis_thc_percentage",
+              "text": "Estimated THC percentage (if known)",
+              "type": "number",
+              "validation": {"min": 0, "max": 100}
+            }
+          ]
+        },
+        {
+          "id": "opioids",
+          "name": "Opioids",
+          "conditional_questions": [
+            {
+              "id": "opioid_type",
+              "text": "Primary opioid type",
+              "type": "single_choice", 
+              "options": [
+                {"value": "prescription", "label": "Prescription opioids (as prescribed)"},
+                {"value": "prescription_misuse", "label": "Prescription opioids (misused)"},
+                {"value": "heroin", "label": "Heroin"},
+                {"value": "fentanyl", "label": "Fentanyl (street)"},
+                {"value": "other", "label": "Other opioids"}
+              ]
+            },
+            {
+              "id": "opioid_tolerance",
+              "text": "Evidence of tolerance (needing more to achieve same effect)?",
+              "type": "boolean"
+            },
+            {
+              "id": "opioid_withdrawal_history",
+              "text": "History of withdrawal symptoms when stopping?",
+              "type": "boolean"
+            }
+          ]
+        },
+        {
+          "id": "cocaine",
+          "name": "Cocaine/Crack",
+          "conditional_questions": [
+            {
+              "id": "cocaine_form",
+              "text": "Primary form used",
+              "type": "single_choice",
+              "options": [
+                {"value": "powder", "label": "Powder cocaine"},
+                {"value": "crack", "label": "Crack cocaine"},
+                {"value": "both", "label": "Both forms"}
+              ]
+            }
+          ]
+        },
+        {
+          "id": "amphetamines",
+          "name": "Amphetamines/Stimulants",
+          "conditional_questions": [
+            {
+              "id": "amphet_type",
+              "text": "Primary stimulant type",
+              "type": "single_choice",
+              "options": [
+                {"value": "prescription", "label": "Prescription (Adderall, Ritalin, etc.)"},
+                {"value": "methamphetamine", "label": "Methamphetamine"},
+                {"value": "mdma", "label": "MDMA/Ecstasy"},
+                {"value": "other", "label": "Other stimulants"}
+              ]
+            }
+          ]
+        },
+        {
+          "id": "benzodiazepines",
+          "name": "Benzodiazepines",
+          "conditional_questions": [
+            {
+              "id": "benzo_type",
+              "text": "Primary benzodiazepine",
+              "type": "single_choice",
+              "options": [
+                {"value": "alprazolam", "label": "Alprazolam (Xanax)"},
+                {"value": "lorazepam", "label": "Lorazepam (Ativan)"},
+                {"value": "diazepam", "label": "Diazepam (Valium)"},
+                {"value": "clonazepam", "label": "Clonazepam (Klonopin)"},
+                {"value": "other", "label": "Other benzodiazepine"}
+              ]
+            },
+            {
+              "id": "benzo_prescribed",
+              "text": "Was this prescribed to you?",
+              "type": "boolean"
+            }
+          ]
+        },
+        {
+          "id": "hallucinogens",
+          "name": "Hallucinogens",
+          "conditional_questions": [
+            {
+              "id": "hallucinogen_type",
+              "text": "Primary hallucinogen type",
+              "type": "single_choice",
+              "options": [
+                {"value": "lsd", "label": "LSD"},
+                {"value": "psilocybin", "label": "Psilocybin mushrooms"},
+                {"value": "pcp", "label": "PCP"},
+                {"value": "ketamine", "label": "Ketamine"},
+                {"value": "other", "label": "Other hallucinogens"}
+              ]
+            }
+          ]
+        },
+        {
+          "id": "inhalants",
+          "name": "Inhalants",
+          "conditional_questions": [
+            {
+              "id": "inhalant_type",
+              "text": "Primary inhalant type", 
+              "type": "single_choice",
+              "options": [
+                {"value": "nitrous", "label": "Nitrous oxide"},
+                {"value": "solvents", "label": "Solvents/gasoline"},
+                {"value": "aerosols", "label": "Aerosols"},
+                {"value": "poppers", "label": "Nitrites (poppers)"},
+                {"value": "other", "label": "Other inhalants"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d1_05",
+      "text": "Part 2: General Substance Use History",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "history_section_header",
+      "description": "After identifying which substances are used above, these questions cover the consequences and patterns of your overall use. Response options are 'Yes/No' or scales from 'Not at all' to 'Extremely.' Use motivational interviewing skills to explore responses."
+    },
+    {
+      "id": "d1_06",
+      "text": "How much are you bothered by physical or emotional symptoms when you stop or reduce substance use?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "bothered_by_symptoms",
+      "options": [
+        {"value": "not_at_all", "label": "Not at all", "score": 1},
+        {"value": "a_little", "label": "A little", "score": 2},
+        {"value": "somewhat", "label": "Somewhat", "score": 3},
+        {"value": "very", "label": "Very", "score": 4},
+        {"value": "extremely", "label": "Extremely", "score": 5}
+      ]
+    },
+    {
+      "id": "d1_07",
+      "text": "Please describe the physical or emotional symptoms you experience:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "symptoms_description"
+    },
+    {
+      "id": "d1_08",
+      "text": "Are you currently experiencing withdrawal symptoms (tremors, excessive sweating, rapid heart rate, nausea, anxiety, restlessness, sleep disturbances)?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "current_withdrawal_symptoms",
+      "options": [
+        {"value": "not_at_all", "label": "Not at all", "score": 1},
+        {"value": "a_little", "label": "A little", "score": 2},
+        {"value": "somewhat", "label": "Somewhat", "score": 3},
+        {"value": "very", "label": "Very", "score": 4},
+        {"value": "extremely", "label": "Extremely", "score": 5}
+      ]
+    },
+    {
+      "id": "d1_09",
+      "text": "Please describe specific withdrawal symptoms you're experiencing:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "withdrawal_symptoms_description"
+    },
+    {
+      "id": "d1_10",
+      "text": "Do you find yourself using more substances to get the same effect (higher tolerance)?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "tolerance",
+      "options": [
+        {"value": "not_at_all", "label": "Not at all", "score": 1},
+        {"value": "a_little", "label": "A little", "score": 2},
+        {"value": "somewhat", "label": "Somewhat", "score": 3},
+        {"value": "very", "label": "Very", "score": 4},
+        {"value": "extremely", "label": "Extremely", "score": 5}
+      ]
+    },
+    {
+      "id": "d1_11",
+      "text": "Please describe tolerance patterns:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "tolerance_description"
+    },
+    {
+      "id": "d1_12",
+      "text": "Do you have a history of serious withdrawal, seizures, or life-threatening symptoms when stopping substance use?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "severe_withdrawal_history",
+      "options": [
+        {"value": "yes", "label": "Yes", "score": 4},
+        {"value": "no", "label": "No", "score": 1}
+      ]
+    },
+    {
+      "id": "d1_13",
+      "text": "Please describe severe withdrawal history and specify substance(s):",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "severe_withdrawal_description",
+      "visible_if": {
+        "question": "d1_12",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d1_14",
+      "text": "Date of last severe withdrawal episode:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "last_severe_withdrawal_date",
+      "visible_if": {
+        "question": "d1_12",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d1_15",
+      "text": "Do you have a history of overdose requiring emergency medical treatment?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "overdose_history",
+      "options": [
+        {"value": "yes", "label": "Yes", "score": 4},
+        {"value": "no", "label": "No", "score": 1}
+      ]
+    },
+    {
+      "id": "d1_16",
+      "text": "Please describe overdose history and specify substances:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "overdose_description",
+      "visible_if": {
+        "question": "d1_15",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d1_17",
+      "text": "If opioids were involved in overdose - Do you have access to naloxone (Narcan)?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "naloxone_access",
+      "visible_if": {
+        "question": "d1_15",
+        "operator": "equals",
+        "value": "yes"
+      },
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d1_18",
+      "text": "How recent was your last overdose?",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "last_overdose_timeframe",
+      "visible_if": {
+        "question": "d1_15",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d1_19",
+      "text": "Have you used substances in the last 48 hours?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "recent_use_48hrs",
+      "options": [
+        {"value": "yes", "label": "Yes", "score": 3},
+        {"value": "no", "label": "No", "score": 1}
+      ]
+    },
+    {
+      "id": "d1_20",
+      "text": "List substances used in last 48 hours:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "recent_substances_list",
+      "visible_if": {
+        "question": "d1_19",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d1_21",
+      "text": "Interviewer observation: Does the patient seem to have current signs of intoxication or withdrawal?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "interviewer_observation",
+      "options": [
+        {"value": "intoxication", "label": "Intoxication", "score": 4},
+        {"value": "withdrawal", "label": "Withdrawal", "score": 4},
+        {"value": "none", "label": "None", "score": 1}
+      ]
+    },
+    {
+      "id": "d1_22",
+      "text": "Part 3: Summary, Goals, and Severity Rating",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "summary_section_header",
+      "description": "This section captures the patient's perspective and creates the final clinical assessment based on all previous responses."
+    },
+    {
+      "id": "d1_23",
+      "text": "What concerns do you have about your risk for overdose?",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "overdose_concerns"
+    },
+    {
+      "id": "d1_24",
+      "text": "What concerns do you have about your risk for withdrawal?",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "withdrawal_concerns"
+    },
+    {
+      "id": "d1_25",
+      "text": "What concerns do you have about getting medication or other treatment for substance use?",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "treatment_concerns"
+    },
+    {
+      "id": "d1_26",
+      "text": "What goals do you have for your management of withdrawal or overdose risk?",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "management_goals"
+    },
+    {
+      "id": "d1_27",
+      "text": "Severity Rating - Dimension 1: Select the single best-fitting score for overall acute intoxication and withdrawal potential",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "severity_rating",
+      "options": [
+        {"value": "0", "label": "0 - None: No signs of withdrawal or intoxication", "score": 0},
+        {"value": "1", "label": "1 - Mild: Mild intoxication/withdrawal; interferes with daily functioning but no danger", "score": 1},
+        {"value": "2", "label": "2 - Moderate: More significant intoxication/withdrawal, patient responds to support; moderate risk", "score": 2},
+        {"value": "3", "label": "3 - Severe: Severe intoxication or withdrawal with imminent risk; needs 24-hour support", "score": 3},
+        {"value": "4", "label": "4 - Very Severe: Incapacitated; presents immediate danger to life", "score": 4}
+      ]
+    },
+    {
+      "id": "d1_28",
+      "text": "Substance-Specific Rating: Check which substance(s) are the main drivers for the severity score above",
+      "type": "multiple_choice",
+      "required": false,
+      "breadcrumb": "severity_substances",
+      "options": [
+        {"value": "alcohol", "label": "Alcohol"},
+        {"value": "opioids", "label": "Opioids"},
+        {"value": "benzodiazepines", "label": "Benzodiazepines"},
+        {"value": "stimulants", "label": "Stimulants"},
+        {"value": "other1", "label": "Other (specify below)"},
+        {"value": "other2", "label": "Additional other (specify below)"}
+      ]
+    },
+    {
+      "id": "d1_29",
+      "text": "Specify other substance(s) driving severity:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "other_substances_specify"
+    },
+    {
+      "id": "d1_30",
+      "text": "Additional clinical comments for Dimension 1:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "additional_comments"
+    }
+  ]
+}

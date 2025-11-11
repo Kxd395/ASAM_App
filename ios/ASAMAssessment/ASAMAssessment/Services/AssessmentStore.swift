@@ -39,6 +39,9 @@ class AssessmentStore: ObservableObject {
             if currentAssessment?.id == assessment.id {
                 currentAssessment = updated
             }
+            
+            // Notify that the assessment was updated (for UI refresh)
+            print("📊 AssessmentStore: Updated assessment \(String(assessment.id.uuidString.prefix(8))) - domains with answers: \(assessment.domains.filter { !$0.answers.isEmpty }.count)")
         }
     }
 

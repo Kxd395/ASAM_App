@@ -78,7 +78,8 @@ actor TokenProvider {
             throw TokenError.refreshFailed("HTTP \((response as? HTTPURLResponse)?.statusCode ?? -1)")
         }
 
-        return try JSONDecoder().decode(TokenResponse.self, from: data)
+        let decoder = JSONDecoder()
+        return try decoder.decode(TokenResponse.self, from: data)
     }
 }
 

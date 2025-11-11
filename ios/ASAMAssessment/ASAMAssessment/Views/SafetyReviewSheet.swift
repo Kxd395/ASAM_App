@@ -96,7 +96,7 @@ struct SafetyReviewSheet: View {
                 }
                 .scrollDismissesKeyboard(.interactively)
                 .ignoresSafeArea(.keyboard, edges: .bottom)     // prevents sheet "jump"
-                .onChange(of: actionTaken) { newValue in
+                .onChange(of: actionTaken) { _, newValue in
                     guard newValue != nil else { return }
                     // Auto-prefill notes if empty
                     if notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {

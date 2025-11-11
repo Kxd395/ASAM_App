@@ -60,7 +60,7 @@ struct ASAMAssessmentApp: App {
             }
 
             // Process pending uploads
-            let readyJobs = await uploadQueue.ready()
+            let readyJobs = uploadQueue.ready()
             for job in readyJobs {
                 do {
                     // TODO: Replace with actual upload implementation
@@ -70,10 +70,10 @@ struct ASAMAssessmentApp: App {
                     try await Task.sleep(for: .seconds(1))
 
                     // Mark as complete
-                    await uploadQueue.complete(jobId: job.id)
+                    uploadQueue.complete(jobId: job.id)
                 } catch {
                     print("❌ Upload failed: \(error)")
-                    await uploadQueue.retry(jobId: job.id, error: error.localizedDescription)
+                    uploadQueue.retry(jobId: job.id, error: error.localizedDescription)
                 }
             }
         }

@@ -49,7 +49,8 @@ final class NetworkSanityChecker: ObservableObject {
                 }
             } else {
                 Task { @MainActor in
-                    self?.status = .offline
+                    guard let strongSelf = self else { return }
+                    strongSelf.status = .offline
                 }
             }
         }

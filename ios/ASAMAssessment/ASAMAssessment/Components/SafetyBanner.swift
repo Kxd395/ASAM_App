@@ -187,7 +187,7 @@ enum SafetyAction: String, CaseIterable, Identifiable {
         switch self {
         case .noRiskIdentified: return 10
         case .monitoringPlan: return 15
-        case .escalated: return 25
+        case .escalated: return 20
         case .consultRequested: return 15
         case .transportArranged: return 20
         }
@@ -196,6 +196,17 @@ enum SafetyAction: String, CaseIterable, Identifiable {
     /// Whether notes are required for this action
     var notesRequired: Bool {
         return true // All safety actions require notes
+    }
+    
+    /// Default notes stub to help user get started
+    var defaultNotes: String {
+        switch self {
+        case .noRiskIdentified: return "No immediate risk identified. "
+        case .monitoringPlan: return "Monitoring plan established. "
+        case .escalated: return "Escalated due to immediate safety concern. "
+        case .consultRequested: return "Consultation requested for "
+        case .transportArranged: return "Emergency transport arranged. "
+        }
     }
 }
 

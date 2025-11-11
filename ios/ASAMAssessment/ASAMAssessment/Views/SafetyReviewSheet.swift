@@ -91,7 +91,7 @@ struct SafetyReviewSheet: View {
                     guard newValue != nil else { return }
                     // Auto-prefill notes if empty
                     if notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        // notes = newValue!.defaultNotes // Comment out since SafetyAction may not have defaultNotes
+                        notes = newValue!.defaultNotes
                     }
                     // Short delay to avoid keyboard-induced detent snap
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {

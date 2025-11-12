@@ -28,8 +28,8 @@ class ASAMService: ObservableObject {
     
     // MARK: - Initialization
     
-    init(storageManager: ASAMStorageManager = ASAMStorageManager()) {
-        self.storageManager = storageManager
+    init(storageManager: ASAMStorageManager? = nil) {
+        self.storageManager = storageManager ?? ASAMStorageManager()
     }
     
     // MARK: - Assessment Management
@@ -538,6 +538,7 @@ enum ASAMServiceError: LocalizedError {
 // MARK: - Storage Manager (Placeholder)
 
 /// Storage manager for ASAM assessments (would integrate with GRDB or Core Data)
+@MainActor
 class ASAMStorageManager {
     
     func saveAssessment(_ assessment: ASAMAssessment) async throws {

@@ -565,6 +565,14 @@ struct HealthIssueSelection: Equatable {
     var multiSelectValues: [String]?
     var customEntries: [String]?  // User-added custom items (audit-clean separation)
     var details: [String: [String: Any]]?  // Optional metadata per item (e.g., reactions)
+    
+    // Custom Equatable implementation since [String: Any] isn't Equatable by default
+    static func == (lhs: HealthIssueSelection, rhs: HealthIssueSelection) -> Bool {
+        return lhs.noteText == rhs.noteText &&
+               lhs.multiSelectValues == rhs.multiSelectValues &&
+               lhs.customEntries == rhs.customEntries
+        // Note: details field excluded from equality check due to Any type
+    }
 }
 
 // MARK: - Creatable Multi-Select Component

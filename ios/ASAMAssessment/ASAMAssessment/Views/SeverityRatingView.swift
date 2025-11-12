@@ -262,19 +262,20 @@ struct SeverityRatingView: View {
                 .font(.headline)
                 .foregroundColor(.cardTitle)
             
-            // Adaptive grid layout with minimum card width
-            GeometryReader { geometry in
-                ScrollView(.horizontal, showsIndicators: true) {
-                    LazyHGrid(rows: [GridItem(.flexible(), spacing: 12)], spacing: 12) {
-                        ForEach(cards) { card in
-                            severityCard(card)
-                                .frame(minWidth: 220, maxWidth: max(220, (geometry.size.width - 60) / 5))
-                        }
-                    }
-                    .padding(.vertical, 4)
+            // Wrapped grid layout with minimum card width - no horizontal scroll
+            // Cards wrap to multiple rows based on available width
+            // minWidth: 220px ensures cards never get too skinny
+            // 1fr allows them to grow but stay equal width per row
+            LazyVGrid(
+                columns: [
+                    GridItem(.adaptive(minimum: 220, maximum: .infinity), spacing: 12)
+                ],
+                spacing: 12
+            ) {
+                ForEach(cards) { card in
+                    severityCard(card)
                 }
             }
-            .frame(height: 320) // Fixed height to accommodate cards
             
             // Keyboard shortcut hint
             Text("Keyboard shortcuts: Press 0-4 to select rating")
@@ -296,33 +297,30 @@ struct SeverityRatingView: View {
                 selectedRating = card.rating
             }
         }) {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 10) {
                 // Title with color swatch
-                HStack(alignment: .top, spacing: 8) {
+                HStack(alignment: .center, spacing: 8) {
                     // Color swatch
                     RoundedRectangle(cornerRadius: 4)
                         .fill(borderColor)
                         .frame(width: 16, height: 16)
                     
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(card.title)
-                            .font(.system(.headline, design: .rounded))
-                            .fontWeight(.bold)
-                            .foregroundColor(.cardTitle)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
+                    Text(card.title)
+                        .font(.system(.subheadline, design: .rounded))
+                        .fontWeight(.bold)
+                        .foregroundColor(.cardTitle)
                     
                     Spacer()
                     
                     if isSelected {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.blue)
-                            .font(.title3)
+                            .font(.body)
                     }
                 }
                 
-                // Bullet points
-                VStack(alignment: .leading, spacing: 6) {
+                // Bullet points (always visible)
+                VStack(alignment: .leading, spacing: 5) {
                     ForEach(card.bullets, id: \.self) { bullet in
                         HStack(alignment: .top, spacing: 6) {
                             Text("•")
@@ -337,14 +335,15 @@ struct SeverityRatingView: View {
                     }
                 }
                 
-                Spacer(minLength: 0)
+                // Push disposition to bottom
+                Spacer(minLength: 8)
                 
-                // Disposition strip (fixed at bottom)
+                // Disposition strip (always at bottom if present)
                 if !card.disposition.isEmpty {
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 3) {
                         Text("Disposition:")
                             .font(.system(.caption2, design: .rounded))
-                            .fontWeight(.bold)
+                            .fontWeight(.semibold)
                             .foregroundColor(.cardDisposition)
                         
                         Text(card.disposition)
@@ -355,15 +354,15 @@ struct SeverityRatingView: View {
                     }
                     .padding(8)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(bgColor.opacity(0.3))
+                    .background(bgColor.opacity(0.25))
                     .cornerRadius(6)
                 }
             }
             .padding(12)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .frame(maxWidth: .infinity, alignment: .topLeading)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? bgColor.opacity(0.2) : Color(.systemBackground))
+                    .fill(isSelected ? bgColor.opacity(0.15) : Color(.systemBackground))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
@@ -373,13 +372,14 @@ struct SeverityRatingView: View {
                     )
             )
             .shadow(
-                color: isSelected ? borderColor.opacity(0.4) : Color.clear,
-                radius: isSelected ? 8 : 0,
+                color: isSelected ? borderColor.opacity(0.3) : Color.clear,
+                radius: isSelected ? 6 : 0,
                 x: 0,
-                y: isSelected ? 4 : 0
+                y: isSelected ? 2 : 0
             )
         }
         .buttonStyle(PlainButtonStyle())
+        .frame(minHeight: 200) // Minimum height for consistent grid
         .accessibilityLabel("\(card.title). \(card.bullets.joined(separator: ". "))")
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }

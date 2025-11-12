@@ -281,55 +281,33 @@ struct CategorizedHealthIssuesView: View {
         }
     }
     
-    // MARK: - Multi-Select Dropdown
+    // MARK: - Multi-Select Dropdown (Creatable)
     
     private func multiSelectDropdown(item: HealthIssueItem, options: [HealthIssueOption]) -> some View {
         let selection = selectedItems[item.id]
         let selectedOptions = Set(selection?.multiSelectValues ?? [])
+        let customEntries = selection?.customEntries ?? []
         
         return VStack(alignment: .leading, spacing: 8) {
             Text("Select \(item.label.lowercased()):")
                 .font(.caption)
                 .foregroundColor(.secondary)
             
-            // Selected chips
-            if !selectedOptions.isEmpty {
-                FlowLayout(spacing: 6) {
-                    ForEach(Array(selectedOptions).sorted(), id: \.self) { optionId in
-                        if let option = options.first(where: { $0.id == optionId }) {
-                            optionChip(option: option, item: item)
-                        }
-                    }
+            CreatableMultiSelectView(
+                item: item,
+                options: options,
+                selectedOptions: selectedOptions,
+                customEntries: customEntries,
+                onToggleOption: { optionId in
+                    toggleMultiSelectOption(item: item, optionId: optionId)
+                },
+                onAddCustom: { customText in
+                    addCustomEntry(item: item, customText: customText)
+                },
+                onRemoveCustom: { customText in
+                    removeCustomEntry(item: item, customText: customText)
                 }
-            }
-            
-            // Dropdown menu
-            Menu {
-                ForEach(options) { option in
-                    Button(action: { toggleMultiSelectOption(item: item, optionId: option.id) }) {
-                        HStack {
-                            Text(option.label)
-                            if selectedOptions.contains(option.id) {
-                                Image(systemName: "checkmark")
-                            }
-                        }
-                    }
-                }
-            } label: {
-                HStack {
-                    Text("Add option...")
-                        .font(.subheadline)
-                    Spacer()
-                    Image(systemName: "chevron.down")
-                        .font(.caption)
-                }
-                .padding(8)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color(.systemGray6))
-                )
-                .foregroundColor(.primary)
-            }
+            )
             
             // "Other" text input if Other option is selected
             if selectedOptions.contains("__OTHER__") || selectedOptions.contains("other") {
@@ -458,6 +436,32 @@ struct CategorizedHealthIssuesView: View {
         selectedItems[item.id] = selection
     }
     
+    private func addCustomEntry(item: HealthIssueItem, customText: String) {
+        let trimmed = customText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        
+        var selection = selectedItems[item.id] ?? HealthIssueSelection()
+        var customs = selection.customEntries ?? []
+        
+        // Deduplicate case-insensitive
+        let lowercaseCustoms = customs.map { $0.lowercased() }
+        if !lowercaseCustoms.contains(trimmed.lowercased()) {
+            customs.append(trimmed)
+            selection.customEntries = customs
+            selectedItems[item.id] = selection
+        }
+    }
+    
+    private func removeCustomEntry(item: HealthIssueItem, customText: String) {
+        guard var selection = selectedItems[item.id] else { return }
+        
+        if var customs = selection.customEntries {
+            customs.removeAll { $0 == customText }
+            selection.customEntries = customs.isEmpty ? nil : customs
+            selectedItems[item.id] = selection
+        }
+    }
+    
     private func findItem(id: String) -> HealthIssueItem? {
         for category in categories {
             if let item = category.items.first(where: { $0.id == id }) {
@@ -503,6 +507,16 @@ struct CategorizedHealthIssuesView: View {
                     selection.multiSelectValues = multiSelect
                 }
                 
+                // Load custom entries (audit-clean separation)
+                if let custom = valueDict["custom"] as? [String] {
+                    selection.customEntries = custom
+                }
+                
+                // Load details metadata
+                if let details = valueDict["details"] as? [String: [String: Any]] {
+                    selection.details = details
+                }
+                
                 selectedItems[itemId] = selection
             }
         }
@@ -513,6 +527,27 @@ struct CategorizedHealthIssuesView: View {
         
         for (itemId, selection) in selectedItems {
             var selectionDict: [String: Any] = ["checked": true]
+            
+            if let note = selection.noteText, !note.isEmpty {
+                selectionDict["note"] = note
+            }
+            
+            if let multiSelect = selection.multiSelectValues, !multiSelect.isEmpty {
+                selectionDict["multi_select"] = multiSelect
+            }
+            
+            // Save custom entries separately (audit-clean structure)
+            if let custom = selection.customEntries, !custom.isEmpty {
+                selectionDict["custom"] = custom
+            }
+            
+            // Save details metadata if present
+            if let details = selection.details, !details.isEmpty {
+                selectionDict["details"] = details
+            }
+            
+            resultDict[itemId] = selectionDict
+        }
             
             if let note = selection.noteText, !note.isEmpty {
                 selectionDict["note"] = note
@@ -539,6 +574,204 @@ struct CategorizedHealthIssuesView: View {
 struct HealthIssueSelection: Equatable {
     var noteText: String?
     var multiSelectValues: [String]?
+    var customEntries: [String]?  // User-added custom items (audit-clean separation)
+    var details: [String: [String: Any]]?  // Optional metadata per item (e.g., reactions)
+}
+
+// MARK: - Creatable Multi-Select Component
+
+struct CreatableMultiSelectView: View {
+    let item: HealthIssueItem
+    let options: [HealthIssueOption]
+    let selectedOptions: Set<String>
+    let customEntries: [String]
+    let onToggleOption: (String) -> Void
+    let onAddCustom: (String) -> Void
+    let onRemoveCustom: (String) -> Void
+    
+    @State private var searchText = ""
+    @FocusState private var isInputFocused: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            // Search/Input Field
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.secondary)
+                    .font(.system(size: 14))
+                
+                TextField("Type to search or add...", text: $searchText)
+                    .focused($isInputFocused)
+                    .textFieldStyle(.plain)
+                    .onSubmit {
+                        if !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+                            // Check if it's an exact match with a curated option
+                            if let exactMatch = options.first(where: { $0.label.lowercased() == trimmed.lowercased() }) {
+                                onToggleOption(exactMatch.id)
+                            } else {
+                                onAddCustom(trimmed)
+                            }
+                            searchText = ""
+                        }
+                    }
+                
+                if !searchText.isEmpty {
+                    Button(action: { searchText = "" }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.secondary)
+                            .font(.system(size: 14))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(8)
+            .background(Color(.systemGray6))
+            .cornerRadius(8)
+            
+            // Selected chips (curated + custom)
+            if !selectedOptions.isEmpty || !customEntries.isEmpty {
+                FlowLayout(spacing: 8) {
+                    // Curated option chips (blue)
+                    ForEach(Array(selectedOptions).sorted(), id: \.self) { optionId in
+                        if let option = options.first(where: { $0.id == optionId }) {
+                            chipView(label: option.label, isCustom: false) {
+                                onToggleOption(optionId)
+                            }
+                        }
+                    }
+                    
+                    // Custom entry chips (teal)
+                    ForEach(customEntries, id: \.self) { customText in
+                        chipView(label: customText, isCustom: true) {
+                            onRemoveCustom(customText)
+                        }
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+            
+            // Filtered options dropdown
+            if !searchText.isEmpty {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 4) {
+                        let filtered = filteredOptions
+                        
+                        // Show "Add 'text'" pseudo-option if no exact match
+                        if !hasExactMatch(filtered) {
+                            addPseudoOption
+                        }
+                        
+                        // Show filtered curated options
+                        ForEach(filtered, id: \.id) { option in
+                            optionRow(option: option)
+                        }
+                    }
+                }
+                .frame(maxHeight: 200)
+                .padding(8)
+                .background(Color(.systemBackground))
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color(.systemGray4), lineWidth: 1)
+                )
+            }
+        }
+    }
+    
+    // MARK: - Helper Views
+    
+    private func chipView(label: String, isCustom: Bool, onRemove: @escaping () -> Void) -> some View {
+        HStack(spacing: 4) {
+            if isCustom {
+                Image(systemName: "plus.circle.fill")
+                    .font(.system(size: 10))
+                    .foregroundColor(.white)
+            }
+            
+            Text(label)
+                .font(.system(size: 13))
+                .foregroundColor(.white)
+            
+            Button(action: onRemove) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundColor(.white)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(isCustom ? Color.teal : Color.blue)
+        .cornerRadius(16)
+    }
+    
+    private func optionRow(option: HealthIssueOption) -> some View {
+        Button(action: {
+            onToggleOption(option.id)
+            searchText = ""
+        }) {
+            HStack {
+                Text(option.label)
+                    .font(.system(size: 14))
+                    .foregroundColor(.primary)
+                
+                Spacer()
+                
+                if selectedOptions.contains(option.id) {
+                    Image(systemName: "checkmark")
+                        .foregroundColor(.blue)
+                        .font(.system(size: 12, weight: .bold))
+                }
+            }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background(selectedOptions.contains(option.id) ? Color.blue.opacity(0.1) : Color.clear)
+            .cornerRadius(6)
+        }
+        .buttonStyle(.plain)
+    }
+    
+    private var addPseudoOption: some View {
+        Button(action: {
+            let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+            onAddCustom(trimmed)
+            searchText = ""
+        }) {
+            HStack {
+                Image(systemName: "plus.circle.fill")
+                    .foregroundColor(.teal)
+                    .font(.system(size: 14))
+                
+                Text("Add '\(searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
+                    .font(.system(size: 14))
+                    .foregroundColor(.teal)
+                
+                Spacer()
+            }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background(Color.teal.opacity(0.1))
+            .cornerRadius(6)
+        }
+        .buttonStyle(.plain)
+    }
+    
+    // MARK: - Helper Functions
+    
+    private var filteredOptions: [HealthIssueOption] {
+        let query = searchText.lowercased()
+        if query.isEmpty {
+            return options
+        }
+        return options.filter { $0.label.lowercased().contains(query) }
+    }
+    
+    private func hasExactMatch(_ filtered: [HealthIssueOption]) -> Bool {
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        return filtered.contains(where: { $0.label.lowercased() == trimmed })
+    }
 }
 
 // MARK: - Flow Layout for Chips

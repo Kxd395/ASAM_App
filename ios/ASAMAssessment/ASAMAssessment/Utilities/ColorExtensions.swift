@@ -147,4 +147,24 @@ extension Color {
         default: return .gray
         }
     }
+    
+    // MARK: - Decision Zone Colors
+    
+    /// Decision band header background - prominent blue/teal gradient feel
+    static let decisionBandBackground = Color(lightHex: "#E0F2FE", darkMultiplier: 0.2)
+    
+    /// Decision band text color - adapts to light/dark
+    static let decisionBandText = Color.primary
+    
+    /// Decision accent color - bright blue for icon and emphasis
+    static let decisionAccent = Color(lightHex: "#0EA5E9", darkMultiplier: 1.2)
+    
+    /// Decision required pill background - bright blue
+    static let decisionPillBackground = Color(lightHex: "#0EA5E9", darkMultiplier: 1.0)
+    
+    /// Decision container background - subtle tint to distinguish from rest of form
+    static let decisionContainerBackground = Color(lightHex: "#F0F9FF", darkMultiplier: 0.15)
+    
+    /// Decision container accent border - thick blue left border
+    static let decisionAccentBorder = Color(lightHex: "#0EA5E9", darkMultiplier: 1.2)
 }

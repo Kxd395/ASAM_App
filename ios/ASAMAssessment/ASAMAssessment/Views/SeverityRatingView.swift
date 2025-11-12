@@ -56,45 +56,63 @@ struct SeverityRatingView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Header
-                headerSection
+            VStack(alignment: .leading, spacing: 16) {
+                // DECISION ZONE HEADER - Visually distinct
+                decisionBandHeader
                 
-                // Reference information
-                referenceSection
-                
-                // Safety banner (if triggered)
-                if !activeSafetyRules.isEmpty {
-                    ForEach(Array(activeSafetyRules.enumerated()), id: \.offset) { _, rule in
-                        safetyBanner(for: rule)
+                // Decision Container with unique styling
+                VStack(alignment: .leading, spacing: 16) {
+                    // Reference information (collapsible)
+                    referenceSection
+                    
+                    // Safety banner (if triggered)
+                    if !activeSafetyRules.isEmpty {
+                        ForEach(Array(activeSafetyRules.enumerated()), id: \.offset) { _, rule in
+                            safetyBanner(for: rule)
+                        }
                     }
+                    
+                    // Substance-specific warnings
+                    if hasHighRiskSubstances {
+                        withdrawalManagementReminder
+                    }
+                    
+                    if hasStimulants {
+                        stimulantWarning
+                    }
+                    
+                    // Severity rating cards
+                    severityCardsSection
+                    
+                    // Selected rating summary (after selection)
+                    if let rating = selectedRating {
+                        selectedRatingSummary(rating: rating)
+                    }
+                    
+                    // Rationale (shown after selection)
+                    if selectedRating != nil {
+                        rationaleSection
+                    }
+                    
+                    // Substance selection
+                    substanceSection
+                    
+                    // Additional comments
+                    commentsSection
+                    
+                    // Interviewer instructions
+                    interviewerInstructions
                 }
-                
-                // Substance-specific warnings
-                if hasHighRiskSubstances {
-                    withdrawalManagementReminder
-                }
-                
-                if hasStimulants {
-                    stimulantWarning
-                }
-                
-                // Severity rating cards
-                severityCardsSection
-                
-                // Rationale (shown after selection)
-                if selectedRating != nil {
-                    rationaleSection
-                }
-                
-                // Substance selection
-                substanceSection
-                
-                // Additional comments
-                commentsSection
-                
-                // Interviewer instructions
-                interviewerInstructions
+                .padding(16)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color.decisionContainerBackground)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.decisionAccentBorder, lineWidth: 4)
+                        .padding(.leading, -2) // Thick left border effect
+                )
             }
             .padding()
         }
@@ -125,6 +143,127 @@ struct SeverityRatingView: View {
         .onChange(of: additionalComments) { _, _ in
             saveAnswer()
         }
+    }
+    
+    // MARK: - Decision Band Header
+    
+    private var decisionBandHeader: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .center, spacing: 12) {
+                // Lightning bolt icon
+                Image(systemName: "bolt.fill")
+                    .font(.title2)
+                    .foregroundColor(.decisionAccent)
+                
+                // Title
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Severity Rating - Dimension 1")
+                        .font(.system(.title3, design: .rounded))
+                        .fontWeight(.bold)
+                        .foregroundColor(.decisionBandText)
+                    
+                    Text("Acute Intoxication and/or Withdrawal Potential")
+                        .font(.system(.caption, design: .rounded))
+                        .foregroundColor(.decisionBandText.opacity(0.8))
+                }
+                
+                Spacer()
+                
+                // Decision Required Pill
+                Text("DECISION REQUIRED")
+                    .font(.system(.caption2, design: .rounded))
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(
+                        Capsule()
+                            .fill(Color.decisionPillBackground)
+                    )
+            }
+            
+            // Purpose statement
+            Text("Choose the patient's current intensity and urgency for services")
+                .font(.system(.subheadline, design: .rounded))
+                .foregroundColor(.decisionBandText.opacity(0.9))
+                .padding(.leading, 36) // Align with title
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.decisionBandBackground)
+        )
+    }
+    
+    // MARK: - Selected Rating Summary
+    
+    private func selectedRatingSummary(rating: Int) -> some View {
+        guard let card = cards.first(where: { $0.rating == rating }) else {
+            return AnyView(EmptyView())
+        }
+        
+        let bgColor = Color.severityCardBackground(colorHex: card.color)
+        let borderColor = Color.severityCardBorder(colorHex: card.border)
+        
+        return AnyView(
+            VStack(alignment: .leading, spacing: 12) {
+                // Header with color swatch
+                HStack(spacing: 8) {
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(borderColor)
+                        .frame(width: 20, height: 20)
+                    
+                    Text("Selected: \(card.title)")
+                        .font(.system(.headline, design: .rounded))
+                        .fontWeight(.bold)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.blue)
+                        .font(.title3)
+                }
+                
+                // Bullets
+                VStack(alignment: .leading, spacing: 6) {
+                    ForEach(card.bullets, id: \.self) { bullet in
+                        HStack(alignment: .top, spacing: 6) {
+                            Text("•")
+                                .font(.system(.body, design: .rounded))
+                            Text(bullet)
+                                .font(.system(.body, design: .rounded))
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                }
+                
+                // Disposition
+                if !card.disposition.isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Disposition:")
+                            .font(.system(.subheadline, design: .rounded))
+                            .fontWeight(.semibold)
+                        
+                        Text(card.disposition)
+                            .font(.system(.body, design: .rounded))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .padding(12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(bgColor.opacity(0.2))
+                    .cornerRadius(8)
+                }
+            }
+            .padding(16)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(.systemBackground))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(borderColor, lineWidth: 2)
+            )
+        )
     }
     
     // MARK: - Header Section
@@ -335,8 +474,10 @@ struct SeverityRatingView: View {
                     }
                 }
                 
-                // Push disposition to bottom
-                Spacer(minLength: 8)
+                // Only add spacer if card has disposition (to push it to bottom)
+                if !card.disposition.isEmpty {
+                    Spacer(minLength: 8)
+                }
                 
                 // Disposition strip (always at bottom if present)
                 if !card.disposition.isEmpty {
@@ -379,7 +520,9 @@ struct SeverityRatingView: View {
             )
         }
         .buttonStyle(PlainButtonStyle())
-        .frame(minHeight: 200) // Minimum height for consistent grid
+        // Use minHeight only for cards with disposition to keep them aligned
+        // Cards without disposition (like "0 None") can be more compact
+        .frame(minHeight: card.disposition.isEmpty ? nil : 200)
         .accessibilityLabel("\(card.title). \(card.bullets.joined(separator: ". "))")
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }

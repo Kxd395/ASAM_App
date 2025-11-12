@@ -44,13 +44,12 @@ final class NetworkSanityChecker: ObservableObject {
     private func startMonitoring() {
         monitor.pathUpdateHandler = { [weak self] path in
             if path.status == .satisfied {
-                Task { @MainActor in
+                Task { @MainActor [weak self] in
                     await self?.performActiveProbe()
                 }
             } else {
-                Task { @MainActor in
-                    guard let strongSelf = self else { return }
-                    strongSelf.status = .offline
+                Task { @MainActor [weak self] in
+                    self?.status = .offline
                 }
             }
         }

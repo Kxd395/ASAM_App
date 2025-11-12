@@ -83,7 +83,8 @@ actor TokenProvider {
     }
 }
 
-struct TokenResponse: Codable {
+// Sendable conformance ensures safe concurrent access
+struct TokenResponse: Codable, Sendable {
     let accessToken: String
     let expiresIn: Int
     let tokenType: String

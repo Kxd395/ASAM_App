@@ -512,7 +512,7 @@ struct QuestionView: View {
         
     case .severityRating:
         // D1 Severity Rating with interactive cards
-        if let metadata = question.severityRating {
+        if question.severityRating != nil {
             SeverityRatingView(
                 question: question,
                 answer: $answer
@@ -525,7 +525,7 @@ struct QuestionView: View {
         
     case .categorizedHealthIssues:
         // D2 Compact categorized health issues
-        if let metadata = question.categorizedHealthIssues {
+        if question.categorizedHealthIssues != nil {
             CategorizedHealthIssuesView(
                 question: question,
                 answer: $answer

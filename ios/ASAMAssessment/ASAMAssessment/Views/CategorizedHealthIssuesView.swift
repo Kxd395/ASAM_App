@@ -58,7 +58,7 @@ struct CategorizedHealthIssuesView: View {
                 expandedCategories.insert(categories.first?.id ?? "")
             }
         }
-        .onChange(of: selectedItems) { _ in
+        .onChange(of: selectedItems) {
             saveAnswer()
         }
     }

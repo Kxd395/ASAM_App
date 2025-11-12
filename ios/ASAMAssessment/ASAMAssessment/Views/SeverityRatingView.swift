@@ -131,17 +131,21 @@ struct SeverityRatingView: View {
     
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: 8) {
+            // Compact instruction text
             Text("Please circle the intensity and urgency of the patient's CURRENT needs for services based on the information collected in Dimension 1:")
-                .font(.subheadline)
+                .font(.caption)
                 .foregroundColor(.secondary)
             
+            // Main question title - responsive sizing
             Text(question.text)
-                .font(.title3)
+                .font(.system(.title3, design: .rounded))
                 .fontWeight(.bold)
                 .foregroundColor(.cardTitle)
+                .lineLimit(nil)
+                .fixedSize(horizontal: false, vertical: true)
             
             if question.required {
-                HStack {
+                HStack(spacing: 4) {
                     Image(systemName: "asterisk")
                         .font(.caption2)
                         .foregroundColor(.red)
@@ -156,30 +160,36 @@ struct SeverityRatingView: View {
     // MARK: - Reference Section
     
     private var referenceSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("For guidance assessing risk, please see Risk Rating Matrices in The ASAM Criteria, 3rd ed.:")
-                .font(.caption)
-                .fontWeight(.medium)
-                .foregroundColor(.secondary)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                referenceItem(substance: "Alcohol", pages: "147-154")
-                referenceItem(substance: "Sedatives/Hypnotics", pages: "155-161")
-                referenceItem(substance: "Opioids", pages: "162 (Risk Assessment Matrix)")
-            }
-            .padding(.leading, 8)
-            
-            HStack(alignment: .top, spacing: 8) {
-                Image(systemName: "info.circle.fill")
-                    .foregroundColor(.orange)
-                Text("Stimulant withdrawal from cathinones (bath salts) or high dose prescription amphetamines can be associated with intense psychotic events needing higher level of care")
+        // Collapsible in compact width, always visible in regular
+        DisclosureGroup("Guidance & References") {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("For guidance assessing risk, please see Risk Rating Matrices in The ASAM Criteria, 3rd ed.:")
                     .font(.caption)
+                    .fontWeight(.medium)
                     .foregroundColor(.secondary)
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    referenceItem(substance: "Alcohol", pages: "147-154")
+                    referenceItem(substance: "Sedatives/Hypnotics", pages: "155-161")
+                    referenceItem(substance: "Opioids", pages: "162 (Risk Assessment Matrix)")
+                }
+                .padding(.leading, 8)
+                
+                HStack(alignment: .top, spacing: 8) {
+                    Image(systemName: "info.circle.fill")
+                        .foregroundColor(.orange)
+                        .font(.caption)
+                    Text("Stimulant withdrawal from cathinones (bath salts) or high dose prescription amphetamines can be associated with intense psychotic events needing higher level of care")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(12)
+                .background(Color.orange.opacity(0.1))
+                .cornerRadius(8)
             }
-            .padding(12)
-            .background(Color.orange.opacity(0.1))
-            .cornerRadius(8)
         }
+        .font(.caption)
+        .tint(.blue)
     }
     
     private func referenceItem(substance: String, pages: String) -> some View {
@@ -252,28 +262,19 @@ struct SeverityRatingView: View {
                 .font(.headline)
                 .foregroundColor(.cardTitle)
             
-            // Desktop: Horizontal row, Mobile: Vertical stack
-            #if os(iOS)
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                HStack(spacing: 12) {
-                    ForEach(cards) { card in
-                        severityCard(card)
+            // Adaptive grid layout with minimum card width
+            GeometryReader { geometry in
+                ScrollView(.horizontal, showsIndicators: true) {
+                    LazyHGrid(rows: [GridItem(.flexible(), spacing: 12)], spacing: 12) {
+                        ForEach(cards) { card in
+                            severityCard(card)
+                                .frame(minWidth: 220, maxWidth: max(220, (geometry.size.width - 60) / 5))
+                        }
                     }
-                }
-            } else {
-                VStack(spacing: 12) {
-                    ForEach(cards) { card in
-                        severityCard(card)
-                    }
+                    .padding(.vertical, 4)
                 }
             }
-            #else
-            HStack(spacing: 12) {
-                ForEach(cards) { card in
-                    severityCard(card)
-                }
-            }
-            #endif
+            .frame(height: 320) // Fixed height to accommodate cards
             
             // Keyboard shortcut hint
             Text("Keyboard shortcuts: Press 0-4 to select rating")
@@ -287,6 +288,8 @@ struct SeverityRatingView: View {
     
     private func severityCard(_ card: SeverityCard) -> some View {
         let isSelected = selectedRating == card.rating
+        let bgColor = Color.severityCardBackground(colorHex: card.color)
+        let borderColor = Color.severityCardBorder(colorHex: card.border)
         
         return Button(action: {
             withAnimation(.easeInOut(duration: 0.2)) {
@@ -294,16 +297,20 @@ struct SeverityRatingView: View {
             }
         }) {
             VStack(alignment: .leading, spacing: 12) {
-                // Title with color indicator
-                HStack {
-                    Rectangle()
-                        .fill(Color(hex: card.color))
-                        .frame(width: 4, height: 24)
+                // Title with color swatch
+                HStack(alignment: .top, spacing: 8) {
+                    // Color swatch
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(borderColor)
+                        .frame(width: 16, height: 16)
                     
-                    Text(card.title)
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundColor(.cardTitle)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(card.title)
+                            .font(.system(.headline, design: .rounded))
+                            .fontWeight(.bold)
+                            .foregroundColor(.cardTitle)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                     
                     Spacer()
                     
@@ -314,56 +321,63 @@ struct SeverityRatingView: View {
                     }
                 }
                 
-                // Icon
-                Image(systemName: card.icon)
-                    .font(.title2)
-                    .foregroundColor(Color(hex: card.color))
-                
                 // Bullet points
                 VStack(alignment: .leading, spacing: 6) {
                     ForEach(card.bullets, id: \.self) { bullet in
                         HStack(alignment: .top, spacing: 6) {
                             Text("•")
+                                .font(.system(.caption, design: .rounded))
                                 .foregroundColor(.cardText)
                             Text(bullet)
-                                .font(.caption)
+                                .font(.system(.caption, design: .rounded))
                                 .foregroundColor(.cardText)
                                 .fixedSize(horizontal: false, vertical: true)
+                                .lineLimit(nil)
                         }
                     }
                 }
                 
-                // Disposition strip (if not empty)
+                Spacer(minLength: 0)
+                
+                // Disposition strip (fixed at bottom)
                 if !card.disposition.isEmpty {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Disposition:")
-                            .font(.caption2)
+                            .font(.system(.caption2, design: .rounded))
                             .fontWeight(.bold)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.cardDisposition)
                         
                         Text(card.disposition)
-                            .font(.caption)
+                            .font(.system(.caption, design: .rounded))
                             .foregroundColor(.cardText)
                             .fixedSize(horizontal: false, vertical: true)
+                            .lineLimit(nil)
                     }
                     .padding(8)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(hex: card.color).opacity(0.15))
+                    .background(bgColor.opacity(0.3))
                     .cornerRadius(6)
                 }
             }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(isSelected ? Color(hex: card.color).opacity(0.1) : Color.clear)
+            .padding(12)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isSelected ? bgColor.opacity(0.2) : Color(.systemBackground))
+            )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(
-                        isSelected ? Color(hex: card.border) : Color.gray.opacity(0.2),
+                        isSelected ? borderColor : Color(.separator),
                         lineWidth: isSelected ? 3 : 1
                     )
             )
-            .cornerRadius(12)
-            .shadow(color: isSelected ? Color(hex: card.color).opacity(0.3) : Color.clear, radius: 8)
+            .shadow(
+                color: isSelected ? borderColor.opacity(0.4) : Color.clear,
+                radius: isSelected ? 8 : 0,
+                x: 0,
+                y: isSelected ? 4 : 0
+            )
         }
         .buttonStyle(PlainButtonStyle())
         .accessibilityLabel("\(card.title). \(card.bullets.joined(separator: ". "))")

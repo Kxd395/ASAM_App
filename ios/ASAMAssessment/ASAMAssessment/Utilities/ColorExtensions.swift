@@ -9,34 +9,53 @@
 import SwiftUI
 
 extension Color {
-    // MARK: - Dimension 1 Severity Colors (WCAG AA Compliant)
+    // MARK: - Dimension 1 Severity Colors (Adaptive for Light/Dark Mode)
     
     /// 0 - None: Green indicating no severity
-    static let d1None = Color(hex: "#9AD07D")
-    static let d1NoneBorder = Color(hex: "#5AA03A")
+    static let d1None = Color("D1None", bundle: nil)
+    static let d1NoneBorder = Color("D1NoneBorder", bundle: nil)
+    static let d1NoneSwatch = Color("D1NoneSwatch", bundle: nil)
     
     /// 1 - Mild: Light green indicating mild severity
-    static let d1Mild = Color(hex: "#7CC46B")
-    static let d1MildBorder = Color(hex: "#4F9A3A")
+    static let d1Mild = Color("D1Mild", bundle: nil)
+    static let d1MildBorder = Color("D1MildBorder", bundle: nil)
+    static let d1MildSwatch = Color("D1MildSwatch", bundle: nil)
     
     /// 2 - Moderate: Yellow indicating moderate severity
-    static let d1Moderate = Color(hex: "#F6C74A")
-    static let d1ModerateBorder = Color(hex: "#C89E24")
+    static let d1Moderate = Color("D1Moderate", bundle: nil)
+    static let d1ModerateBorder = Color("D1ModerateBorder", bundle: nil)
+    static let d1ModerateSwatch = Color("D1ModerateSwatch", bundle: nil)
     
     /// 3 - Severe: Orange indicating severe severity
-    static let d1Severe = Color(hex: "#F59E3A")
-    static let d1SevereBorder = Color(hex: "#C7771D")
+    static let d1Severe = Color("D1Severe", bundle: nil)
+    static let d1SevereBorder = Color("D1SevereBorder", bundle: nil)
+    static let d1SevereSwatch = Color("D1SevereSwatch", bundle: nil)
     
     /// 4 - Very Severe: Red indicating critical severity
-    static let d1VerySevere = Color(hex: "#E9544A")
-    static let d1VerySevereBorder = Color(hex: "#B3382D")
+    static let d1VerySevere = Color("D1VerySevere", bundle: nil)
+    static let d1VerySevereBorder = Color("D1VerySevereBorder", bundle: nil)
+    static let d1VerySevereSwatch = Color("D1VerySevereSwatch", bundle: nil)
+    
+    // MARK: - Severity Card Colors with Adaptive Brightness
+    
+    /// Card background with automatic dark mode adaptation
+    static func severityCardBackground(colorHex: String) -> Color {
+        // Use Color(hex:) with a fallback - will be brighter in dark mode via system adaptation
+        return Color(lightHex: colorHex, darkMultiplier: 0.3)
+    }
+    
+    /// Card border with automatic dark mode adaptation  
+    static func severityCardBorder(colorHex: String) -> Color {
+        return Color(lightHex: colorHex, darkMultiplier: 1.4)
+    }
     
     // MARK: - Severity Card Text Colors
     
-    static let cardText = Color(hex: "#1F2937")
-    static let cardTitle = Color(hex: "#111827")
+    static let cardText = Color.primary // Adapts automatically
+    static let cardTitle = Color.primary // Adapts automatically
+    static let cardDisposition = Color.secondary // Adapts automatically
     static let chipTextOn = Color.white
-    static let chipTextOff = Color(hex: "#111827")
+    static let chipTextOff = Color.primary
     
     // MARK: - Safety Banner Colors
     
@@ -70,6 +89,37 @@ extension Color {
             blue: Double(b) / 255,
             opacity: Double(a) / 255
         )
+    }
+    
+    /// Initialize with adaptive brightness for dark mode
+    /// - Parameters:
+    ///   - lightHex: Hex color for light mode
+    ///   - darkMultiplier: Brightness multiplier for dark mode (>1 = brighter, <1 = darker)
+    init(lightHex: String, darkMultiplier: Double = 1.0) {
+        let baseColor = Color(hex: lightHex)
+        
+        // In dark mode, adjust brightness
+        if darkMultiplier != 1.0 {
+            #if os(iOS)
+            self = Color(uiColor: UIColor { traitCollection in
+                let uiColor = UIColor(baseColor)
+                if traitCollection.userInterfaceStyle == .dark {
+                    // Adjust brightness for dark mode
+                    var hue: CGFloat = 0
+                    var saturation: CGFloat = 0
+                    var brightness: CGFloat = 0
+                    var alpha: CGFloat = 0
+                    uiColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+                    return UIColor(hue: hue, saturation: saturation * 0.8, brightness: min(1.0, brightness * darkMultiplier), alpha: alpha)
+                }
+                return uiColor
+            })
+            #else
+            self = baseColor
+            #endif
+        } else {
+            self = baseColor
+        }
     }
     
     // MARK: - Severity Rating Helper

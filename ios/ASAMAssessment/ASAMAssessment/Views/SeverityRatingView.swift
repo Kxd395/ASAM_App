@@ -550,71 +550,74 @@ struct SeverityRatingView: View {
     }
     
     private func loadExistingAnswer() {
-        // Load from answer if available
-        switch answer {
-        case .object(let dict):
-            if let rating = dict["rating"]?.numberValue {
-                selectedRating = Int(rating)
-            }
-            if let ratText = dict["rationale"]?.stringValue {
-                rationale = ratText
-            }
-            if let subs = dict["substances"]?.objectValue {
-                // Load checkboxes
-                for key in ["alcohol", "opioids", "benzodiazepines"] {
-                    if subs[key]?.boolValue == true {
-                        selectedSubstances.insert(key)
-                    }
-                }
-                // Load text fields
-                if let stimText = subs["stimulants"]?.stringValue {
-                    substanceText["stimulants"] = stimText
-                }
-                if let other1 = subs["other1"]?.stringValue {
-                    substanceText["other1"] = other1
-                }
-                if let other2 = subs["other2"]?.stringValue {
-                    substanceText["other2"] = other2
+        // Load from answer if available - AnswerValue is .text(String) with JSON
+        guard case .text(let jsonString) = answer else { return }
+        guard let data = jsonString.data(using: .utf8) else { return }
+        guard let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
+        
+        if let rating = dict["rating"] as? Int {
+            selectedRating = rating
+        }
+        if let ratText = dict["rationale"] as? String {
+            rationale = ratText
+        }
+        if let subs = dict["substances"] as? [String: Any] {
+            // Load checkboxes
+            for key in ["alcohol", "opioids", "benzodiazepines"] {
+                if let value = subs[key] as? Bool, value {
+                    selectedSubstances.insert(key)
                 }
             }
-            if let comments = dict["comments"]?.stringValue {
-                additionalComments = comments
+            // Load text fields
+            if let stimText = subs["stimulants"] as? String {
+                substanceText["stimulants"] = stimText
             }
-        default:
-            break
+            if let other1 = subs["other1"] as? String {
+                substanceText["other1"] = other1
+            }
+            if let other2 = subs["other2"] as? String {
+                substanceText["other2"] = other2
+            }
+        }
+        if let comments = dict["comments"] as? String {
+            additionalComments = comments
         }
     }
     
     private func saveAnswer() {
-        var result: [String: AnswerValue] = [:]
+        var result: [String: Any] = [:]
         
         if let rating = selectedRating {
-            result["rating"] = .number(Double(rating))
+            result["rating"] = rating
         }
         
         if !rationale.isEmpty {
-            result["rationale"] = .string(rationale)
+            result["rationale"] = rationale
         }
         
-        var substances: [String: AnswerValue] = [:]
+        var substances: [String: Any] = [:]
         for sub in ["alcohol", "opioids", "benzodiazepines"] {
-            substances[sub] = .bool(selectedSubstances.contains(sub))
+            substances[sub] = selectedSubstances.contains(sub)
         }
         if let stimText = substanceText["stimulants"], !stimText.isEmpty {
-            substances["stimulants"] = .string(stimText)
+            substances["stimulants"] = stimText
         }
         if let other1 = substanceText["other1"], !other1.isEmpty {
-            substances["other1"] = .string(other1)
+            substances["other1"] = other1
         }
         if let other2 = substanceText["other2"], !other2.isEmpty {
-            substances["other2"] = .string(other2)
+            substances["other2"] = other2
         }
-        result["substances"] = .object(substances)
+        result["substances"] = substances
         
         if !additionalComments.isEmpty {
-            result["comments"] = .string(additionalComments)
+            result["comments"] = additionalComments
         }
         
-        answer = .object(result)
+        // Convert to JSON string for .text case
+        if let jsonData = try? JSONSerialization.data(withJSONObject: result, options: []),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            answer = .text(jsonString)
+        }
     }
 }

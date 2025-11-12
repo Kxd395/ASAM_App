@@ -507,19 +507,24 @@ struct QuestionView: View {
                     ),
                     displayedComponents: [.date]
                 )
-                .datePickerStyle(.compact)
-            }
-            
-        case .severityRating:
-            // Render severity rating cards for D1
-            // TODO: Full SeverityRatingView implementation
-            Text("Severity Rating component - Implementation in progress")
-                .font(.headline)
-                .foregroundColor(.orange)
+            .datePickerStyle(.compact)
+        }
+        
+    case .severityRating:
+        // D1 Severity Rating with interactive cards
+        if let metadata = question.severityRating {
+            SeverityRatingView(
+                question: question,
+                answer: $answer
+            )
+        } else {
+            Text("Error: Severity rating metadata missing")
+                .foregroundColor(.red)
                 .padding()
         }
     }
-    
+}
+
     private func setupInitialValues() {
         switch answer {
         case .text(let value):

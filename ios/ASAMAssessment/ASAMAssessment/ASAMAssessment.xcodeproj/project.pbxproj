@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09223B86AD25C097B768EDDA /* SeverityRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432035D5FAA695D4BBA1B195 /* SeverityRatingView.swift */; };
+		40266C610697197EEC7C8439 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D1B7A052E5675A87956777 /* ColorExtensions.swift */; };
 		8002204D2EC3C4BA006ABEB3 /* Assessment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8002204A2EC3C4BA006ABEB3 /* Assessment.swift */; };
 		8002204E2EC3C4BA006ABEB3 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800220462EC3C4BA006ABEB3 /* AppSettings.swift */; };
 		8002204F2EC3C4BA006ABEB3 /* ASAMModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800220472EC3C4BA006ABEB3 /* ASAMModels.swift */; };
@@ -115,6 +117,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		432035D5FAA695D4BBA1B195 /* SeverityRatingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SeverityRatingView.swift; sourceTree = "<group>"; };
 		800220462EC3C4BA006ABEB3 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		800220472EC3C4BA006ABEB3 /* ASAMModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMModels.swift; sourceTree = "<group>"; };
 		800220492EC3C4BA006ABEB3 /* ASAMTraceabilityMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMTraceabilityMatrix.swift; sourceTree = "<group>"; };
@@ -191,16 +194,21 @@
 		80D8BA132EC357CB00D86D32 /* README_Questionnaires.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README_Questionnaires.md; sourceTree = "<group>"; };
 		80D8BA5D2EC38FC500D86D32 /* SubstanceGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstanceGridView.swift; sourceTree = "<group>"; };
 		80D8BA612EC356DB00D86D32 /* d1_withdrawal_enhanced.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = d1_withdrawal_enhanced.json; sourceTree = "<group>"; };
+		B1D1B7A052E5675A87956777 /* ColorExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		80366E982EC07360008403F4 /* ASAMAssessmentTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = ASAMAssessmentTests;
 			sourceTree = "<group>";
 		};
 		80366EA22EC07360008403F4 /* ASAMAssessmentUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = ASAMAssessmentUITests;
 			sourceTree = "<group>";
 		};
@@ -244,6 +252,7 @@
 			children = (
 				8013220F2EC3D2B7001CFF7E /* TextInputManager.swift */,
 				801322102EC3D2B7001CFF7E /* TimeUtility.swift */,
+				B1D1B7A052E5675A87956777 /* ColorExtensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -349,6 +358,7 @@
 				80AC41C92EC25C5400A06E06 /* SubstanceRowSheet.swift */,
 				80AC41CA2EC25C5400A06E06 /* SubstanceSheet.swift */,
 				80D8B9F92EC3548500D86D32 /* UIKit */,
+				432035D5FAA695D4BBA1B195 /* SeverityRatingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -443,8 +453,6 @@
 			dependencies = (
 			);
 			name = ASAMAssessment;
-			packageProductDependencies = (
-			);
 			productName = ASAMAssessment;
 			productReference = 80366E862EC0735E008403F4 /* ASAMAssessment.app */;
 			productType = "com.apple.product-type.application";
@@ -466,8 +474,6 @@
 				80366E982EC07360008403F4 /* ASAMAssessmentTests */,
 			);
 			name = ASAMAssessmentTests;
-			packageProductDependencies = (
-			);
 			productName = ASAMAssessmentTests;
 			productReference = 80366E952EC07360008403F4 /* ASAMAssessmentTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -489,8 +495,6 @@
 				80366EA22EC07360008403F4 /* ASAMAssessmentUITests */,
 			);
 			name = ASAMAssessmentUITests;
-			packageProductDependencies = (
-			);
 			productName = ASAMAssessmentUITests;
 			productReference = 80366E9F2EC07360008403F4 /* ASAMAssessmentUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -653,6 +657,8 @@
 				8013221B2EC3D309001CFF7E /* SettingsView.swift in Sources */,
 				8013221C2EC3D309001CFF7E /* ContentView.swift in Sources */,
 				8013221D2EC3D309001CFF7E /* RobustTextField.swift in Sources */,
+				40266C610697197EEC7C8439 /* ColorExtensions.swift in Sources */,
+				09223B86AD25C097B768EDDA /* SeverityRatingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

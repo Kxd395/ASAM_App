@@ -548,17 +548,6 @@ struct CategorizedHealthIssuesView: View {
             
             resultDict[itemId] = selectionDict
         }
-            
-            if let note = selection.noteText, !note.isEmpty {
-                selectionDict["note"] = note
-            }
-            
-            if let multiSelect = selection.multiSelectValues, !multiSelect.isEmpty {
-                selectionDict["multi_select"] = multiSelect
-            }
-            
-            resultDict[itemId] = selectionDict
-        }
         
         // Encode to JSON string
         let fullDict = ["selected": resultDict]

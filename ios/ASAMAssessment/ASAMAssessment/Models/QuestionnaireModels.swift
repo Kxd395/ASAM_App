@@ -171,6 +171,48 @@ struct SeverityRatingMetadata: Codable {
     }
 }
 
+// MARK: - Categorized Health Issues (D2)
+
+struct HealthIssueCategory: Codable, Identifiable {
+    let id: String
+    let title: String
+    let items: [HealthIssueItem]
+}
+
+struct HealthIssueItem: Codable, Identifiable {
+    let id: String
+    let label: String
+    let requiresNote: Bool
+    let multiSelectOptions: [HealthIssueOption]?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, label
+        case requiresNote = "requires_note"
+        case multiSelectOptions = "multi_select_options"
+    }
+}
+
+struct HealthIssueOption: Codable, Identifiable {
+    let id: String
+    let label: String
+    let isOtherOption: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case id, label
+        case isOtherOption = "is_other"
+    }
+}
+
+struct CategorizedHealthIssuesMetadata: Codable {
+    let categories: [HealthIssueCategory]
+    let macros: [String]?  // e.g., ["none_of_the_above", "reviewed_unchanged"]
+    
+    enum CodingKeys: String, CodingKey {
+        case categories
+        case macros
+    }
+}
+
 struct Question: Codable, Identifiable {
     let id: String
     let text: String
@@ -185,7 +227,8 @@ struct Question: Codable, Identifiable {
     let repeaterFields: [RepeaterField]?  // For repeater type questions
     let substanceTemplate: SubstanceTemplate?
     let availableSubstances: [SubstanceDefinition]?
-    let severityRating: SeverityRatingMetadata?  // NEW: For severity_rating type
+    let severityRating: SeverityRatingMetadata?  // For severity_rating type
+    let categorizedHealthIssues: CategorizedHealthIssuesMetadata?  // For categorized_health_issues type
     
     // Explicit initializer with default values for new optional parameters
     init(
@@ -202,7 +245,8 @@ struct Question: Codable, Identifiable {
         repeaterFields: [RepeaterField]? = nil,
         substanceTemplate: SubstanceTemplate? = nil,
         availableSubstances: [SubstanceDefinition]? = nil,
-        severityRating: SeverityRatingMetadata? = nil
+        severityRating: SeverityRatingMetadata? = nil,
+        categorizedHealthIssues: CategorizedHealthIssuesMetadata? = nil
     ) {
         self.id = id
         self.text = text
@@ -218,6 +262,7 @@ struct Question: Codable, Identifiable {
         self.substanceTemplate = substanceTemplate
         self.availableSubstances = availableSubstances
         self.severityRating = severityRating
+        self.categorizedHealthIssues = categorizedHealthIssues
     }
     
     enum CodingKeys: String, CodingKey {
@@ -228,6 +273,7 @@ struct Question: Codable, Identifiable {
         case substanceTemplate = "substance_template"
         case availableSubstances = "available_substances"
         case severityRating = "severity_rating"
+        case categorizedHealthIssues = "categorized_health_issues"
     }
 }
 
@@ -241,7 +287,8 @@ enum QuestionType: String, Codable, CaseIterable {
     case repeater = "repeater"
     case monthYear = "month_year"
     case dynamicSubstanceGrid = "dynamic_substance_grid"
-    case severityRating = "severity_rating"  // NEW: D1 severity rating cards
+    case severityRating = "severity_rating"  // D1 severity rating cards
+    case categorizedHealthIssues = "categorized_health_issues"  // D2 compact searchable health issues
 }
 
 struct QuestionOption: Codable, Identifiable {

@@ -97,6 +97,7 @@
 		80D8BA142EC357CB00D86D32 /* README_Questionnaires.md in Resources */ = {isa = PBXBuildFile; fileRef = 80D8BA132EC357CB00D86D32 /* README_Questionnaires.md */; };
 		80D8BA5F2EC38FC500D86D32 /* SubstanceGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D8BA5D2EC38FC500D86D32 /* SubstanceGridView.swift */; };
 		80D8BA602EC356DB00D86D32 /* d1_withdrawal_enhanced.json in Resources */ = {isa = PBXBuildFile; fileRef = 80D8BA612EC356DB00D86D32 /* d1_withdrawal_enhanced.json */; };
+		C011A1BE7735D7E5DE022746 /* CategorizedHealthIssuesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C25F3B1B2F98C3DE44F493E /* CategorizedHealthIssuesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +118,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C25F3B1B2F98C3DE44F493E /* CategorizedHealthIssuesView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CategorizedHealthIssuesView.swift; sourceTree = "<group>"; };
 		432035D5FAA695D4BBA1B195 /* SeverityRatingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SeverityRatingView.swift; sourceTree = "<group>"; };
 		800220462EC3C4BA006ABEB3 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		800220472EC3C4BA006ABEB3 /* ASAMModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMModels.swift; sourceTree = "<group>"; };
@@ -359,6 +361,7 @@
 				80AC41CA2EC25C5400A06E06 /* SubstanceSheet.swift */,
 				80D8B9F92EC3548500D86D32 /* UIKit */,
 				432035D5FAA695D4BBA1B195 /* SeverityRatingView.swift */,
+				0C25F3B1B2F98C3DE44F493E /* CategorizedHealthIssuesView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -659,6 +662,7 @@
 				8013221D2EC3D309001CFF7E /* RobustTextField.swift in Sources */,
 				40266C610697197EEC7C8439 /* ColorExtensions.swift in Sources */,
 				09223B86AD25C097B768EDDA /* SeverityRatingView.swift in Sources */,
+				C011A1BE7735D7E5DE022746 /* CategorizedHealthIssuesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

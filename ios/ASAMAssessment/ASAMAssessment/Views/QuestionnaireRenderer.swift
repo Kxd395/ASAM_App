@@ -522,6 +522,19 @@ struct QuestionView: View {
                 .foregroundColor(.red)
                 .padding()
         }
+        
+    case .categorizedHealthIssues:
+        // D2 Compact categorized health issues
+        if let metadata = question.categorizedHealthIssues {
+            CategorizedHealthIssuesView(
+                question: question,
+                answer: $answer
+            )
+        } else {
+            Text("Error: Categorized health issues metadata missing")
+                .foregroundColor(.red)
+                .padding()
+        }
     }
 }
 

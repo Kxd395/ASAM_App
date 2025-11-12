@@ -1,0 +1,166 @@
+{
+  "categories": [
+    {
+      "id": "cardiovascular",
+      "title": "Cardiovascular",
+      "items": [
+        {"id": "heart_problems", "label": "Heart problems", "requires_note": false},
+        {"id": "high_bp", "label": "High Blood Pressure", "requires_note": false},
+        {"id": "high_cholesterol", "label": "High Cholesterol", "requires_note": false},
+        {"id": "blood_disorder", "label": "Blood Disorder", "requires_note": false}
+      ]
+    },
+    {
+      "id": "endocrine_metabolic",
+      "title": "Endocrine and Metabolic",
+      "items": [
+        {"id": "thyroid", "label": "Thyroid Problems", "requires_note": false},
+        {"id": "diabetes", "label": "Diabetes", "requires_note": false}
+      ]
+    },
+    {
+      "id": "infectious",
+      "title": "Infectious",
+      "items": [
+        {"id": "hiv", "label": "HIV", "requires_note": false},
+        {"id": "tuberculosis", "label": "Tuberculosis (TB)", "requires_note": false},
+        {"id": "viral_hepatitis", "label": "Viral Hepatitis (A, B, or C)", "requires_note": false},
+        {
+          "id": "std",
+          "label": "Sexually Transmitted Disease(s)",
+          "requires_note": false,
+          "multi_select_options": [
+            {"id": "chlamydia", "label": "Chlamydia", "is_other": false},
+            {"id": "gonorrhea", "label": "Gonorrhea", "is_other": false},
+            {"id": "syphilis", "label": "Syphilis", "is_other": false},
+            {"id": "hsv", "label": "Genital herpes (HSV)", "is_other": false},
+            {"id": "hpv", "label": "Human papillomavirus (HPV)", "is_other": false},
+            {"id": "trichomoniasis", "label": "Trichomoniasis", "is_other": false},
+            {"id": "mycoplasma", "label": "Mycoplasma genitalium", "is_other": false},
+            {"id": "pid", "label": "Pelvic inflammatory disease", "is_other": false},
+            {"id": "__OTHER__", "label": "Other…", "is_other": true}
+          ]
+        },
+        {
+          "id": "infections",
+          "label": "Infection(s)",
+          "requires_note": false,
+          "multi_select_options": [
+            {"id": "skin_soft_tissue", "label": "Skin or soft tissue", "is_other": false},
+            {"id": "respiratory", "label": "Respiratory", "is_other": false},
+            {"id": "urinary_tract", "label": "Urinary tract", "is_other": false},
+            {"id": "bloodstream", "label": "Bloodstream", "is_other": false},
+            {"id": "bone_joint", "label": "Bone or joint", "is_other": false},
+            {"id": "gastrointestinal", "label": "Gastrointestinal", "is_other": false},
+            {"id": "endocarditis", "label": "Endocarditis", "is_other": false},
+            {"id": "__OTHER__", "label": "Other…", "is_other": true}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "neuro_musculoskeletal",
+      "title": "Neuro and Musculoskeletal",
+      "items": [
+        {"id": "seizure_neuro", "label": "Seizure/Neurological Problems", "requires_note": false},
+        {"id": "muscle_joint", "label": "Muscle/Joint problems", "requires_note": false}
+      ]
+    },
+    {
+      "id": "respiratory",
+      "title": "Respiratory",
+      "items": [
+        {"id": "asthma_lung", "label": "Asthma/Lung Problems", "requires_note": false}
+      ]
+    },
+    {
+      "id": "gi_hepatic_renal",
+      "title": "GI Hepatic Renal",
+      "items": [
+        {"id": "stomach_intestinal", "label": "Stomach/Intestinal Problems", "requires_note": false},
+        {"id": "liver", "label": "Liver Problems", "requires_note": false},
+        {"id": "kidney", "label": "Kidney Problems", "requires_note": false}
+      ]
+    },
+    {
+      "id": "sensory_dental",
+      "title": "Sensory and Dental",
+      "items": [
+        {"id": "vision", "label": "Vision Problems", "requires_note": false},
+        {"id": "hearing", "label": "Hearing Problems", "requires_note": false},
+        {"id": "dental", "label": "Dental Problems", "requires_note": false}
+      ]
+    },
+    {
+      "id": "pain",
+      "title": "Pain",
+      "items": [
+        {"id": "chronic_pain", "label": "Chronic Pain", "requires_note": false},
+        {"id": "acute_pain", "label": "Acute Pain", "requires_note": false}
+      ]
+    },
+    {
+      "id": "other_write_ins",
+      "title": "Other and Write-ins",
+      "items": [
+        {"id": "sleep", "label": "Sleep Problems", "requires_note": false},
+        {
+          "id": "cancer",
+          "label": "Cancer (specify type(s))",
+          "requires_note": false,
+          "multi_select_options": [
+            {"id": "breast", "label": "Breast", "is_other": false},
+            {"id": "lung", "label": "Lung", "is_other": false},
+            {"id": "colorectal", "label": "Colorectal", "is_other": false},
+            {"id": "prostate", "label": "Prostate", "is_other": false},
+            {"id": "cervical", "label": "Cervical", "is_other": false},
+            {"id": "ovarian", "label": "Ovarian", "is_other": false},
+            {"id": "endometrial", "label": "Endometrial", "is_other": false},
+            {"id": "melanoma", "label": "Melanoma", "is_other": false},
+            {"id": "non_melanoma_skin", "label": "Non-melanoma skin", "is_other": false},
+            {"id": "pancreatic", "label": "Pancreatic", "is_other": false},
+            {"id": "liver_cancer", "label": "Liver", "is_other": false},
+            {"id": "kidney_cancer", "label": "Kidney", "is_other": false},
+            {"id": "bladder", "label": "Bladder", "is_other": false},
+            {"id": "thyroid_cancer", "label": "Thyroid", "is_other": false},
+            {"id": "brain_cns", "label": "Brain or CNS", "is_other": false},
+            {"id": "leukemia", "label": "Leukemia", "is_other": false},
+            {"id": "lymphoma", "label": "Lymphoma", "is_other": false},
+            {"id": "multiple_myeloma", "label": "Multiple myeloma", "is_other": false},
+            {"id": "__OTHER__", "label": "Other…", "is_other": true}
+          ]
+        },
+        {
+          "id": "allergies",
+          "label": "Allergies",
+          "requires_note": false,
+          "multi_select_options": [
+            {"id": "penicillin", "label": "Penicillin or beta-lactams", "is_other": false},
+            {"id": "sulfonamides", "label": "Sulfonamides", "is_other": false},
+            {"id": "nsaids", "label": "NSAIDs", "is_other": false},
+            {"id": "opioids", "label": "Opioids", "is_other": false},
+            {"id": "anticonvulsants", "label": "Anticonvulsants", "is_other": false},
+            {"id": "contrast", "label": "Radiographic contrast", "is_other": false},
+            {"id": "latex", "label": "Latex", "is_other": false},
+            {"id": "food_peanut", "label": "Food: peanut", "is_other": false},
+            {"id": "food_shellfish", "label": "Food: shellfish", "is_other": false},
+            {"id": "environmental", "label": "Environmental: pollen or dust", "is_other": false},
+            {"id": "__OTHER__", "label": "Other…", "is_other": true}
+          ]
+        },
+        {
+          "id": "other",
+          "label": "Other",
+          "requires_note": false,
+          "multi_select_options": [
+            {"id": "disability_mobility", "label": "Disability or mobility", "is_other": false},
+            {"id": "wound_care", "label": "Wound care", "is_other": false},
+            {"id": "medical_device", "label": "Medical device", "is_other": false},
+            {"id": "__OTHER__", "label": "Other…", "is_other": true}
+          ]
+        }
+      ]
+    }
+  ],
+  "macros": ["none_of_the_above", "reviewed_unchanged"]
+}

@@ -12,24 +12,24 @@ struct ImpactGridView: View {
     let question: Question
     let metadata: ImpactGridMetadata
     @Binding var answer: AnswerValue?
-
+    
     @State private var selections: [String: String] = [:]  // [itemId: scaleValue]
     @State private var notes: [String: String] = [:]  // [itemId: note text]
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Question text
             Text(question.text)
                 .font(.headline)
                 .padding(.horizontal)
-
+            
             if let helpText = question.helpText {
                 Text(helpText)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .padding(.horizontal)
             }
-
+            
             // Impact grid
             ScrollView {
                 VStack(spacing: 0) {
@@ -38,76 +38,55 @@ struct ImpactGridView: View {
                         // Life area column
                         Text("Life Area")
                             .font(.caption.bold())
-                            .foregroundColor(.primary)
-                            .frame(width: 180, alignment: .leading)
+                            .frame(width: 120, alignment: .leading)
                             .padding(.horizontal, 8)
-                            .padding(.vertical, 8)
-                            .background(Color.gray.opacity(0.1))
-
-                        // Scale option columns with color coding
+                        
+                        // Scale option columns
                         ForEach(metadata.scaleOptions) { option in
                             Text(option.label)
                                 .font(.caption.bold())
-                                .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .multilineTextAlignment(.center)
-                                .padding(.vertical, 8)
-                                .background(colorForScore(option.score).opacity(0.9))
                         }
                     }
-                    .padding(.vertical, 0)
-
+                    .padding(.vertical, 8)
+                    .background(Color.secondary.opacity(0.1))
+                    
                     Divider()
-
+                    
                     // Impact items
                     ForEach(Array(metadata.impactItems.enumerated()), id: \.element.id) { index, item in
                         VStack(spacing: 0) {
                             HStack(spacing: 4) {
                                 // Life area label
                                 Text(item.label)
-                                    .font(.system(size: 15, weight: .medium))
-                                    .foregroundColor(.black)
-                                    .frame(width: 180, alignment: .leading)
+                                    .font(.body)
+                                    .frame(width: 120, alignment: .leading)
                                     .padding(.horizontal, 8)
-                                    .padding(.vertical, 12)
-                                    .background(Color.white)
-
+                                
                                 // Rating buttons
                                 ForEach(metadata.scaleOptions) { option in
                                     Button(action: {
                                         selectOption(for: item.id, value: option.value)
                                     }) {
                                         ZStack {
-                                            // Background with column color or white
-                                            RoundedRectangle(cornerRadius: 6)
-                                                .fill(selections[item.id] == option.value
-                                                    ? colorForScore(option.score)
-                                                    : Color.white)
-
-                                            // Border
-                                            RoundedRectangle(cornerRadius: 6)
-                                                .strokeBorder(
-                                                    selections[item.id] == option.value
-                                                        ? colorForScore(option.score)
-                                                        : Color.gray.opacity(0.4),
-                                                    lineWidth: selections[item.id] == option.value ? 2 : 1
-                                                )
-
-                                            // Checkmark when selected
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .fill(selections[item.id] == option.value ? colorForScore(option.score) : Color.gray.opacity(0.1))
+                                            
                                             if selections[item.id] == option.value {
                                                 Image(systemName: "checkmark")
                                                     .foregroundColor(.white)
-                                                    .font(.system(size: 16, weight: .bold))
+                                                    .font(.caption.bold())
                                             }
                                         }
                                         .frame(maxWidth: .infinity)
-                                        .frame(height: 44)
+                                        .frame(height: 40)
                                     }
                                     .buttonStyle(.plain)
                                 }
                             }
                             .padding(.vertical, 4)
-
+                            
                             // Note field if required
                             if item.requiresNote, let note = notes[item.id] ?? "" as String?, !note.isEmpty || selections[item.id] != nil {
                                 HStack {
@@ -115,7 +94,7 @@ struct ImpactGridView: View {
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                         .frame(width: 60, alignment: .leading)
-
+                                    
                                     TextField("Additional details...", text: Binding(
                                         get: { notes[item.id] ?? "" },
                                         set: { newValue in
@@ -123,7 +102,7 @@ struct ImpactGridView: View {
                                             notes[item.id] = newValue
                                         }
                                     ), onCommit: {
-                                        // Save only when user is done editing (hits return or loses focus)
+                                        // Save only when user is done editing
                                         saveAnswer()
                                     })
                                     .textFieldStyle(.roundedBorder)
@@ -132,7 +111,7 @@ struct ImpactGridView: View {
                                 .padding(.horizontal, 8)
                                 .padding(.bottom, 8)
                             }
-
+                            
                             if index < metadata.impactItems.count - 1 {
                                 Divider()
                             }
@@ -152,16 +131,16 @@ struct ImpactGridView: View {
             loadAnswer()
         }
         .onChange(of: notes) { _, _ in
-            // Save answer whenever notes change (after debounce from TextField onCommit)
+            // Save answer whenever notes change (after onCommit debounce)
             saveAnswer()
         }
     }
-
+    
     private func selectOption(for itemId: String, value: String) {
         selections[itemId] = value
         saveAnswer()
     }
-
+    
     private func loadAnswer() {
         // Load from existing answer if present
         // For now, initialize with empty selections
@@ -170,7 +149,7 @@ struct ImpactGridView: View {
             notes = gridData.notes
         }
     }
-
+    
     private func saveAnswer() {
         // Save answer in impact grid format
         answer = .impactGrid(ImpactGridAnswer(
@@ -178,14 +157,14 @@ struct ImpactGridView: View {
             notes: notes
         ))
     }
-
+    
     private func colorForScore(_ score: Int) -> Color {
         switch score {
-        case 0: return Color(red: 72/255, green: 187/255, blue: 120/255)  // Green #48bb78
-        case 1: return Color(red: 132/255, green: 204/255, blue: 22/255) // Lime #84cc16
-        case 2: return Color(red: 250/255, green: 204/255, blue: 21/255) // Yellow #facc15
-        case 3: return Color(red: 251/255, green: 146/255, blue: 60/255) // Orange #fb923c
-        case 4: return Color(red: 239/255, green: 68/255, blue: 68/255)  // Red #ef4444
+        case 0: return .gray
+        case 1: return .green
+        case 2: return .yellow
+        case 3: return .orange
+        case 4: return .red
         default: return .gray
         }
     }

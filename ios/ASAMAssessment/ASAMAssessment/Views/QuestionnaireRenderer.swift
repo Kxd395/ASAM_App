@@ -542,10 +542,7 @@ struct QuestionView: View {
             ImpactGridView(
                 question: question,
                 metadata: metadata,
-                answer: Binding(
-                    get: { answer as AnswerValue? },
-                    set: { if let newValue = $0 { answer = newValue } }
-                )
+                answer: $answer
             )
         } else {
             Text("Error: Impact grid metadata missing")

@@ -599,6 +599,7 @@
     },
     {
       "id": "d2_severity_rating",
+      "text": "Severity Rating - Dimension 2",
       "type": "severity_rating",
       "required": true,
       "breadcrumb": "d2_severity_rating",

@@ -112,6 +112,7 @@
     },
     {
       "id": "d6_severity_rating",
+      "text": "Severity Rating - Domain 6",
       "type": "severity_rating",
       "required": true,
       "breadcrumb": "d6_severity_rating",

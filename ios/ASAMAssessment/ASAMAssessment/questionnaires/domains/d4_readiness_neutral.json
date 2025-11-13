@@ -2,7 +2,7 @@
   "id": "d4_readiness_neutral",
   "title": "Dimension 4: Readiness to Change",
   "domain": "4",
-  "version": "2.1.1",
+  "version": "2.2.2",
   "description": "Assessment of patient readiness and motivation to change substance use behaviors",
   "questions": [
     {
@@ -420,75 +420,83 @@
       "required": false,
       "breadcrumb": "concerns",
       "helpText": "Problem(s):"
-    }
-  ],
-  "severity_rating": {
-    "header": "Please circle the intensity and urgency of the patient CURRENT needs for services based on the information collected in Dimension 4:",
-    "guidance_link": "For guidance assessing Dimension 4, see The ASAM Criteria, 3rd Ed.",
-    "severity_cards": [
-      {
-        "rating": 0,
-        "title": "None",
-        "color": "#22c55e",
-        "border": "#16a34a",
-        "icon": "checkmark.circle.fill",
-        "bullets": [
-          "Proactive responsible participant in treatment",
-          "Committed to changing AOD use",
-          "Willing to enter treatment"
+    },
+    {
+      "id": "d4_severity_rating",
+      "text": "SEVERITY RATING - DIMENSION 4 (Readiness to Change)",
+      "type": "severity_rating",
+      "required": true,
+      "breadcrumb": "d4_severity_rating",
+      "helpText": "Please circle the intensity and urgency of the patient's CURRENT needs for services based on the information collected in Dimension 4:",
+      "severity_rating": {
+        "severity_cards": [
+          {
+            "rating": 0,
+            "title": "0 None",
+            "color": "#48bb78",
+            "border": "#38a169",
+            "icon": "checkmark.circle",
+            "bullets": [
+              "Proactive responsible participant in treatment",
+              "Committed to changing alcohol or other drug (AOD) use"
+            ],
+            "disposition": ""
+          },
+          {
+            "rating": 1,
+            "title": "1 Mild",
+            "color": "#84cc16",
+            "border": "#65a30d",
+            "icon": "info.circle",
+            "bullets": [
+              "Willing to enter treatment",
+              "Ambivalent to the need to change"
+            ],
+            "disposition": "Requires low intensity services for motivational enhancement"
+          },
+          {
+            "rating": 2,
+            "title": "2 Moderate",
+            "color": "#facc15",
+            "border": "#eab308",
+            "icon": "exclamationmark.triangle",
+            "bullets": [
+              "Reluctant to agree to treatment",
+              "Low commitment to change AOD use",
+              "Variable adherence to treatment"
+            ],
+            "disposition": "Requires moderate intensity services for motivational enhancement"
+          },
+          {
+            "rating": 3,
+            "title": "3 Severe",
+            "color": "#fb923c",
+            "border": "#f97316",
+            "icon": "exclamationmark.triangle.fill",
+            "bullets": [
+              "Unaware of and not interested in the need to change",
+              "Unwilling or only partially able to follow through with treatment",
+              "Passively compliant, goes through the motions in treatment"
+            ],
+            "disposition": "Requires high intensity engagement and or motivational enhancement services to prevent decline in functioning or safety"
+          },
+          {
+            "rating": 4,
+            "title": "4 Very Severe",
+            "color": "#ef4444",
+            "border": "#dc2626",
+            "icon": "xmark.circle.fill",
+            "bullets": [
+              "Rejecting need to change",
+              "Engaging in potentially dangerous behavior",
+              "Unwilling or unable to follow through with treatment recommendations"
+            ],
+            "disposition": "Secure placement for acute or imminently dangerous situations and or close observation required"
+          }
         ],
-        "disposition": "Requires low intensity services for motivational enhancement"
-      },
-      {
-        "rating": 1,
-        "title": "Mild",
-        "color": "#65a30d",
-        "border": "#4d7c0f",
-        "icon": "exclamationmark.circle.fill",
-        "bullets": [
-          "Ambivalent to the need to change",
-          "Reluctant to agree to treatment",
-          "Low commitment to change AOD use"
-        ],
-        "disposition": "Requires moderate intensity services for motivational enhancement"
-      },
-      {
-        "rating": 2,
-        "title": "Moderate",
-        "color": "#eab308",
-        "border": "#ca8a04",
-        "icon": "exclamationmark.triangle.fill",
-        "bullets": [
-          "Variable adherence to treatment",
-          "Unaware of and not interested in the need to change",
-          "Unwilling or only partially able to follow through with treatment"
-        ],
-        "disposition": "Requires high intensity engagement and or motivational enhancement services"
-      },
-      {
-        "rating": 3,
-        "title": "Severe",
-        "color": "#f59e0b",
-        "border": "#d97706",
-        "icon": "exclamationmark.triangle.fill",
-        "bullets": [
-          "Passively compliant, goes through the motions in treatment"
-        ],
-        "disposition": "Secure placement for acute or imminently dangerous situations"
-      },
-      {
-        "rating": 4,
-        "title": "Very Severe",
-        "color": "#ef4444",
-        "border": "#dc2626",
-        "icon": "exclamationmark.octagon.fill",
-        "bullets": [
-          "Rejecting need to change",
-          "Engaging in potentially dangerous behavior",
-          "Unwilling or unable to follow through with treatment"
-        ],
-        "disposition": "Secure placement for acute or imminently dangerous situations"
+        "substance_options": [],
+        "safety_rules": []
       }
-    ]
-  }
+    }
+  ]
 }

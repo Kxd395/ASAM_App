@@ -926,11 +926,856 @@ struct SessionRowView: View {
         }
     }
 }
+---
+
+## 11. Severity Auto-Calculation + Clinician Override (P0+)
+
+### Problem
+- No automatic severity calculation from questionnaire answers
+- No structured override system with audit trail
+- Risk of inconsistent severity assignments
+- No emergency floor constraints
+
+### Solution: Auto-Calculate + Override with Attestation
+
+**Data Model Additions:**
+
+```swift
+// MARK: - Severity Override
+struct SeverityOverride: Codable, Identifiable {
+    var id: UUID = .init()
+    var enabled: Bool
+    var value: Int             // 0...4
+    var reason: String         // min 15 chars
+    var category: OverrideCategory
+    var createdBy: UserRef
+    var createdAt: Date
+    var acknowledgesEmergency: Bool // must be true if any emergency floors apply
+}
+
+enum OverrideCategory: String, Codable, CaseIterable {
+    case clinicalJudgment = "Clinical Judgment"
+    case incompleteData = "Incomplete Data"
+    case falsePositiveTrigger = "False Positive Trigger"
+    case patientSafety = "Patient Safety"
+    case other = "Other"
+}
+
+struct UserRef: Codable {
+    var userId: String
+    var name: String
+    var role: String
+}
+
+// MARK: - Domain State
+struct DomainState: Codable {
+    var computedSeverity: Int? // auto-calculated from answers
+    var minFloor: Int?         // from Emergency + ValidationMatrix
+    var override: SeverityOverride? // nil if none
+    
+    var finalSeverity: Int {   // read-only derived
+        let base = max(computedSeverity ?? 0, minFloor ?? 0)
+        if let o = override, o.enabled {
+            return max(o.value, minFloor ?? 0)
+        }
+        return base
+    }
+}
+
+// MARK: - Assessment Severity
+struct AssessmentSeverity: Codable {
+    var domains: [DomainState] // D1...D6
+    var computedOverall: Int   // policy: max of domain finals, or custom rubric
+    var overallOverride: SeverityOverride? // same rules as above
+    
+    var finalOverall: Int {
+        if let o = overallOverride, o.enabled { 
+            return max(o.value, computedOverall) 
+        }
+        return computedOverall
+    }
+}
+```
+
+**Severity Calculation Logic:**
+
+```swift
+// MARK: - Severity Calculator
+class SeverityCalculator {
+    
+    /// Calculate severity for a dimension based on answers
+    func calculateSeverity(for dimension: Domain) -> Int {
+        var severity = 0
+        
+        switch dimension.type {
+        case .d1_acute_intox_withdrawal:
+            severity = calculateD1Severity(dimension)
+        case .d2_biomedical:
+            severity = calculateD2Severity(dimension)
+        case .d3_emotional:
+            severity = calculateD3Severity(dimension)
+        case .d4_readiness:
+            severity = calculateD4Severity(dimension)
+        case .d5_relapse:
+            severity = calculateD5Severity(dimension)
+        case .d6_recovery_environment:
+            severity = calculateD6Severity(dimension)
+        }
+        
+        return min(max(severity, 0), 4) // clamp 0-4
+    }
+    
+    // MARK: - D1: Acute Intoxication/Withdrawal
+    private func calculateD1Severity(_ domain: Domain) -> Int {
+        var severity = 0
+        
+        // Check withdrawal symptoms
+        if domain.answers["withdrawal_symptoms"] == .bool(true) {
+            if domain.answers["withdrawal_severity"] == .string("Severe") {
+                severity = 4
+            } else if domain.answers["withdrawal_severity"] == .string("Moderate") {
+                severity = 3
+            } else {
+                severity = 2
+            }
+        }
+        
+        // Check recent use (last 48h)
+        if domain.answers["used_last_48h"] == .bool(true) {
+            severity = max(severity, 2)
+        }
+        
+        // Emergency trigger: severe withdrawal + recent use
+        if severity >= 3 && domain.answers["used_last_48h"] == .bool(true) {
+            severity = 4
+        }
+        
+        return severity
+    }
+    
+    // MARK: - D2: Biomedical Conditions
+    private func calculateD2Severity(_ domain: Domain) -> Int {
+        var severity = 0
+        
+        // Life-threatening conditions
+        if domain.answers["life_threatening_condition"] == .bool(true) {
+            return 4
+        }
+        
+        // Pregnancy + substance use
+        if domain.answers["pregnant"] == .bool(true) {
+            if domain.answers["trimester"] == .string("Third") {
+                severity = max(severity, 3)
+            }
+        }
+        
+        // Drug-drug interactions
+        if domain.answers["benzo_use"] == .bool(true) && 
+           domain.answers["buprenorphine_use"] == .bool(true) {
+            severity = max(severity, 3)
+        }
+        
+        // Chronic conditions with poor management
+        if domain.answers["chronic_condition_unmanaged"] == .bool(true) {
+            severity = max(severity, 2)
+        }
+        
+        return severity
+    }
+    
+    // MARK: - D3: Emotional/Behavioral/Cognitive
+    private func calculateD3Severity(_ domain: Domain) -> Int {
+        var severity = 0
+        
+        // CRITICAL: Suicide assessment
+        if domain.answers["suicidal_ideation_today"] == .bool(true) {
+            if domain.answers["suicide_plan"] == .bool(true) && 
+               domain.answers["suicide_intent"] == .bool(true) {
+                return 4 // Emergency
+            } else if domain.answers["suicide_plan"] == .bool(true) {
+                severity = max(severity, 3)
+            } else {
+                severity = max(severity, 3)
+            }
+        }
+        
+        // CRITICAL: Duty to warn
+        if domain.answers["homicidal_ideation_today"] == .bool(true) {
+            if domain.answers["specific_target"] == .bool(true) {
+                return 4 // Emergency
+            } else {
+                severity = max(severity, 3)
+            }
+        }
+        
+        // Psychosis symptoms
+        if domain.answers["psychosis_symptoms"] == .bool(true) {
+            severity = max(severity, 3)
+        }
+        
+        // Mental health diagnosis + functional impairment
+        if domain.answers["mental_health_diagnosis"] == .bool(true) &&
+           domain.answers["functional_impairment"] == .string("Severe") {
+            severity = max(severity, 3)
+        }
+        
+        return severity
+    }
+    
+    // MARK: - D4: Readiness to Change
+    private func calculateD4Severity(_ domain: Domain) -> Int {
+        var severity = 0
+        
+        // Calculate stage of change
+        let stage = calculateStageOfChange(domain)
+        
+        switch stage {
+        case "Precontemplation":
+            severity = 3
+        case "Contemplation":
+            severity = 2
+        case "Preparation":
+            severity = 2
+        case "Action":
+            severity = 1
+        case "Maintenance":
+            severity = 1
+        default:
+            severity = 2
+        }
+        
+        // Adjust for external pressure (reduces motivation)
+        if domain.answers["motivation_source"] == .string("External only") {
+            severity = min(severity + 1, 4)
+        }
+        
+        // Adjust for barriers
+        if domain.answers["barriers_count"]?.asInt ?? 0 >= 3 {
+            severity = min(severity + 1, 4)
+        }
+        
+        return severity
+    }
+    
+    // MARK: - D5: Relapse/Continued Use
+    private func calculateD5Severity(_ domain: Domain) -> Int {
+        var severity = 0
+        
+        // Imminent relapse risk
+        if domain.answers["relapse_timeframe"] == .string("Hours/Days") {
+            return 4 // Emergency
+        } else if domain.answers["relapse_timeframe"] == .string("Weeks") {
+            severity = max(severity, 3)
+        }
+        
+        // High-risk environment (cannot avoid)
+        if domain.answers["high_risk_environment"] == .bool(true) &&
+           domain.answers["can_avoid_environment"] == .bool(false) {
+            severity = max(severity, 3)
+        }
+        
+        // Poor coping skills
+        let healthySkills = domain.answers["healthy_coping_count"]?.asInt ?? 0
+        let unhealthySkills = domain.answers["unhealthy_coping_count"]?.asInt ?? 0
+        if healthySkills <= 1 && unhealthySkills >= 2 {
+            severity = max(severity, 3)
+        }
+        
+        // Never in recovery
+        if domain.answers["ever_in_recovery"] == .bool(false) {
+            severity = max(severity, 2)
+        }
+        
+        return severity
+    }
+    
+    // MARK: - D6: Recovery/Living Environment
+    private func calculateD6Severity(_ domain: Domain) -> Int {
+        var severity = 0
+        
+        // Homelessness
+        if domain.answers["housing_status"] == .string("Homeless") {
+            return 4 // Emergency
+        }
+        
+        // Domestic violence
+        if domain.answers["domestic_violence"] == .bool(true) {
+            if domain.answers["lethal_threat"] == .bool(true) {
+                return 4 // Emergency
+            } else {
+                severity = max(severity, 3)
+            }
+        }
+        
+        // Unstable housing
+        if domain.answers["housing_stable"] == .bool(false) {
+            severity = max(severity, 3)
+        }
+        
+        // No support system
+        if domain.answers["support_system_quality"] == .string("None") {
+            severity = max(severity, 2)
+        }
+        
+        // Legal/financial crisis
+        if domain.answers["legal_crisis"] == .bool(true) ||
+           domain.answers["financial_crisis"] == .bool(true) {
+            severity = max(severity, 2)
+        }
+        
+        return severity
+    }
+    
+    // MARK: - Helpers
+    private func calculateStageOfChange(_ domain: Domain) -> String {
+        // Auto-set: "Can stop anytime" → Precontemplation
+        if domain.answers["can_stop_anytime"] == .bool(true) {
+            return "Precontemplation"
+        }
+        
+        // Check explicit stage if set
+        if let stage = domain.answers["stage_of_change"]?.asString {
+            return stage
+        }
+        
+        // Infer from motivation + action
+        let motivated = domain.answers["motivated_to_change"] == .bool(true)
+        let takingAction = domain.answers["taking_action"] == .bool(true)
+        
+        if !motivated {
+            return "Precontemplation"
+        } else if motivated && !takingAction {
+            return "Contemplation"
+        } else if motivated && takingAction {
+            return "Action"
+        }
+        
+        return "Contemplation" // default
+    }
+    
+    /// Calculate overall severity from all domains
+    func calculateOverallSeverity(_ domains: [DomainState]) -> Int {
+        // Policy: max of all domain finals
+        return domains.map { $0.finalSeverity }.max() ?? 0
+    }
+}
+```
+
+**Override Application with Validation:**
+
+```swift
+// MARK: - Override Manager
+class SeverityOverrideManager {
+    
+    enum ValidationError: Error, LocalizedError {
+        case floorViolation(Int)
+        case reasonTooShort
+        case emergencyAckRequired
+        
+        var errorDescription: String? {
+            switch self {
+            case .floorViolation(let floor):
+                return "Severity cannot be set below \(floor) due to active safety triggers."
+            case .reasonTooShort:
+                return "Reason must be at least 15 characters."
+            case .emergencyAckRequired:
+                return "You must acknowledge emergency constraints to apply this override."
+            }
+        }
+    }
+    
+    /// Apply domain override with validation
+    func applyDomainOverride(
+        assessment: inout Assessment,
+        dimension: Int,
+        value: Int,
+        reason: String,
+        category: OverrideCategory,
+        acknowledgesEmergency: Bool,
+        user: UserRef
+    ) throws {
+        let domainState = assessment.severity.domains[dimension]
+        let floor = domainState.minFloor ?? 0
+        
+        // Validate floor constraint
+        guard value >= floor else {
+            throw ValidationError.floorViolation(floor)
+        }
+        
+        // Validate reason length
+        let trimmedReason = reason.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmedReason.count >= 15 else {
+            throw ValidationError.reasonTooShort
+        }
+        
+        // Require emergency acknowledgement if floor > 0
+        if floor > 0 {
+            guard acknowledgesEmergency else {
+                throw ValidationError.emergencyAckRequired
+            }
+        }
+        
+        // Create override
+        let override = SeverityOverride(
+            enabled: true,
+            value: value,
+            reason: trimmedReason,
+            category: category,
+            createdBy: user,
+            createdAt: Date(),
+            acknowledgesEmergency: acknowledgesEmergency
+        )
+        
+        // Apply and audit
+        let oldValue = domainState.finalSeverity
+        assessment.severity.domains[dimension].override = override
+        
+        AuditLog.shared.append(AuditEvent(
+            timestamp: Date(),
+            userId: user.userId,
+            action: .domainOverrideSet,
+            target: "D\(dimension + 1)",
+            oldValue: String(oldValue),
+            newValue: String(value),
+            metadata: [
+                "floor": String(floor),
+                "reason": trimmedReason,
+                "category": category.rawValue,
+                "ack_emergency": String(acknowledgesEmergency)
+            ]
+        ))
+        
+        // Persist
+        try assessment.save()
+    }
+    
+    /// Reset domain override to auto
+    func resetDomainOverride(
+        assessment: inout Assessment,
+        dimension: Int,
+        user: UserRef
+    ) throws {
+        let oldOverride = assessment.severity.domains[dimension].override
+        assessment.severity.domains[dimension].override = nil
+        
+        AuditLog.shared.append(AuditEvent(
+            timestamp: Date(),
+            userId: user.userId,
+            action: .domainOverrideCleared,
+            target: "D\(dimension + 1)",
+            oldValue: oldOverride.map { String($0.value) } ?? "nil",
+            newValue: "auto",
+            metadata: [:]
+        ))
+        
+        try assessment.save()
+        
+        // Show undo option
+        UndoManager.shared.showUndo(
+            message: "Override removed",
+            bucket: "override_reset"
+        ) {
+            // Restore previous override
+            assessment.severity.domains[dimension].override = oldOverride
+            try? assessment.save()
+        }
+    }
+    
+    /// Apply overall override
+    func applyOverallOverride(
+        assessment: inout Assessment,
+        value: Int,
+        reason: String,
+        category: OverrideCategory,
+        acknowledgesEmergency: Bool,
+        user: UserRef
+    ) throws {
+        let computed = assessment.severity.computedOverall
+        
+        // Cannot drop below computed
+        guard value >= computed else {
+            throw ValidationError.floorViolation(computed)
+        }
+        
+        // Same validation as domain override
+        let trimmedReason = reason.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmedReason.count >= 15 else {
+            throw ValidationError.reasonTooShort
+        }
+        
+        let override = SeverityOverride(
+            enabled: true,
+            value: value,
+            reason: trimmedReason,
+            category: category,
+            createdBy: user,
+            createdAt: Date(),
+            acknowledgesEmergency: acknowledgesEmergency
+        )
+        
+        let oldValue = assessment.severity.finalOverall
+        assessment.severity.overallOverride = override
+        
+        AuditLog.shared.append(AuditEvent(
+            timestamp: Date(),
+            userId: user.userId,
+            action: .overallOverrideSet,
+            target: "Overall",
+            oldValue: String(oldValue),
+            newValue: String(value),
+            metadata: [
+                "computed": String(computed),
+                "reason": trimmedReason,
+                "category": category.rawValue,
+                "ack_emergency": String(acknowledgesEmergency)
+            ]
+        ))
+        
+        try assessment.save()
+    }
+}
+```
+
+**SwiftUI Views:**
+
+```swift
+// MARK: - Severity Override Sheet
+struct SeverityOverrideSheet: View {
+    @Binding var domainState: DomainState
+    @State private var overrideEnabled = false
+    @State private var overrideValue = 0
+    @State private var reason = ""
+    @State private var category: OverrideCategory = .clinicalJudgment
+    @State private var acknowledgesEmergency = false
+    @State private var errorMessage: String?
+    
+    let dimension: Int
+    let currentUser: UserRef
+    let onApply: () -> Void
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                // Current state
+                Section("Current Severity") {
+                    HStack {
+                        Text("Auto-Calculated:")
+                        Spacer()
+                        SeverityChip(level: domainState.computedSeverity ?? 0, label: "Auto")
+                    }
+                    
+                    if let floor = domainState.minFloor, floor > 0 {
+                        HStack {
+                            Text("Minimum Floor:")
+                            Spacer()
+                            SeverityChip(level: floor, label: "Floor")
+                        }
+                        .foregroundColor(.orange)
+                    }
+                    
+                    HStack {
+                        Text("Final Severity:")
+                        Spacer()
+                        SeverityChip(level: domainState.finalSeverity, label: "Final")
+                    }
+                    .font(.headline)
+                }
+                
+                // Override controls
+                Section("Override") {
+                    Toggle("Override severity", isOn: $overrideEnabled)
+                    
+                    if overrideEnabled {
+                        Picker("New Severity", selection: $overrideValue) {
+                            ForEach(0...4, id: \.self) { level in
+                                Text("Severity \(level)").tag(level)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                        
+                        Picker("Category", selection: $category) {
+                            ForEach(OverrideCategory.allCases, id: \.self) { cat in
+                                Text(cat.rawValue).tag(cat)
+                            }
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Reason (min 15 characters)")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            TextEditor(text: $reason)
+                                .frame(height: 80)
+                                .border(Color.gray.opacity(0.3))
+                            Text("\(reason.count) characters")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        if let floor = domainState.minFloor, floor > 0 {
+                            Toggle("I acknowledge emergency constraints", isOn: $acknowledgesEmergency)
+                                .foregroundColor(.red)
+                        }
+                    }
+                }
+                
+                // Warnings
+                if let floor = domainState.minFloor, floor > 0, overrideEnabled {
+                    Section {
+                        Label("Minimum allowed is \(floor) due to active safety triggers.", systemImage: "exclamationmark.triangle.fill")
+                            .foregroundColor(.orange)
+                    }
+                }
+                
+                if let error = errorMessage {
+                    Section {
+                        Text(error)
+                            .foregroundColor(.red)
+                    }
+                }
+            }
+            .navigationTitle("D\(dimension + 1) Severity Override")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        // dismiss
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Apply") {
+                        applyOverride()
+                    }
+                    .disabled(!canApply)
+                }
+            }
+        }
+    }
+    
+    var canApply: Bool {
+        guard overrideEnabled else { return false }
+        guard reason.trimmingCharacters(in: .whitespacesAndNewlines).count >= 15 else { return false }
+        if let floor = domainState.minFloor, floor > 0 {
+            guard acknowledgesEmergency else { return false }
+            guard overrideValue >= floor else { return false }
+        }
+        return true
+    }
+    
+    func applyOverride() {
+        do {
+            var assessment = Assessment.current // placeholder
+            try SeverityOverrideManager().applyDomainOverride(
+                assessment: &assessment,
+                dimension: dimension,
+                value: overrideValue,
+                reason: reason,
+                category: category,
+                acknowledgesEmergency: acknowledgesEmergency,
+                user: currentUser
+            )
+            onApply()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+}
+
+// MARK: - Severity Chip Component
+struct SeverityChip: View {
+    let level: Int
+    let label: String
+    
+    var color: Color {
+        switch level {
+        case 0: return .gray
+        case 1: return .green
+        case 2: return .yellow
+        case 3: return .orange
+        case 4: return .red
+        default: return .gray
+        }
+    }
+    
+    var body: some View {
+        HStack(spacing: 4) {
+            Text("\(label): \(level)")
+                .font(.caption.bold())
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(color.opacity(0.2))
+                .foregroundColor(color)
+                .cornerRadius(8)
+        }
+    }
+}
+```
+
+**Integration into Domain Views:**
+
+```swift
+// Add to each domain summary view
+VStack(alignment: .leading, spacing: 8) {
+    HStack {
+        Text("Severity")
+            .font(.headline)
+        Spacer()
+        SeverityChip(level: domainState.computedSeverity ?? 0, label: "Auto")
+        if domainState.override != nil {
+            SeverityChip(level: domainState.finalSeverity, label: "Final")
+            Image(systemName: "pencil.circle.fill")
+                .foregroundColor(.orange)
+        }
+    }
+    
+    Button("Override Severity") {
+        showOverrideSheet = true
+    }
+    .buttonStyle(.bordered)
+}
+.sheet(isPresented: $showOverrideSheet) {
+    SeverityOverrideSheet(
+        domainState: $domainState,
+        dimension: dimensionIndex,
+        currentUser: currentUser,
+        onApply: {
+            showOverrideSheet = false
+            recalculateOverall()
+        }
+    )
+}
+```
+
+### Testing
+
+```swift
+// MARK: - SeverityCalculationTests.swift
+import XCTest
+
+class SeverityCalculationTests: XCTestCase {
+    
+    func testD1_SevereWithdrawal_Returns4() {
+        var domain = Domain(type: .d1_acute_intox_withdrawal)
+        domain.answers["withdrawal_symptoms"] = .bool(true)
+        domain.answers["withdrawal_severity"] = .string("Severe")
+        domain.answers["used_last_48h"] = .bool(true)
+        
+        let severity = SeverityCalculator().calculateSeverity(for: domain)
+        XCTAssertEqual(severity, 4)
+    }
+    
+    func testD3_SuicidePlanIntent_Returns4() {
+        var domain = Domain(type: .d3_emotional)
+        domain.answers["suicidal_ideation_today"] = .bool(true)
+        domain.answers["suicide_plan"] = .bool(true)
+        domain.answers["suicide_intent"] = .bool(true)
+        
+        let severity = SeverityCalculator().calculateSeverity(for: domain)
+        XCTAssertEqual(severity, 4)
+    }
+    
+    func testOverride_BelowFloor_ThrowsError() {
+        var assessment = Assessment()
+        assessment.severity.domains[2].minFloor = 3
+        
+        XCTAssertThrowsError(
+            try SeverityOverrideManager().applyDomainOverride(
+                assessment: &assessment,
+                dimension: 2,
+                value: 2,
+                reason: "Trying to override below floor",
+                category: .clinicalJudgment,
+                acknowledgesEmergency: false,
+                user: UserRef(userId: "test", name: "Test", role: "Clinician")
+            )
+        ) { error in
+            XCTAssertTrue(error is SeverityOverrideManager.ValidationError)
+        }
+    }
+    
+    func testOverride_RequiresAcknowledgement_WhenFloorActive() {
+        var assessment = Assessment()
+        assessment.severity.domains[2].minFloor = 3
+        
+        XCTAssertThrowsError(
+            try SeverityOverrideManager().applyDomainOverride(
+                assessment: &assessment,
+                dimension: 2,
+                value: 3,
+                reason: "Valid reason here that is long enough",
+                category: .clinicalJudgment,
+                acknowledgesEmergency: false,
+                user: UserRef(userId: "test", name: "Test", role: "Clinician")
+            )
+        ) { error in
+            guard case SeverityOverrideManager.ValidationError.emergencyAckRequired = error else {
+                XCTFail("Wrong error type")
+                return
+            }
+        }
+    }
+    
+    func testOverride_AuditLog_RecordsChange() {
+        var assessment = Assessment()
+        let auditLog = AuditLog.shared
+        auditLog.clear() // reset
+        
+        try? SeverityOverrideManager().applyDomainOverride(
+            assessment: &assessment,
+            dimension: 0,
+            value: 4,
+            reason: "Clinical judgment based on patient presentation",
+            category: .clinicalJudgment,
+            acknowledgesEmergency: false,
+            user: UserRef(userId: "kdial", name: "Dr. Dial", role: "Clinician")
+        )
+        
+        let events = auditLog.getEvents(for: assessment.id)
+        XCTAssertEqual(events.count, 1)
+        XCTAssertEqual(events[0].action, .domainOverrideSet)
+        XCTAssertEqual(events[0].newValue, "4")
+    }
+}
+```
+
+### Export Integration
+
+Add to `computed.json`:
+
+```json
+{
+  "domains": [
+    {
+      "dimension": 1,
+      "computed": 3,
+      "minFloor": 3,
+      "override": {
+        "enabled": true,
+        "value": 4,
+        "reason": "Severe psychosis with command hallucinations",
+        "category": "clinicalJudgment",
+        "createdBy": {"userId": "kdial", "name": "Dr. Dial", "role": "Clinician"},
+        "createdAt": "2025-11-13T13:41:22Z",
+        "acknowledgesEmergency": true
+      },
+      "final": 4
+    }
+  ],
+  "overall": {
+    "computed": 4,
+    "override": null,
+    "final": 4
+  }
+}
+```
+
+Add to PDF footer when override present:
+```
+"Final rating reflects clinician override by Dr. Dial on 2025-11-13 13:41 EST"
 ```
 
 ---
 
-## 📋 UPDATED P0 CHECKLIST
+## 12. Updated 5-Day Schedule
 
 Add to Master TODO P0 section:
 
@@ -984,41 +1829,119 @@ Add to Master TODO P0 section:
 
 ---
 
-### Updated Day 1: P0 Blockers + Settings (10 hours)
+### Day 1: P0 Blockers + Settings + Severity (12 hours)
 
-**Add to afternoon**:
-5. AppSettings + SettingsView (3h)
-   - Create AppSettings.swift with all 7 sections
-   - Create SettingsView.swift
-   - Wire "Purge PHI" button
-   - Test: All settings persist
+**Morning (6h)**:
+1. Intake Header UI (2h)
+   - Blocking screen before D1 access
+   - All validation from enhanced IntakeHeader
+   - Error states and inline help
+   
+2. Severity Auto-Calculation (3h)
+   - Add SeverityCalculator class with all D1-D6 logic
+   - Add DomainState and AssessmentSeverity structs
+   - Integrate into Domain answer changes
+   - Test: All dimension calculations with test fixtures
 
-6. CompactPatientHeader (1h)
-   - Create component
-   - Add to all dimension forms
-   - Make sticky
-   - Test: Always visible
+3. Validation Matrix core (1h)
+   - ValidationRule struct
+   - Core validation engine
+   - Hook into Domain.answers changes
+
+**Afternoon (4h)**:
+4. Emergency Banner registry (2h)
+   - EmergencyTrigger registry
+   - Banner UI component
+   - Integration with all 6 triggers
+   - Hook emergency floors into severity calculation
+
+5. Severity Override System (2h)
+   - Add SeverityOverride struct
+   - Add SeverityOverrideManager with validation
+   - Add SeverityOverrideSheet UI
+   - Add SeverityChip component
+   - Test: Floor constraints, acknowledgement, audit
+
+**Evening (2h)**:
+6. AppSettings + SettingsView (1h)
+   - Paste AppSettings struct from guide
+   - Paste SettingsView from guide
+   - Test persistence
+  
+7. CompactPatientHeader (1h)
+   - Paste from guide
+   - Make sticky above all forms
+   - Test with navigation
+
+**Deliverables**:
+- ✅ Intake header blocks D1
+- ✅ All severity calculations working
+- ✅ Override system with audit trail
+- ✅ Emergency floors enforced
+- ✅ Settings + patient header complete
 
 ---
 
-### Updated Day 4: Testing + UX Polish (10 hours)
+### Day 2: Validation + Emergency + Severity Complete (8 hours)
 
-**Replace afternoon with**:
-3. Sessions Primary Column (3h)
+**Morning (4h)**:
+1. Complete validation matrix (all D1-D6 rules)
+2. Complete emergency trigger integration
+3. Test all dimension severity calculations
+4. Test override floor constraints with all emergencies
+
+**Afternoon (4h)**:
+5. Integration testing (all 12 test fixtures)
+6. Smoke tests passing
+7. Fix edge cases
+8. Documentation of severity algorithms
+
+**Deliverables**:
+- ✅ All dimension rules implemented
+- ✅ All emergency triggers working
+- ✅ All severity calculations verified
+- ✅ Override system fully tested
+- ✅ All smoke tests passing
+
+---
+
+### Day 3: Storage + Export (8 hours)
+
+(No changes - proceed as planned in Master TODO)
+
+---
+
+### Day 4: Testing + UX Polish (10 hours)
+
+**Morning (4h)**:
+1. Severity display polish (chips, colors, badges)
+2. Override UI refinement
+3. Final severity integration testing
+4. Test with real patient scenarios
+
+**Afternoon (6h)**:
+5. Sessions Primary Column (3h)
    - Convert drawer to primary column
    - Add search + filter
    - Add swipe actions
    - Test: Keyboard shortcuts work
 
-4. Test Coverage Completion (1h)
+6. Test Coverage Completion (3h)
    - FORM_FIELD_MAP coverage test
    - Storage corruption test
-   - Property-based tests
+   - Property-based tests (severity idempotence)
    - Accessibility audit
+   - Severity calculation tests for all dimensions
+
+**Deliverables**:
+- ✅ Severity system polished and tested
+- ✅ Sessions UX complete
+- ✅ All tests passing
+- ✅ Production ready
 
 ---
 
-## ✅ FINAL CHECKLIST
+## ✅ FINAL CHECKLIST (50+ items)
 
 ### Security & Privacy
 - [ ] AES-256 encryption enabled
@@ -1028,6 +1951,7 @@ Add to Master TODO P0 section:
 - [ ] Purge PHI button
 - [ ] Audit log per session
 - [ ] Emergency banner tracking
+- [ ] Override audit trail complete
 
 ### Compliance
 - [ ] Ruleset versioned
@@ -1038,6 +1962,35 @@ Add to Master TODO P0 section:
 - [ ] FORM_FIELD_MAP coverage
 - [ ] Export reproducibility
 
+### Validation + Emergency + Severity
+- [ ] Validation matrix enforces all D1-D6 rules
+- [ ] All 6 emergency triggers functional
+- [ ] Emergency banner dismissal logged
+- [ ] Inline validation errors shown
+- [ ] All test fixtures pass validation
+- [ ] Severity auto-calculated for all dimensions (D1-D6)
+- [ ] Override requires reason (min 15 chars)
+- [ ] Override enforces floor constraints
+- [ ] Override requires emergency acknowledgement when floor > 0
+- [ ] Override audit trail complete
+- [ ] Overall severity computed from domain finals
+- [ ] Severity chips display baseline + final
+- [ ] Reset override shows undo toast
+- [ ] D3 suicide/homicide emergencies trigger floor
+- [ ] D5 imminent relapse triggers floor
+- [ ] D6 homelessness/DV triggers floor
+
+### Export
+- [ ] Export includes all metadata (ruleset, timezone, etc.)
+- [ ] Export includes severity overrides in computed.json
+- [ ] Export includes audit.log.jsonl with all override events
+- [ ] PDF fills all FORM_FIELD_MAP entries
+- [ ] PDF displays final severity (post-override)
+- [ ] Export envelope has checksum
+- [ ] PDF footer shows override attribution when present
+- [ ] Signature placement correct
+- [ ] File naming: ASAMPlan_<sessionId>.pdf
+
 ### UX & Accessibility
 - [ ] Sessions primary column
 - [ ] Search + filter
@@ -1047,6 +2000,8 @@ Add to Master TODO P0 section:
 - [ ] 44pt hit targets
 - [ ] VoiceOver labels
 - [ ] High contrast mode
+- [ ] Severity chip colors accessible
+- [ ] Override sheet accessible
 
 ### Settings Complete
 - [ ] Privacy (5 controls)
@@ -1059,4 +2014,4 @@ Add to Master TODO P0 section:
 
 ---
 
-**Manager's Note**: Every file name, struct name, and setting key above is paste-ready. Use these scaffolds to ship production-grade security and compliance in 5 days.
+**Manager's Note**: Every file name, struct name, and setting key above is paste-ready. Use these scaffolds to ship production-grade security, compliance, AND clinician-grade severity assessment in 5 days.

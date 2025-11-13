@@ -30,6 +30,11 @@ struct CategorizedHealthIssuesView: View {
         question.categorizedHealthIssues?.macros ?? []
     }
     
+    // D3 symptoms question supports dual-checkbox pattern (past 30 days + AOD-only)
+    private var isDimension3Symptoms: Bool {
+        question.id == "d3_09_symptoms"
+    }
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
@@ -162,9 +167,49 @@ struct CategorizedHealthIssuesView: View {
     // MARK: - Categories Section
     
     private var categoriesSection: some View {
-        ForEach(filteredAndGroupedCategories, id: \.id) { category in
-            categoryView(category)
+        VStack(alignment: .leading, spacing: 16) {
+            // D3: Column headers for dual-checkbox layout
+            if isDimension3Symptoms {
+                d3ColumnHeaders
+            }
+            
+            ForEach(filteredAndGroupedCategories, id: \.id) { category in
+                categoryView(category)
+            }
         }
+    }
+    
+    // D3: Column headers for symptom table
+    private var d3ColumnHeaders: some View {
+        HStack(alignment: .center, spacing: 12) {
+            Text("Symptom")
+                .font(.caption)
+                .fontWeight(.semibold)
+                .foregroundColor(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Spacer()
+            
+            Text("Past\n30 days")
+                .font(.caption2)
+                .fontWeight(.semibold)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(width: 50)
+            
+            Text("Only when\nusing/withdrawing")
+                .font(.caption2)
+                .fontWeight(.semibold)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(width: 70)
+            
+            Spacer().frame(width: 60) // Space for AOD-only pill
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+        .background(Color(.systemGray6).opacity(0.5))
+        .cornerRadius(8)
     }
     
     private var filteredAndGroupedCategories: [HealthIssueCategory] {
@@ -196,6 +241,7 @@ struct CategorizedHealthIssuesView: View {
     private func categoryView(_ category: HealthIssueCategory) -> some View {
         let isExpanded = expandedCategories.contains(category.id) || sortMode == .alphabetical
         let selectedCount = category.items.filter { selectedItems.keys.contains($0.id) }.count
+        let aodOnlyCount = isDimension3Symptoms ? category.items.filter { selectedItems[$0.id]?.aodOnly == true }.count : 0
         
         return VStack(alignment: .leading, spacing: 12) {
             // Category header
@@ -210,9 +256,15 @@ struct CategorizedHealthIssuesView: View {
                             .font(.headline)
                             .foregroundColor(.primary)
                         
-                        Text("(\(selectedCount)/\(category.items.count))")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        if isDimension3Symptoms && aodOnlyCount > 0 {
+                            Text("(\(selectedCount)/\(category.items.count) • \(aodOnlyCount) AOD-only)")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        } else {
+                            Text("(\(selectedCount)/\(category.items.count))")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
                         
                         Spacer()
                         
@@ -253,22 +305,13 @@ struct CategorizedHealthIssuesView: View {
     
     private func itemView(_ item: HealthIssueItem) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            // Checkbox
-            Button(action: { toggleItem(item.id) }) {
-                HStack(alignment: .top, spacing: 8) {
-                    Image(systemName: selectedItems.keys.contains(item.id) ? "checkmark.square.fill" : "square")
-                        .font(.body)
-                        .foregroundColor(selectedItems.keys.contains(item.id) ? .blue : .secondary)
-                    
-                    Text(item.label)
-                        .font(.body)
-                        .foregroundColor(.primary)
-                        .multilineTextAlignment(.leading)
-                    
-                    Spacer()
-                }
+            if isDimension3Symptoms {
+                // D3: Dual checkbox pattern (Past 30 days + AOD-only)
+                d3SymptomRow(item)
+            } else {
+                // D2 and others: Single checkbox
+                standardItemRow(item)
             }
-            .buttonStyle(PlainButtonStyle())
             
             // Multi-select dropdown or text input if checked
             if selectedItems.keys.contains(item.id) {
@@ -279,6 +322,75 @@ struct CategorizedHealthIssuesView: View {
                 }
             }
         }
+    }
+    
+    // Standard single-checkbox row (D2, etc.)
+    private func standardItemRow(_ item: HealthIssueItem) -> some View {
+        Button(action: { toggleItem(item.id) }) {
+            HStack(alignment: .top, spacing: 8) {
+                Image(systemName: selectedItems.keys.contains(item.id) ? "checkmark.square.fill" : "square")
+                    .font(.body)
+                    .foregroundColor(selectedItems.keys.contains(item.id) ? .blue : .secondary)
+                
+                Text(item.label)
+                    .font(.body)
+                    .foregroundColor(.primary)
+                    .multilineTextAlignment(.leading)
+                
+                Spacer()
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+    
+    // D3: Dual-checkbox row with AOD-only column
+    private func d3SymptomRow(_ item: HealthIssueItem) -> some View {
+        HStack(alignment: .center, spacing: 12) {
+            // Symptom label
+            Text(item.label)
+                .font(.body)
+                .foregroundColor(.primary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Spacer()
+            
+            // Past 30 days checkbox
+            Button(action: { toggleItem(item.id) }) {
+                Image(systemName: selectedItems.keys.contains(item.id) ? "checkmark.square.fill" : "square")
+                    .font(.title3)
+                    .foregroundColor(selectedItems.keys.contains(item.id) ? .blue : .secondary)
+                    .frame(width: 32, height: 32)
+            }
+            .buttonStyle(PlainButtonStyle())
+            .accessibilityLabel("\(item.label) — past 30 days")
+            
+            // AOD-only checkbox
+            Button(action: { toggleAODOnly(item.id) }) {
+                Image(systemName: (selectedItems[item.id]?.aodOnly == true) ? "checkmark.square.fill" : "square")
+                    .font(.title3)
+                    .foregroundColor((selectedItems[item.id]?.aodOnly == true) ? .orange : .secondary)
+                    .frame(width: 32, height: 32)
+            }
+            .buttonStyle(PlainButtonStyle())
+            .disabled(!selectedItems.keys.contains(item.id))
+            .opacity(selectedItems.keys.contains(item.id) ? 1.0 : 0.4)
+            .accessibilityLabel("\(item.label) — only when using or withdrawing")
+            
+            // AOD-only pill indicator
+            if selectedItems[item.id]?.aodOnly == true {
+                Text("AOD-only")
+                    .font(.caption2)
+                    .fontWeight(.medium)
+                    .foregroundColor(.orange)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color.orange.opacity(0.15))
+                    )
+            }
+        }
+        .padding(.vertical, 4)
     }
     
     // MARK: - Multi-Select Dropdown (Creatable)
@@ -412,10 +524,30 @@ struct CategorizedHealthIssuesView: View {
     
     private func toggleItem(_ itemId: String) {
         if selectedItems.keys.contains(itemId) {
+            // Rule 2: Unchecking present clears AOD-only
             selectedItems.removeValue(forKey: itemId)
         } else {
             selectedItems[itemId] = HealthIssueSelection()
             // Auto-expand the category containing this item
+            if let category = categories.first(where: { $0.items.contains(where: { $0.id == itemId }) }) {
+                expandedCategories.insert(category.id)
+            }
+        }
+    }
+    
+    // D3: Toggle AOD-only status (Rule 1: aodOnly => present)
+    private func toggleAODOnly(_ itemId: String) {
+        if var selection = selectedItems[itemId] {
+            // Toggle AOD-only
+            selection.aodOnly = !(selection.aodOnly ?? false)
+            selectedItems[itemId] = selection
+        } else {
+            // Rule 1: If AOD-only is checked, auto-check present
+            var selection = HealthIssueSelection()
+            selection.aodOnly = true
+            selectedItems[itemId] = selection
+            
+            // Auto-expand the category
             if let category = categories.first(where: { $0.items.contains(where: { $0.id == itemId }) }) {
                 expandedCategories.insert(category.id)
             }
@@ -565,12 +697,14 @@ struct HealthIssueSelection: Equatable {
     var multiSelectValues: [String]?
     var customEntries: [String]?  // User-added custom items (audit-clean separation)
     var details: [String: [String: Any]]?  // Optional metadata per item (e.g., reactions)
+    var aodOnly: Bool?  // D3: symptom occurs only when using/withdrawing from AOD
     
     // Custom Equatable implementation since [String: Any] isn't Equatable by default
     static func == (lhs: HealthIssueSelection, rhs: HealthIssueSelection) -> Bool {
         return lhs.noteText == rhs.noteText &&
                lhs.multiSelectValues == rhs.multiSelectValues &&
-               lhs.customEntries == rhs.customEntries
+               lhs.customEntries == rhs.customEntries &&
+               lhs.aodOnly == rhs.aodOnly
         // Note: details field excluded from equality check due to Any type
     }
 }

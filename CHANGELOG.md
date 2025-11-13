@@ -1,5 +1,42 @@
 # CHANGELOG.md
 
+## 1.3.0 — 2025-11-13 (Root Cleanup & Development Branch)
+
+### Added — Development Infrastructure
+- **Created dev branch** - Safe experimentation branch while preserving stable master for demos
+- **Added docs/dev-notes/** - Archive directory for 47 development status files
+- **Created dev-notes index** - Comprehensive README.md organizing historical documentation
+
+### Changed — Repository Organization
+- **Cleaned root directory** - Moved 47 status/implementation documents to `docs/dev-notes/`
+  - All dimension implementation notes (D1-D6)
+  - UI/UX fixes (sidebar, navigation, layout)
+  - Build and compilation documentation
+  - Critical fixes and issue resolution docs
+- **Moved scripts** - Relocated `add_files_to_xcode.rb` to `scripts/` directory
+- **Updated INDEX.md** - Reflected latest project status with all 6 dimensions working
+- **Root hygiene check** - Now passing with only essential files in root
+
+### Fixed — All Dimensions Working
+- **D2 and D6 severity ratings** - Added required `text` field to fix decoder errors
+- **D3 dual-checkbox pattern** - Implemented AOD-only column with complete ASAM paper form compliance
+  - Added `aodOnly` field to HealthIssueSelection model
+  - Created dual-checkbox UI with column headers
+  - Implemented Rules 1 & 2 (AOD-only => present, unchecking present clears AOD-only)
+  - Added category counts showing AOD-only numbers
+  - Orange pill indicators and accessibility labels
+
+### Repository Status
+- ✅ **Root hygiene passing** - Agent ops check successful
+- ✅ **All 6 dimensions working** - D1-D6 with colored severity cards
+- ✅ **Development branch ready** - Safe experimentation environment
+- ✅ **Documentation archived** - Historical context preserved in dev-notes
+- ✅ **Project organized** - Clean structure for ongoing development
+
+### Git Branches
+- **master** - Stable demo version (all features working, pushed to origin)
+- **dev** - Development branch for experimentation (just created, pushed to origin)
+
 ## 1.2.1 — 2025-11-11 (Repository Cleanup & Organization)
 
 ### Changed — Repository Structure

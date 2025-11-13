@@ -78,10 +78,9 @@ actor TokenProvider {
             throw TokenError.refreshFailed("HTTP \((response as? HTTPURLResponse)?.statusCode ?? -1)")
         }
 
+        // Decode directly without detached task to avoid Swift 6 concurrency issues
         let decoder = JSONDecoder()
-        return try await Task.detached {
-            try decoder.decode(TokenResponse.self, from: data)
-        }.value
+        return try decoder.decode(TokenResponse.self, from: data)
     }
 }
 

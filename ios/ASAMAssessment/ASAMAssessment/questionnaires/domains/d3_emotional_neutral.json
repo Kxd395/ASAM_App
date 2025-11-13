@@ -557,8 +557,8 @@
         "safety_rules": [
           {
             "condition": "rating >= 3",
-            "severity": "critical",
-            "message": "If 3 or 4 is selected, urgent mental health assessment and safety protocols required"
+            "banner": "If 3 or 4 is selected, urgent mental health assessment and safety protocols required",
+            "severity": "critical"
           }
         ]
       }

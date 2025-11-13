@@ -12,30 +12,31 @@ struct SeverityRatingView: View {
     let question: Question
     @Binding var answer: AnswerValue
     @EnvironmentObject private var assessmentStore: AssessmentStore
-    
+
     @State private var selectedRating: Int?
     @State private var rationale: String = ""
     @State private var selectedSubstances: Set<String> = []
     @State private var substanceText: [String: String] = [:]  // For text inputs
     @State private var additionalComments: String = ""
     @State private var showRationaleError: Bool = false
-    
+    @State private var isLoadingInitialData: Bool = true  // Prevent onChange during initial load
+
     private var metadata: SeverityRatingMetadata? {
         question.severityRating
     }
-    
-    private var cards: [SeverityCard] {
+
+    private var cards: [SeverityCardData] {
         metadata?.cards ?? []
     }
-    
+
     private var substanceOptions: [SubstanceOption] {
         metadata?.substanceOptions ?? []
     }
-    
+
     private var safetyRules: [SafetyRule] {
         metadata?.safetyRules ?? []
     }
-    
+
     // Check if rating triggers safety warnings
     private var activeSafetyRules: [SafetyRule] {
         guard let rating = selectedRating else { return [] }
@@ -43,63 +44,63 @@ struct SeverityRatingView: View {
             evaluateSafetyCondition(rule.condition, rating: rating)
         }
     }
-    
+
     // Check for substance-specific warnings
     private var hasHighRiskSubstances: Bool {
         let rating = selectedRating ?? 0
         return rating >= 2 && (selectedSubstances.contains("alcohol") || selectedSubstances.contains("benzodiazepines"))
     }
-    
+
     private var hasStimulants: Bool {
         !substanceText["stimulants", default: ""].isEmpty
     }
-    
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 // DECISION ZONE HEADER - Visually distinct
                 decisionBandHeader
-                
+
                 // Decision Container with unique styling
                 VStack(alignment: .leading, spacing: 16) {
                     // Reference information (collapsible)
                     referenceSection
-                    
+
                     // Safety banner (if triggered)
                     if !activeSafetyRules.isEmpty {
                         ForEach(Array(activeSafetyRules.enumerated()), id: \.offset) { _, rule in
                             safetyBanner(for: rule)
                         }
                     }
-                    
+
                     // Substance-specific warnings
                     if hasHighRiskSubstances {
                         withdrawalManagementReminder
                     }
-                    
+
                     if hasStimulants {
                         stimulantWarning
                     }
-                    
+
                     // Severity rating cards
                     severityCardsSection
-                    
+
                     // Selected rating summary (after selection)
                     if let rating = selectedRating {
                         selectedRatingSummary(rating: rating)
                     }
-                    
+
                     // Rationale (shown after selection)
                     if selectedRating != nil {
                         rationaleSection
                     }
-                    
+
                     // Substance selection
                     substanceSection
-                    
+
                     // Additional comments
                     commentsSection
-                    
+
                     // Interviewer instructions
                     interviewerInstructions
                 }
@@ -118,8 +119,13 @@ struct SeverityRatingView: View {
         }
         .onAppear {
             loadExistingAnswer()
+            // Allow onChange handlers to fire after initial load
+            DispatchQueue.main.async {
+                isLoadingInitialData = false
+            }
         }
         .onChange(of: selectedRating) { oldValue, newValue in
+            guard !isLoadingInitialData else { return }
             saveAnswer()
             // Require rationale for high severity
             if let rating = newValue, rating >= 3 {
@@ -129,24 +135,28 @@ struct SeverityRatingView: View {
             }
         }
         .onChange(of: rationale) { _, _ in
+            guard !isLoadingInitialData else { return }
             saveAnswer()
             if let rating = selectedRating, rating >= 3 {
                 showRationaleError = rationale.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             }
         }
         .onChange(of: selectedSubstances) { _, _ in
+            guard !isLoadingInitialData else { return }
             saveAnswer()
         }
         .onChange(of: substanceText) { _, _ in
+            guard !isLoadingInitialData else { return }
             saveAnswer()
         }
         .onChange(of: additionalComments) { _, _ in
+            guard !isLoadingInitialData else { return }
             saveAnswer()
         }
     }
-    
+
     // MARK: - Decision Band Header
-    
+
     private var decisionBandHeader: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .center, spacing: 12) {
@@ -154,21 +164,21 @@ struct SeverityRatingView: View {
                 Image(systemName: "bolt.fill")
                     .font(.title2)
                     .foregroundColor(.decisionAccent)
-                
+
                 // Title
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Severity Rating - Dimension 1")
                         .font(.system(.title3, design: .rounded))
                         .fontWeight(.bold)
                         .foregroundColor(.decisionBandText)
-                    
+
                     Text("Acute Intoxication and/or Withdrawal Potential")
                         .font(.system(.caption, design: .rounded))
                         .foregroundColor(.decisionBandText.opacity(0.8))
                 }
-                
+
                 Spacer()
-                
+
                 // Decision Required Pill
                 Text("DECISION REQUIRED")
                     .font(.system(.caption2, design: .rounded))
@@ -181,7 +191,7 @@ struct SeverityRatingView: View {
                             .fill(Color.decisionPillBackground)
                     )
             }
-            
+
             // Purpose statement
             Text("Choose the patient's current intensity and urgency for services")
                 .font(.system(.subheadline, design: .rounded))
@@ -194,17 +204,17 @@ struct SeverityRatingView: View {
                 .fill(Color.decisionBandBackground)
         )
     }
-    
+
     // MARK: - Selected Rating Summary
-    
+
     private func selectedRatingSummary(rating: Int) -> some View {
         guard let card = cards.first(where: { $0.rating == rating }) else {
             return AnyView(EmptyView())
         }
-        
+
         let bgColor = Color.severityCardBackground(colorHex: card.color)
         let borderColor = Color.severityCardBorder(colorHex: card.border)
-        
+
         return AnyView(
             VStack(alignment: .leading, spacing: 12) {
                 // Header with color swatch
@@ -212,18 +222,18 @@ struct SeverityRatingView: View {
                     RoundedRectangle(cornerRadius: 4)
                         .fill(borderColor)
                         .frame(width: 20, height: 20)
-                    
+
                     Text("Selected: \(card.title)")
                         .font(.system(.headline, design: .rounded))
                         .fontWeight(.bold)
-                    
+
                     Spacer()
-                    
+
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.blue)
                         .font(.title3)
                 }
-                
+
                 // Bullets
                 VStack(alignment: .leading, spacing: 6) {
                     ForEach(card.bullets, id: \.self) { bullet in
@@ -236,14 +246,14 @@ struct SeverityRatingView: View {
                         }
                     }
                 }
-                
+
                 // Disposition
                 if !card.disposition.isEmpty {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Disposition:")
                             .font(.system(.subheadline, design: .rounded))
                             .fontWeight(.semibold)
-                        
+
                         Text(card.disposition)
                             .font(.system(.body, design: .rounded))
                             .fixedSize(horizontal: false, vertical: true)
@@ -265,16 +275,16 @@ struct SeverityRatingView: View {
             )
         )
     }
-    
+
     // MARK: - Header Section
-    
+
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             // Compact instruction text
             Text("Please circle the intensity and urgency of the patient's CURRENT needs for services based on the information collected in Dimension 1:")
                 .font(.caption)
                 .foregroundColor(.secondary)
-            
+
             // Main question title - responsive sizing
             Text(question.text)
                 .font(.system(.title3, design: .rounded))
@@ -282,7 +292,7 @@ struct SeverityRatingView: View {
                 .foregroundColor(.cardTitle)
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
-            
+
             if question.required {
                 HStack(spacing: 4) {
                     Image(systemName: "asterisk")
@@ -295,9 +305,9 @@ struct SeverityRatingView: View {
             }
         }
     }
-    
+
     // MARK: - Reference Section
-    
+
     private var referenceSection: some View {
         // Collapsible in compact width, always visible in regular
         DisclosureGroup("Guidance & References") {
@@ -306,14 +316,14 @@ struct SeverityRatingView: View {
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundColor(.secondary)
-                
+
                 VStack(alignment: .leading, spacing: 4) {
                     referenceItem(substance: "Alcohol", pages: "147-154")
                     referenceItem(substance: "Sedatives/Hypnotics", pages: "155-161")
                     referenceItem(substance: "Opioids", pages: "162 (Risk Assessment Matrix)")
                 }
                 .padding(.leading, 8)
-                
+
                 HStack(alignment: .top, spacing: 8) {
                     Image(systemName: "info.circle.fill")
                         .foregroundColor(.orange)
@@ -330,7 +340,7 @@ struct SeverityRatingView: View {
         .font(.caption)
         .tint(.blue)
     }
-    
+
     private func referenceItem(substance: String, pages: String) -> some View {
         HStack {
             Text("•")
@@ -339,22 +349,22 @@ struct SeverityRatingView: View {
         .font(.caption)
         .foregroundColor(.secondary)
     }
-    
+
     // MARK: - Safety Banners
-    
+
     private func safetyBanner(for rule: SafetyRule) -> some View {
         let isCritical = rule.severity == "critical"
-        
+
         return HStack(alignment: .top, spacing: 12) {
             Image(systemName: isCritical ? "exclamationmark.triangle.fill" : "exclamationmark.circle.fill")
                 .foregroundColor(isCritical ? .red : .orange)
                 .font(.title3)
-            
+
             Text(rule.banner)
                 .font(.subheadline)
                 .fontWeight(.medium)
                 .foregroundColor(isCritical ? .red : .orange)
-            
+
             Spacer()
         }
         .padding()
@@ -365,7 +375,7 @@ struct SeverityRatingView: View {
         )
         .cornerRadius(8)
     }
-    
+
     private var withdrawalManagementReminder: some View {
         HStack(spacing: 12) {
             Image(systemName: "arrow.triangle.branch")
@@ -379,7 +389,7 @@ struct SeverityRatingView: View {
         .background(Color.blue.opacity(0.1))
         .cornerRadius(8)
     }
-    
+
     private var stimulantWarning: some View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: "brain.head.profile")
@@ -392,15 +402,15 @@ struct SeverityRatingView: View {
         .background(Color.purple.opacity(0.1))
         .cornerRadius(8)
     }
-    
+
     // MARK: - Severity Cards Section
-    
+
     private var severityCardsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Select Severity Rating:")
                 .font(.headline)
                 .foregroundColor(.cardTitle)
-            
+
             // Wrapped grid layout with minimum card width - no horizontal scroll
             // Cards wrap to multiple rows based on available width
             // minWidth: 220px ensures cards never get too skinny
@@ -415,7 +425,7 @@ struct SeverityRatingView: View {
                     severityCard(card)
                 }
             }
-            
+
             // Keyboard shortcut hint
             Text("Keyboard shortcuts: Press 0-4 to select rating")
                 .font(.caption2)
@@ -425,12 +435,12 @@ struct SeverityRatingView: View {
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Severity rating selection")
     }
-    
-    private func severityCard(_ card: SeverityCard) -> some View {
+
+    private func severityCard(_ card: SeverityCardData) -> some View {
         let isSelected = selectedRating == card.rating
         let bgColor = Color.severityCardBackground(colorHex: card.color)
         let borderColor = Color.severityCardBorder(colorHex: card.border)
-        
+
         return Button(action: {
             withAnimation(.easeInOut(duration: 0.2)) {
                 selectedRating = card.rating
@@ -443,21 +453,21 @@ struct SeverityRatingView: View {
                     RoundedRectangle(cornerRadius: 4)
                         .fill(borderColor)
                         .frame(width: 16, height: 16)
-                    
+
                     Text(card.title)
                         .font(.system(.subheadline, design: .rounded))
                         .fontWeight(.bold)
                         .foregroundColor(.cardTitle)
-                    
+
                     Spacer()
-                    
+
                     if isSelected {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.blue)
                             .font(.body)
                     }
                 }
-                
+
                 // Bullet points (always visible)
                 VStack(alignment: .leading, spacing: 5) {
                     ForEach(card.bullets, id: \.self) { bullet in
@@ -473,12 +483,12 @@ struct SeverityRatingView: View {
                         }
                     }
                 }
-                
+
                 // Only add spacer if card has disposition (to push it to bottom)
                 if !card.disposition.isEmpty {
                     Spacer(minLength: 8)
                 }
-                
+
                 // Disposition strip (always at bottom if present)
                 if !card.disposition.isEmpty {
                     VStack(alignment: .leading, spacing: 3) {
@@ -486,7 +496,7 @@ struct SeverityRatingView: View {
                             .font(.system(.caption2, design: .rounded))
                             .fontWeight(.semibold)
                             .foregroundColor(.cardDisposition)
-                        
+
                         Text(card.disposition)
                             .font(.system(.caption, design: .rounded))
                             .foregroundColor(.cardText)
@@ -526,23 +536,23 @@ struct SeverityRatingView: View {
         .accessibilityLabel("\(card.title). \(card.bullets.joined(separator: ". "))")
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }
-    
+
     // MARK: - Rationale Section
-    
+
     private var rationaleSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("Rationale")
                     .font(.subheadline)
                     .fontWeight(.medium)
-                
+
                 if let rating = selectedRating, rating >= 3 {
                     Text("(Required for Severe/Very Severe)")
                         .font(.caption)
                         .foregroundColor(.red)
                 }
             }
-            
+
             TextEditor(text: $rationale)
                 .frame(minHeight: 80)
                 .padding(8)
@@ -552,13 +562,13 @@ struct SeverityRatingView: View {
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(showRationaleError ? Color.red : Color.gray.opacity(0.3), lineWidth: 1)
                 )
-            
+
             if rationale.isEmpty {
                 Text("Brief note supporting the selected rating")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
             if showRationaleError {
                 Text("Rationale is required for severity rating 3 or 4")
                     .font(.caption)
@@ -566,15 +576,15 @@ struct SeverityRatingView: View {
             }
         }
     }
-    
+
     // MARK: - Substance Section
-    
+
     private var substanceSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Substance(s) Driving Severity:")
                 .font(.headline)
                 .foregroundColor(.cardTitle)
-            
+
             ForEach(substanceOptions) { option in
                 if option.type == "checkbox" {
                     checkboxOption(option)
@@ -584,7 +594,7 @@ struct SeverityRatingView: View {
             }
         }
     }
-    
+
     private func checkboxOption(_ option: SubstanceOption) -> some View {
         Button(action: {
             if selectedSubstances.contains(option.id) {
@@ -602,13 +612,13 @@ struct SeverityRatingView: View {
         }
         .buttonStyle(PlainButtonStyle())
     }
-    
+
     private func textOption(_ option: SubstanceOption) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(option.label)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
-            
+
             TextField("Enter substance name", text: Binding(
                 get: { substanceText[option.id, default: ""] },
                 set: { substanceText[option.id] = $0 }
@@ -616,15 +626,15 @@ struct SeverityRatingView: View {
             .textFieldStyle(RoundedBorderTextFieldStyle())
         }
     }
-    
+
     // MARK: - Comments Section
-    
+
     private var commentsSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Additional Comments:")
                 .font(.headline)
                 .foregroundColor(.cardTitle)
-            
+
             // Quick chips
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
@@ -634,7 +644,7 @@ struct SeverityRatingView: View {
                     quickChip("No acute symptoms reported today")
                 }
             }
-            
+
             TextEditor(text: $additionalComments)
                 .frame(minHeight: 100)
                 .padding(8)
@@ -646,7 +656,7 @@ struct SeverityRatingView: View {
                 )
         }
     }
-    
+
     private func quickChip(_ text: String) -> some View {
         Button(action: {
             if additionalComments.isEmpty {
@@ -664,20 +674,20 @@ struct SeverityRatingView: View {
                 .cornerRadius(16)
         }
     }
-    
+
     // MARK: - Interviewer Instructions
-    
+
     private var interviewerInstructions: some View {
         HStack(alignment: .top, spacing: 8) {
             Image(systemName: "book.fill")
                 .foregroundColor(.indigo)
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 Text("Interviewer Instructions:")
                     .font(.caption)
                     .fontWeight(.bold)
                     .foregroundColor(.indigo)
-                
+
                 Text("For help assessing D1, see ASAM Criteria, 3rd ed., the textbox titled, \"Dimension 1 Assessment Considerations Include\" on page 44.")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -687,9 +697,9 @@ struct SeverityRatingView: View {
         .background(Color.indigo.opacity(0.1))
         .cornerRadius(8)
     }
-    
+
     // MARK: - Helper Functions
-    
+
     private func evaluateSafetyCondition(_ condition: String, rating: Int) -> Bool {
         // Simple condition parser for "rating >= 3", "rating == 4", etc.
         if condition.contains(">=") {
@@ -705,13 +715,13 @@ struct SeverityRatingView: View {
         }
         return false
     }
-    
+
     private func loadExistingAnswer() {
         // Load from answer if available - AnswerValue is .text(String) with JSON
         guard case .text(let jsonString) = answer else { return }
         guard let data = jsonString.data(using: .utf8) else { return }
         guard let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
-        
+
         if let rating = dict["rating"] as? Int {
             selectedRating = rating
         }
@@ -740,18 +750,18 @@ struct SeverityRatingView: View {
             additionalComments = comments
         }
     }
-    
+
     private func saveAnswer() {
         var result: [String: Any] = [:]
-        
+
         if let rating = selectedRating {
             result["rating"] = rating
         }
-        
+
         if !rationale.isEmpty {
             result["rationale"] = rationale
         }
-        
+
         var substances: [String: Any] = [:]
         for sub in ["alcohol", "opioids", "benzodiazepines"] {
             substances[sub] = selectedSubstances.contains(sub)
@@ -766,11 +776,11 @@ struct SeverityRatingView: View {
             substances["other2"] = other2
         }
         result["substances"] = substances
-        
+
         if !additionalComments.isEmpty {
             result["comments"] = additionalComments
         }
-        
+
         // Convert to JSON string for .text case
         if let jsonData = try? JSONSerialization.data(withJSONObject: result, options: []),
            let jsonString = String(data: jsonData, encoding: .utf8) {

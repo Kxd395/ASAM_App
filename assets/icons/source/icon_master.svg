@@ -1,0 +1,32 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background: Light Gray -->
+  <rect width="1024" height="1024" fill="#F4F6F8"/>
+  
+  <!-- Six-petal wheel centered at 512,512 with radius 380 -->
+  <!-- Represents the 6 ASAM dimensions -->
+  <g transform="translate(512, 512)">
+    <!-- Petal 1 (D1: Acute Intoxication/Withdrawal) -->
+    <path d="M 0,-380 A 380,380 0 0,1 329,-190 L 0,0 Z" fill="#2A63A5"/>
+    
+    <!-- Petal 2 (D2: Biomedical Conditions) -->
+    <path d="M 329,-190 A 380,380 0 0,1 329,190 L 0,0 Z" fill="#2A63A5" opacity="0.9"/>
+    
+    <!-- Petal 3 (D3: Emotional/Behavioral/Cognitive) -->
+    <path d="M 329,190 A 380,380 0 0,1 0,380 L 0,0 Z" fill="#2A63A5" opacity="0.8"/>
+    
+    <!-- Petal 4 (D4: Readiness to Change) -->
+    <path d="M 0,380 A 380,380 0 0,1 -329,190 L 0,0 Z" fill="#2A63A5" opacity="0.7"/>
+    
+    <!-- Petal 5 (D5: Relapse/Continued Use) -->
+    <path d="M -329,190 A 380,380 0 0,1 -329,-190 L 0,0 Z" fill="#2A63A5" opacity="0.6"/>
+    
+    <!-- Petal 6 (D6: Recovery/Living Environment) -->
+    <path d="M -329,-190 A 380,380 0 0,1 0,-380 L 0,0 Z" fill="#2A63A5" opacity="0.5"/>
+    
+    <!-- Center circle: Accent color representing patient at center of care -->
+    <circle r="120" fill="#FF7A5A"/>
+    
+    <!-- Inner white circle for depth -->
+    <circle r="80" fill="#FFFFFF" opacity="0.3"/>
+  </g>
+</svg>

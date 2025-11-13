@@ -19,6 +19,7 @@ struct SeverityRatingView: View {
     @State private var substanceText: [String: String] = [:]  // For text inputs
     @State private var additionalComments: String = ""
     @State private var showRationaleError: Bool = false
+    @State private var isSaving: Bool = false  // Prevent save loops
     
     private var metadata: SeverityRatingMetadata? {
         question.severityRating
@@ -742,6 +743,11 @@ struct SeverityRatingView: View {
     }
     
     private func saveAnswer() {
+        // Prevent re-entrant saves that could cause loops
+        guard !isSaving else { return }
+        isSaving = true
+        defer { isSaving = false }
+        
         var result: [String: Any] = [:]
         
         if let rating = selectedRating {

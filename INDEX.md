@@ -47,7 +47,8 @@
 3. **[ios/IOS_PROTOTYPE_INTEGRATION.md](ios/IOS_PROTOTYPE_INTEGRATION.md)** (30 min) - Complete integration guide
 4. **[ios/ACCESSIBILITY_IMPLEMENTATION.md](ios/ACCESSIBILITY_IMPLEMENTATION.md)** (20 min) - WCAG 2.1 AA guide
 5. **[ios/SAFETY_BANNER_ENHANCEMENT.md](ios/SAFETY_BANNER_ENHANCEMENT.md)** (15 min) - Critical security fix
-6. **🆕 [docs/QUICK_REFERENCE_PERSISTENCE_PROGRESS.md](docs/QUICK_REFERENCE_PERSISTENCE_PROGRESS.md)** (5 min) - Progress bar & persistence fixes
+6. **[docs/QUICK_REFERENCE_PERSISTENCE_PROGRESS.md](docs/QUICK_REFERENCE_PERSISTENCE_PROGRESS.md)** (5 min) - Progress bar & persistence fixes
+7. **🆕 [docs/specs/STORAGE_ARCHITECTURE_COMPARISON.md](docs/specs/STORAGE_ARCHITECTURE_COMPARISON.md)** (20 min) - Storage analysis & roadmap
 7. **🆕 [docs/IMPLEMENTATION_STATUS_PERSISTENCE_PROGRESS.md](docs/IMPLEMENTATION_STATUS_PERSISTENCE_PROGRESS.md)** (10 min) - Complete implementation status
 
 ### **Agent Automation?**
@@ -156,6 +157,8 @@ ASAM_App/                           # Root
 | **[VALIDATION_GATES.json](docs/specs/VALIDATION_GATES.json)** | ✅ Complete | Validation |
 | **[ACCEPTANCE_TESTS.md](docs/specs/ACCEPTANCE_TESTS.md)** | ✅ Complete | Tests |
 | **[TASKS_TODO.md](docs/specs/TASKS_TODO.md)** | ✅ Complete | Tasks |
+| **🆕 [STORAGE_ARCHITECTURE_COMPARISON.md](docs/specs/STORAGE_ARCHITECTURE_COMPARISON.md)** | ✅ Analysis | Storage roadmap |
+| **🆕 [STORAGE_EXPORT_SPRINT_PLAN.md](docs/specs/STORAGE_EXPORT_SPRINT_PLAN.md)** | 📋 Ready | Export implementation |
 
 ### 📖 Integration Guides
 

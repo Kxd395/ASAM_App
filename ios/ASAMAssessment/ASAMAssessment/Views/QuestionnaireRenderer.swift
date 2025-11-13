@@ -152,6 +152,43 @@ struct QuestionnaireRenderer: View {
             validationErrors.removeValue(forKey: question.id)
         }
     }
+    
+    // MARK: - Helper Functions
+    
+    /// Get numeric dimension number from domain string
+    private func getDimensionNumber(for domain: String) -> Int {
+        // Extract numeric part from domain (e.g., "A" -> 1, "1" -> 1, "d1" -> 1)
+        if let number = Int(domain) {
+            return number
+        } else if domain.lowercased().hasPrefix("d") {
+            return Int(domain.dropFirst()) ?? 1
+        } else {
+            // Handle letter domains (A=1, B=2, etc.)
+            return domain.uppercased().unicodeScalars.first.map { Int($0.value) - Int(UnicodeScalar("A").value) + 1 } ?? 1
+        }
+    }
+    
+    /// Get dimension title based on domain number
+    private func getDimensionTitle(for domain: String) -> String {
+        let numericDomain = getDimensionNumber(for: domain)
+        
+        switch numericDomain {
+        case 1:
+            return "Acute Intoxication and/or Withdrawal Potential"
+        case 2:
+            return "Biomedical Conditions and Complications"
+        case 3:
+            return "Emotional, Behavioral, or Cognitive Conditions and Complications"
+        case 4:
+            return "Readiness to Change"
+        case 5:
+            return "Relapse, Continued Use, or Continued Problem Potential"
+        case 6:
+            return "Recovery/Living Environment"
+        default:
+            return "Severity Assessment"
+        }
+    }
 }
 
 // MARK: - Question View
@@ -622,43 +659,6 @@ struct QuestionView: View {
             boolInput = false
             singleSelection = nil
             multipleSelection.removeAll()
-        }
-    }
-    
-    // MARK: - Helper Functions
-    
-    /// Get numeric dimension number from domain string
-    private func getDimensionNumber(for domain: String) -> Int {
-        // Extract numeric part from domain (e.g., "A" -> 1, "1" -> 1, "d1" -> 1)
-        if let number = Int(domain) {
-            return number
-        } else if domain.lowercased().hasPrefix("d") {
-            return Int(domain.dropFirst()) ?? 1
-        } else {
-            // Handle letter domains (A=1, B=2, etc.)
-            return domain.uppercased().unicodeScalars.first.map { Int($0.value) - Int(UnicodeScalar("A").value) + 1 } ?? 1
-        }
-    }
-    
-    /// Get dimension title based on domain number
-    private func getDimensionTitle(for domain: String) -> String {
-        let numericDomain = getDimensionNumber(for: domain)
-        
-        switch numericDomain {
-        case 1:
-            return "Acute Intoxication and/or Withdrawal Potential"
-        case 2:
-            return "Biomedical Conditions and Complications"
-        case 3:
-            return "Emotional, Behavioral, or Cognitive Conditions and Complications"
-        case 4:
-            return "Readiness to Change"
-        case 5:
-            return "Relapse, Continued Use, or Continued Problem Potential"
-        case 6:
-            return "Recovery/Living Environment"
-        default:
-            return "Severity Assessment"
         }
     }
 }

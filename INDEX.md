@@ -147,7 +147,27 @@ ASAM_App/                           # Root
 | **[ACCESSIBILITY_IMPLEMENTATION.md](ios/ACCESSIBILITY_IMPLEMENTATION.md)** | 🔴 CRITICAL | WCAG AA |
 | **[SAFETY_BANNER_ENHANCEMENT.md](ios/SAFETY_BANNER_ENHANCEMENT.md)** | 🔴 STOP-SHIP | Security fix |
 
-### 📊 Specifications
+### 📊 Specifications & Analysis
+
+| Document | Status | Purpose |
+|----------|--------|---------|
+| **🆕 [MASTER_TODO_AUDIT_PLAN.md](docs/MASTER_TODO_AUDIT_PLAN.md)** | ✅ Ready | Master plan synthesizing all audits |
+| **🆕 [STORAGE_ARCHITECTURE_COMPARISON.md](docs/specs/STORAGE_ARCHITECTURE_COMPARISON.md)** | ✅ Analysis | Storage architecture deep dive |
+| **🆕 [STORAGE_EXPORT_SPRINT_PLAN.md](docs/specs/STORAGE_EXPORT_SPRINT_PLAN.md)** | 📋 Ready | Phase 1 export implementation |
+| **🆕 [STORAGE_ANALYSIS_SUMMARY.md](docs/STORAGE_ANALYSIS_SUMMARY.md)** | ✅ Summary | Executive storage summary |
+
+### 🔍 Dimension Audit Checklists
+
+| Dimension | Status | Purpose |
+|-----------|--------|---------|
+| **🆕 [D1_AUDIT_CHECKLIST.md](docs/audit/D1_AUDIT_CHECKLIST.md)** | 📋 Ready | D1: Intoxication/Withdrawal audit |
+| **🆕 [D2_AUDIT_CHECKLIST.md](docs/audit/D2_AUDIT_CHECKLIST.md)** | 📋 Ready | D2: Biomedical Conditions audit |
+| **🆕 [D3_AUDIT_CHECKLIST.md](docs/audit/D3_AUDIT_CHECKLIST.md)** | 📋 Ready | D3: Emotional/Behavioral/Cognitive audit |
+| **🆕 [D4_AUDIT_CHECKLIST.md](docs/audit/D4_AUDIT_CHECKLIST.md)** | 📋 Ready | D4: Readiness to Change audit |
+| **🆕 [D5_AUDIT_CHECKLIST.md](docs/audit/D5_AUDIT_CHECKLIST.md)** | 📋 Ready | D5: Relapse/Continued Use audit |
+| **🆕 [D6_AUDIT_CHECKLIST.md](docs/audit/D6_AUDIT_CHECKLIST.md)** | 📋 Ready | D6: Recovery/Living Environment audit |
+
+### 📊 Original Specifications
 
 | Document | Status | Purpose |
 |----------|--------|---------|

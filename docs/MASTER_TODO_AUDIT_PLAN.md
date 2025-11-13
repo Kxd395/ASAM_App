@@ -2,15 +2,84 @@
 
 **Created**: November 13, 2025  
 **Status**: Active - Ready for Execution  
-**Timeline**: 4-day sprint  
+**Timeline**: 5-day sprint (with prototype safety floor)  
 **Branch**: `dev`
+
+> **⚠️ SECURITY NOTE**: Heavy security features (encryption, full audit trail, export preflight) are **DEFERRED** to post-prototype. See [SECURITY_BACKLOG_DEFERRED.md](SECURITY_BACKLOG_DEFERRED.md) for complete backlog with acceptance criteria. We implement a **lightweight prototype safety floor** now to keep the demo safe without scope creep.
 
 ---
 
-## 🚨 P0 BLOCKERS (Must Fix Before Demo)
+## �️ PROTOTYPE SAFETY FLOOR (Implement Now - P0)
 
-> **🔒 CRITICAL**: See [SECURITY_PRIVACY_HARDENING.md](SECURITY_PRIVACY_HARDENING.md) for production-ready security scaffolds that MUST be implemented alongside these P0 blockers. This includes:
-> - Encryption, audit logging, ruleset versioning, and compliance requirements
+**Purpose**: Lightweight safety measures for demo without full security implementation.
+
+### Required Before Demo
+
+- [ ] **PROTOTYPE_MODE banner visible on every screen**
+  - Persistent header chip: "Demo Build • Synthetic Data Only • Not For Clinical Use"
+  - Color: Orange background, white text
+  - Position: Top of every view, sticky
+  - Gate: `PROTOTYPE_MODE = true` in build config
+
+- [ ] **Export disabled in prototype mode**
+  - Hide "Export PDF" button when `PROTOTYPE_MODE = true`
+  - OR show button but generate redacted dummy PDF with watermark
+  - Watermark: "PROTOTYPE BUILD - NOT FOR CLINICAL USE" diagonal across all pages
+
+- [ ] **Storage path flagged no-backup**
+  - Mark Application Support folder `.isExcludedFromBackup = true`
+  - Verify in preflight before any write
+  - Test: Check `xattr` → `com.apple.metadata:com_apple_backup_excludeItem` present
+
+- [ ] **App switcher snapshot blurred**
+  - Add blur view when app resigns active (`sceneWillResignActive`)
+  - Remove blur when app becomes active (`sceneDidBecomeActive`)
+  - Test: Background app → app switcher shows blur, not form content
+
+- [ ] **Synthetic data only (block real identifiers)**
+  - For MRN/FIN/DOB in prototype mode, show validation error: "Demo build rejects real identifiers"
+  - Seed with test fixtures on first launch
+  - Use obviously fake data: MRN=`DEMO-12345`, Patient Name=`Test Patient (Demo)`
+
+- [ ] **Dev menu: Reset demo data**
+  - Add hidden gesture (3-finger triple-tap on logo) to show dev menu
+  - Button: "Reset Demo Data" with 2-step confirmation
+  - Action: Wipe all assessments, reset to seed fixtures
+
+### Implementation
+
+**Files to Create**:
+- `ios/ASAMAssessment/ASAMAssessment/Config/FeatureFlags.swift`
+  ```swift
+  struct FeatureFlags {
+      static let PROTOTYPE_MODE = true // Set to false for production
+  }
+  ```
+- `ios/ASAMAssessment/ASAMAssessment/Views/Components/PrototypeBanner.swift`
+- `ios/ASAMAssessment/ASAMAssessment/Views/Components/SnapshotBlurView.swift`
+- `ios/ASAMAssessment/ASAMAssessment/Views/DevMenu.swift`
+
+**Files to Modify**:
+- `ContentView.swift` - Add PrototypeBanner at top
+- `SceneDelegate.swift` - Add blur on resign active
+- `IntakeHeaderView.swift` - Block real identifiers in prototype mode
+- `ExportView.swift` - Disable or redact export in prototype mode
+
+**Acceptance Tests**:
+- [ ] Banner visible on all screens
+- [ ] Export blocked or watermarked
+- [ ] No-backup flag verified
+- [ ] App switcher shows blur
+- [ ] Real MRN rejected with error message
+- [ ] Dev menu resets data successfully
+
+---
+
+## �🚨 P0 BLOCKERS (Must Fix Before Demo)
+
+> **🔒 CRITICAL**: See [SECURITY_PRIVACY_HARDENING.md](SECURITY_PRIVACY_HARDENING.md) for production-ready security scaffolds and [SECURITY_BACKLOG_DEFERRED.md](SECURITY_BACKLOG_DEFERRED.md) for post-prototype work. This includes:
+> - **Deferred to Post-Prototype**: Full encryption, comprehensive audit trail, export preflight, PHI redaction
+> - **Prototype Safety Floor**: Lightweight measures above to keep demo safe
 > - **Severity Auto-Calculation + Clinician Override** (Section 11): Auto-calculate severity (0-4) from questionnaire answers for all dimensions (D1-D6), with clinician override capability, audit trail, and emergency floor constraints. Required for clinical consistency and HIPAA compliance.
 
 ### 1. Intake Header (Before D1 Access)
@@ -374,6 +443,134 @@ struct EmergencyBannerRegistry {
 **Test Fixtures**:
 - [ ] `d6_lethal_threat_weapon.json` - Emergency safety issue
 - [ ] `d6_unsafe_home.json` - High risk environment
+
+---
+
+## ⚠️ CRITICAL GAPS (From Hyper-Critical Review)
+
+### Hard Blockers That Must Be Addressed
+
+#### 1. **Security Not First-Class in Plan Flow**
+- **Problem**: Day 0.5 security tasks are narrative, not acceptance-gated
+- **Fix**: Promote to hard gates with explicit pass/fail checks
+- **Action**: Add test IDs and CI gates to Day 0.5 deliverables
+  - [ ] SecureStore test: `testKeychainKeyPersistsAfterRestart()`
+  - [ ] No-backup test: `testStoragePathExcludedFromBackup()`
+  - [ ] Audit log test: `testAuditLogAppendsWithRulesetChecksum()`
+
+#### 2. **Export Can Leak PHI Before SecureStore Live**
+- **Problem**: PDF/bundle creation can run before encryption enabled
+- **Fix**: Add preflight guard that rejects export unless preconditions met
+- **Action**: Create `ExportPreflight.swift` with checks:
+  - [ ] Keychain key present
+  - [ ] Storage path excluded from backup
+  - [ ] NSFileProtection set to `.completeUntilFirstUserAuthentication`
+  - [ ] Ruleset version present
+  - [ ] Block export with error if any check fails
+
+#### 3. **Severity Override Under-Specified**
+- **Problem**: Override audit logging mentioned but data/UI not defined
+- **Fix**: Require: userId, ruleset version+checksum, suggested/final levels, reason code, rationale, timestamp
+- **Action**: ✅ COMPLETE - See SECURITY_PRIVACY_HARDENING.md Section 11
+  - [x] SeverityOverride struct with all required fields
+  - [x] SeverityOverrideManager with validation
+  - [x] SeverityOverrideSheet UI with reason (min 15 chars)
+  - [x] Block "Mark Complete" if reason missing for Sev 3/4
+
+#### 4. **Validation/Emergency Logic Scattered**
+- **Problem**: No deterministic evaluation order, debouncing, idempotency
+- **Fix**: Single state mutation pipeline, not per-field listeners
+- **Action**: Create unified validation reducer
+  - [ ] Single `ValidationPipeline` class
+  - [ ] Debounce field changes (150ms throttle)
+  - [ ] Apply ValidationMatrix → EmergencyRegistry in fixed order
+  - [ ] Idempotent: same input → same output, no flicker
+
+#### 5. **No Definition of Done Per P0**
+- **Problem**: Success criteria exist but no hard acceptance check per P0
+- **Fix**: Map each P0 to at least one fixture and test ID
+- **Action**: See P0 Acceptance Table below ↓
+
+#### 6. **Fixtures Limited on Negatives**
+- **Problem**: Missing boundary and error cases
+- **Fix**: Add negative fixtures
+- **Action**: Create additional test files:
+  - [ ] `corrupted_date.json` - Invalid date format
+  - [ ] `timezone_rollover.json` - DST boundary test
+  - [ ] `ttl_edge_before.json` - 47h59m (just before expiry)
+  - [ ] `ttl_edge_after.json` - 48h01m (just after expiry)
+  - [ ] `undo_collision.json` - Race condition on clear-with-undo
+  - [ ] `pregnancy_trimester_mismatch.json` - Male patient + pregnancy flag
+
+#### 7. **Settings Not Spec'd Yet**
+- **Problem**: App lacks compliance toggles (Purge PHI, disable backup, passcode)
+- **Fix**: Treat settings as P0 blocker
+- **Action**: ✅ PARTIAL - See SECURITY_PRIVACY_HARDENING.md Section 7
+  - [x] AppSettings struct with 31 settings
+  - [x] SettingsView with 7 sections
+  - [ ] Wire "Purge all PHI" with 2-step confirmation
+  - [ ] Wire "Require passcode on launch"
+  - [ ] Wire "Disable screenshots" toggle
+  - [ ] Add to Day 1 deliverables
+
+### Domain-Specific Tightening
+
+#### D1 Issues
+- [ ] Add age-based duration guard (e.g., "Used daily for X years" must be ≤ age)
+- [ ] Require rationale chips for Sev 3 or 4 (not just suggestion)
+- [ ] Create substance alias map: "molly" → "MDMA", "ecstasy" → "MDMA"
+- [ ] Add RxNorm normalization to prevent data forking
+
+#### D2 Issues
+- [ ] Hard rule: life-threatening flag auto-sets Sev 4
+- [ ] Block completion until emergency workflow acknowledged
+- [ ] Add explicit test: `testLifeThreateningBlocksCompletion()`
+
+#### D3 Issues
+- [ ] Add med-substance interaction safety table to repo
+- [ ] Tests verify detection without manual logic
+- [ ] Example: Benzodiazepine + Buprenorphine → warning banner
+
+#### D6 Issues
+- [ ] Add "Mark reportable" pathway for domestic violence
+- [ ] Lock rationale field before dismissal (cannot dismiss DV banner without reason)
+- [ ] Make UI contract explicit in tests
+
+---
+
+## ✅ P0 ACCEPTANCE TABLE (Definition of Done)
+
+**Purpose**: Map each P0 blocker to fixtures and test IDs. All tests must pass before merge.
+
+| P0 Item | Test Fixture(s) | Test ID(s) | Pass Criteria |
+|---------|----------------|-----------|---------------|
+| **Intake Header** | `intake_complete.json`, `intake_incomplete.json` | `testIntakeHeaderBlocksD1Access()`, `testIntakeHeaderValidation()` | D1 inaccessible until all required fields filled; validation errors shown inline |
+| **Validation Matrix** | All 12 dimension fixtures | `testValidationMatrixD1()` through `testValidationMatrixD6()` | All rules enforced; no false positives/negatives |
+| **Emergency Banners** | `d1_sev4_withdrawal.json`, `d2_life_threatening.json`, `d3_suicidal_today.json`, `d3_homicidal_today.json`, `d5_hours_days_imminent.json`, `d6_lethal_threat.json` | `testEmergencyBannerD1()` through `testEmergencyBannerD6()` | All 6 triggers show banner; dismissal logged; min severity enforced |
+| **Storage Export** | `assessment_complete.json` | `testExportCreatesStructure()`, `testExportIncludesMetadata()` | Correct folder structure; all files present; metadata complete |
+| **Prototype Safety** | N/A (UI/build tests) | `testPrototypeBannerVisible()`, `testExportDisabledInPrototype()`, `testNoBackupFlagSet()`, `testSnapshotBlurred()` | Banner on all screens; export blocked/redacted; storage flagged; blur works |
+| **Severity Calc** | All 12 dimension fixtures | `testSeverityCalculationD1()` through `testSeverityCalculationD6()` | Auto-calculated severity matches expected for each fixture |
+| **Severity Override** | `d3_suicidal_today.json` | `testOverrideBelowFloorThrows()`, `testOverrideRequiresReason()`, `testOverrideAuditLogged()` | Cannot override below floor; 15+ char reason required; audit complete |
+| **Negative Cases** | `corrupted_date.json`, `ttl_edge_before.json`, `ttl_edge_after.json` | `testCorruptedDateHandled()`, `testTTLEdgeCases()` | Graceful error handling; no crashes |
+
+### Single Command to Run All P0 Tests
+
+```bash
+# Run all P0 blocking tests
+cd ios/ASAMAssessment
+xcodebuild test -scheme ASAMAssessment \
+  -only-testing:ASAMAssessmentTests/IntakeHeaderTests \
+  -only-testing:ASAMAssessmentTests/ValidationMatrixTests \
+  -only-testing:ASAMAssessmentTests/EmergencyBannerTests \
+  -only-testing:ASAMAssessmentTests/StorageExporterTests \
+  -only-testing:ASAMAssessmentTests/PrototypeSafetyTests \
+  -only-testing:ASAMAssessmentTests/SeverityCalculationTests \
+  -only-testing:ASAMAssessmentTests/SeverityOverrideTests \
+  -only-testing:ASAMAssessmentTests/NegativeCaseTests \
+  -destination 'platform=iOS Simulator,name=iPhone 16'
+```
+
+**Merge Gate**: All P0 tests must pass. No merge without green CI.
 
 ---
 

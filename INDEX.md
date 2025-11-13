@@ -151,6 +151,7 @@ ASAM_App/                           # Root
 
 | Document | Status | Purpose |
 |----------|--------|---------|
+| **🔒 [SECURITY_PRIVACY_HARDENING.md](docs/SECURITY_PRIVACY_HARDENING.md)** | 🔴 CRITICAL | Production security scaffolds (P0+) |
 | **🆕 [MASTER_TODO_AUDIT_PLAN.md](docs/MASTER_TODO_AUDIT_PLAN.md)** | ✅ Ready | Master plan synthesizing all audits |
 | **🆕 [STORAGE_ARCHITECTURE_COMPARISON.md](docs/specs/STORAGE_ARCHITECTURE_COMPARISON.md)** | ✅ Analysis | Storage architecture deep dive |
 | **🆕 [STORAGE_EXPORT_SPRINT_PLAN.md](docs/specs/STORAGE_EXPORT_SPRINT_PLAN.md)** | 📋 Ready | Phase 1 export implementation |

@@ -9,6 +9,8 @@
 
 ## 🚨 P0 BLOCKERS (Must Fix Before Demo)
 
+> **🔒 CRITICAL**: See [SECURITY_PRIVACY_HARDENING.md](SECURITY_PRIVACY_HARDENING.md) for production-ready security scaffolds that MUST be implemented alongside these P0 blockers. This includes encryption, audit logging, ruleset versioning, and compliance requirements.
+
 ### 1. Intake Header (Before D1 Access)
 **Status**: ❌ Not Implemented  
 **Effort**: 2-3 hours  
@@ -438,7 +440,42 @@ xcodebuild test -scheme ASAMAssessment -only-testing:ASAMAssessmentTests/Storage
 
 ---
 
-## 📅 4-Day Execution Schedule
+## 📅 5-Day Execution Schedule
+
+> **⚠️ UPDATED**: Schedule extended to 5 days to include critical security hardening. See [SECURITY_PRIVACY_HARDENING.md](SECURITY_PRIVACY_HARDENING.md) for Day 0.5 security foundations.
+
+### Day 0.5: Security Foundations (4 hours) - CRITICAL
+**Morning (2h)**:
+1. SecureStore Implementation (1.5h)
+   - Create `SecureStore.swift`
+   - Generate AES-256 key, store in Keychain with `.afterFirstUnlockThisDeviceOnly`
+   - Mark storage folder `.isExcludedFromBackup = true`
+   - Test: Key survives app restart, no iCloud backup
+
+2. AuditLog Foundation (0.5h)
+   - Create `AuditLog.swift` with JSONL append-only
+   - Test: Append works, survives crashes
+
+**Afternoon (2h)**:
+3. Ruleset Versioning (1h)
+   - Add `ruleset: "v2.0.0"` to Assessment
+   - Add `rulesetChecksum` (SHA-256 of ValidationMatrix.rules)
+   - Include in export envelope
+   - Test: Persists in export, enables PDF reproducibility
+
+4. Enhanced IntakeHeader (1h)
+   - Add `sessionId` auto-generation (ASAM_20251113_143022)
+   - Add `timezone`, `encounterId`, `facilityAdd MRN/FIN normalization and validation
+   - Add DOB range validation (0-120 years)
+   - Test: All validations work
+
+**Deliverables**:
+- ✅ AES-256 encryption enabled, no iCloud backup
+- ✅ Audit log appending (field changes, emergency banners, severity overrides)
+- ✅ Ruleset versioned for export reproducibility
+- ✅ IntakeHeader validation working (MRN, DOB, required fields)
+
+---
 
 ### Day 1: Foundations (P0 Blockers)
 **8 hours**

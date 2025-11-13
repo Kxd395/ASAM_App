@@ -34,6 +34,11 @@
 		8013222A2EC3DD26001CFF7E /* RulesProvenance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322262EC3DD26001CFF7E /* RulesProvenance.swift */; };
 		8013222B2EC3DD26001CFF7E /* AssessmentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322242EC3DD26001CFF7E /* AssessmentStore.swift */; };
 		8013222D2EC3E0E0001CFF7E /* ASAMModelsEnhanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8013222C2EC3E0E0001CFF7E /* ASAMModelsEnhanced.swift */; };
+		801322652EC54164001CFF7E /* AdaptiveAssessmentShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322602EC54164001CFF7E /* AdaptiveAssessmentShell.swift */; };
+		801322662EC54164001CFF7E /* D2SeveritySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322632EC54164001CFF7E /* D2SeveritySection.swift */; };
+		801322672EC54164001CFF7E /* SeverityCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322612EC54164001CFF7E /* SeverityCard.swift */; };
+		8013227F2EC5454D001CFF7E /* ImpactGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8013227E2EC5454D001CFF7E /* ImpactGridView.swift */; };
+		801322812EC5461B001CFF7E /* SeverityContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801322802EC5461B001CFF7E /* SeverityContent.swift */; };
 		80366ECD2EC07582008403F4 /* SafetyBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80366EC22EC07582008403F4 /* SafetyBanner.swift */; };
 		80366ECE2EC07582008403F4 /* LOCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80366EC82EC07582008403F4 /* LOCService.swift */; };
 		80366ECF2EC07582008403F4 /* AuditService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80366EC72EC07582008403F4 /* AuditService.swift */; };
@@ -146,6 +151,11 @@
 		801322262EC3DD26001CFF7E /* RulesProvenance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesProvenance.swift; sourceTree = "<group>"; };
 		801322272EC3DD26001CFF7E /* RulesServiceWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesServiceWrapper.swift; sourceTree = "<group>"; };
 		8013222C2EC3E0E0001CFF7E /* ASAMModelsEnhanced.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASAMModelsEnhanced.swift; sourceTree = "<group>"; };
+		801322602EC54164001CFF7E /* AdaptiveAssessmentShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveAssessmentShell.swift; sourceTree = "<group>"; };
+		801322612EC54164001CFF7E /* SeverityCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeverityCard.swift; sourceTree = "<group>"; };
+		801322632EC54164001CFF7E /* D2SeveritySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = D2SeveritySection.swift; sourceTree = "<group>"; };
+		8013227E2EC5454D001CFF7E /* ImpactGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpactGridView.swift; sourceTree = "<group>"; };
+		801322802EC5461B001CFF7E /* SeverityContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeverityContent.swift; sourceTree = "<group>"; };
 		80366E862EC0735E008403F4 /* ASAMAssessment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = ASAMAssessment.app; path = "Treatment Plan Assistant.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		80366E952EC07360008403F4 /* ASAMAssessmentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ASAMAssessmentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		80366E9F2EC07360008403F4 /* ASAMAssessmentUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ASAMAssessmentUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -197,20 +207,17 @@
 		80D8BA5D2EC38FC500D86D32 /* SubstanceGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstanceGridView.swift; sourceTree = "<group>"; };
 		80D8BA612EC356DB00D86D32 /* d1_withdrawal_enhanced.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = d1_withdrawal_enhanced.json; sourceTree = "<group>"; };
 		B1D1B7A052E5675A87956777 /* ColorExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
+		ED2CA9341350EDE1211B7D89 /* SeverityRatingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SeverityRatingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		80366E982EC07360008403F4 /* ASAMAssessmentTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = ASAMAssessmentTests;
 			sourceTree = "<group>";
 		};
 		80366EA22EC07360008403F4 /* ASAMAssessmentUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = ASAMAssessmentUITests;
 			sourceTree = "<group>";
 		};
@@ -259,6 +266,22 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		801322622EC54164001CFF7E /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				801322612EC54164001CFF7E /* SeverityCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		801322642EC54164001CFF7E /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				801322632EC54164001CFF7E /* D2SeveritySection.swift */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
 		80366E7D2EC0735E008403F4 = {
 			isa = PBXGroup;
 			children = (
@@ -301,9 +324,10 @@
 		80366EC52EC07582008403F4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8013222C2EC3E0E0001CFF7E /* ASAMModelsEnhanced.swift */,
+				801322802EC5461B001CFF7E /* SeverityContent.swift */,
 				800220462EC3C4BA006ABEB3 /* AppSettings.swift */,
 				800220472EC3C4BA006ABEB3 /* ASAMModels.swift */,
+				8013222C2EC3E0E0001CFF7E /* ASAMModelsEnhanced.swift */,
 				800220492EC3C4BA006ABEB3 /* ASAMTraceabilityMatrix.swift */,
 				8002204A2EC3C4BA006ABEB3 /* Assessment.swift */,
 				8002204B2EC3C4BA006ABEB3 /* QuestionnaireModels.swift */,
@@ -346,6 +370,10 @@
 		80366ECB2EC07582008403F4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8013227E2EC5454D001CFF7E /* ImpactGridView.swift */,
+				801322602EC54164001CFF7E /* AdaptiveAssessmentShell.swift */,
+				801322622EC54164001CFF7E /* Components */,
+				801322642EC54164001CFF7E /* Domain */,
 				801322162EC3D309001CFF7E /* ContentView.swift */,
 				801322172EC3D309001CFF7E /* QuestionnaireRenderer.swift */,
 				801322182EC3D309001CFF7E /* RobustTextField.swift */,
@@ -362,6 +390,7 @@
 				80D8B9F92EC3548500D86D32 /* UIKit */,
 				432035D5FAA695D4BBA1B195 /* SeverityRatingView.swift */,
 				0C25F3B1B2F98C3DE44F493E /* CategorizedHealthIssuesView.swift */,
+				ED2CA9341350EDE1211B7D89 /* SeverityRatingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -614,6 +643,9 @@
 				801322292EC3DD26001CFF7E /* QuestionsService.swift in Sources */,
 				8013222A2EC3DD26001CFF7E /* RulesProvenance.swift in Sources */,
 				8013222B2EC3DD26001CFF7E /* AssessmentStore.swift in Sources */,
+				801322652EC54164001CFF7E /* AdaptiveAssessmentShell.swift in Sources */,
+				801322662EC54164001CFF7E /* D2SeveritySection.swift in Sources */,
+				801322672EC54164001CFF7E /* SeverityCard.swift in Sources */,
 				80AC428A2EC29F0800A06E06 /* SettingsViewEnhanced.swift in Sources */,
 				80D8BA5F2EC38FC500D86D32 /* SubstanceGridView.swift in Sources */,
 				80AC428B2EC29F0800A06E06 /* SafetyReviewSheet.swift in Sources */,
@@ -651,11 +683,13 @@
 				80AC41CB2EC25C5400A06E06 /* FlagsSection.swift in Sources */,
 				80D8B9FA2EC3548500D86D32 /* AutofocusTextView.swift in Sources */,
 				80AC41CC2EC25C5400A06E06 /* ClinicalFlagsSection.swift in Sources */,
+				801322812EC5461B001CFF7E /* SeverityContent.swift in Sources */,
 				80AC41CD2EC25C5400A06E06 /* RulesDegradedBanner.swift in Sources */,
 				80AC41CE2EC25C5400A06E06 /* RulesDiagnosticsView.swift in Sources */,
 				80AC41CF2EC25C5400A06E06 /* SubstanceRowSheet.swift in Sources */,
 				80AC41D02EC25C5400A06E06 /* SubstanceSheet.swift in Sources */,
 				8002206F2EC3C6C3006ABEB3 /* ASAMAssessmentApp.swift in Sources */,
+				8013227F2EC5454D001CFF7E /* ImpactGridView.swift in Sources */,
 				8013221A2EC3D309001CFF7E /* QuestionnaireRenderer.swift in Sources */,
 				8013221B2EC3D309001CFF7E /* SettingsView.swift in Sources */,
 				8013221C2EC3D309001CFF7E /* ContentView.swift in Sources */,

@@ -56,7 +56,7 @@ actor TokenProvider {
     }
 
     /// Refresh token from OAuth endpoint
-    private func refresh() async throws -> TokenResponse {
+    nonisolated private func refresh() async throws -> TokenResponse {
         var request = URLRequest(url: refreshURL)
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
@@ -79,7 +79,9 @@ actor TokenProvider {
         }
 
         let decoder = JSONDecoder()
-        return try decoder.decode(TokenResponse.self, from: data)
+        return try await Task.detached {
+            try decoder.decode(TokenResponse.self, from: data)
+        }.value
     }
 }
 

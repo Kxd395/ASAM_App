@@ -1,100 +1,494 @@
 {
   "id": "d4_readiness_neutral",
-  "title": "Domain D: Readiness to Change",
-  "domain": "D",
-  "version": "1.0.0",
-  "description": "Assessment of patient's motivation and readiness for treatment",
+  "title": "Dimension 4: Readiness to Change",
+  "domain": "4",
+  "version": "2.1.1",
+  "description": "Assessment of patient readiness and motivation to change substance use behaviors",
   "questions": [
     {
-      "id": "d01",
-      "text": "How does the patient view their substance use?",
+      "id": "d4_01_impact",
+      "text": "I am going to read you a list of items that are sometimes impacted by alcohol or other drug use. Please indicate how much your alcohol or other drug use affects these aspects of your life.",
+      "helpText": "Interviewer instruction: As co-occurring disorders are common, also explore the patient readiness to address any mental health diagnoses or issues.",
+      "type": "impact_grid",
+      "required": true,
+      "breadcrumb": "life_impact",
+      "impact_grid": {
+        "scale_options": [
+          {
+            "value": "0",
+            "label": "Not at all",
+            "score": 0
+          },
+          {
+            "value": "1",
+            "label": "A Little",
+            "score": 1
+          },
+          {
+            "value": "2",
+            "label": "Somewhat",
+            "score": 2
+          },
+          {
+            "value": "3",
+            "label": "Very",
+            "score": 3
+          },
+          {
+            "value": "4",
+            "label": "Extremely",
+            "score": 4
+          }
+        ],
+        "impact_items": [
+          {
+            "id": "work_school",
+            "label": "Work, School",
+            "requires_note": false
+          },
+          {
+            "id": "mental_health",
+            "label": "Mental health or Emotions",
+            "requires_note": false
+          },
+          {
+            "id": "hobbies",
+            "label": "Hobbies or Recreation",
+            "requires_note": false
+          },
+          {
+            "id": "legal",
+            "label": "Legal matters (e.g., DUI)",
+            "requires_note": false
+          },
+          {
+            "id": "finances",
+            "label": "Finances",
+            "requires_note": false
+          },
+          {
+            "id": "family",
+            "label": "Family relationships",
+            "requires_note": false
+          },
+          {
+            "id": "friendships",
+            "label": "Friendships",
+            "requires_note": false
+          },
+          {
+            "id": "romantic",
+            "label": "Romantic partners",
+            "requires_note": false
+          },
+          {
+            "id": "self_esteem",
+            "label": "Self-esteem",
+            "requires_note": false
+          },
+          {
+            "id": "physical_health",
+            "label": "Physical health",
+            "requires_note": false
+          },
+          {
+            "id": "enjoyment",
+            "label": "Enjoyment of activities",
+            "requires_note": false
+          },
+          {
+            "id": "sexual",
+            "label": "Sexual function",
+            "requires_note": false
+          },
+          {
+            "id": "hygiene",
+            "label": "Hygiene or Self-care",
+            "requires_note": false
+          },
+          {
+            "id": "other",
+            "label": "Other",
+            "requires_note": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "d4_01_notes",
+      "text": "Notes",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "impact_notes",
+      "helpText": "Free text for interviewer observations"
+    },
+    {
+      "id": "d4_02_belief",
+      "text": "Do you believe changing your use of substances could improve any of these aspects of your life?",
       "type": "single_choice",
       "required": true,
-      "breadcrumb": "substance_use_awareness",
+      "breadcrumb": "belief_change",
       "options": [
-        {"value": "no_problem", "label": "Does not see substance use as a problem", "score": 4},
-        {"value": "minimal_problem", "label": "Sees minimal problems from substance use", "score": 3},
-        {"value": "some_problems", "label": "Acknowledges some problems", "score": 2},
-        {"value": "significant_problems", "label": "Recognizes significant problems", "score": 1}
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        },
+        {
+          "value": "dont_know",
+          "label": "I dont know"
+        }
       ]
     },
     {
-      "id": "d02",
-      "text": "What is the patient's motivation for treatment?",
+      "id": "d4_02_belief_describe",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "belief_describe"
+    },
+    {
+      "id": "d4_03_treatment_need",
+      "text": "Do you think you need treatment to change your use of substances?",
       "type": "single_choice",
       "required": true,
-      "breadcrumb": "treatment_motivation",
+      "breadcrumb": "treatment_need",
       "options": [
-        {"value": "high_internal", "label": "High motivation, internal reasons", "score": 1},
-        {"value": "moderate_internal", "label": "Moderate motivation, internal reasons", "score": 2},
-        {"value": "external_pressure", "label": "Motivated primarily by external pressure", "score": 3},
-        {"value": "no_motivation", "label": "No apparent motivation for treatment", "score": 4}
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no_not_problem",
+          "label": "No, it is not a problem"
+        },
+        {
+          "value": "no_can_stop",
+          "label": "No, I can stop anytime without help"
+        },
+        {
+          "value": "dont_know",
+          "label": "I dont know"
+        }
       ]
     },
     {
-      "id": "d03",
-      "text": "Has the patient made previous attempts to change their substance use?",
-      "type": "single_choice",
-      "required": true,
-      "breadcrumb": "change_attempts",
-      "options": [
-        {"value": "multiple_successful", "label": "Multiple attempts with periods of success", "score": 2},
-        {"value": "some_attempts", "label": "Some attempts with mixed results", "score": 2},
-        {"value": "few_attempts", "label": "Few attempts, mostly unsuccessful", "score": 3},
-        {"value": "no_attempts", "label": "No previous attempts to change", "score": 4}
+      "id": "d4_04_stages",
+      "text": "Interviewer observations: What stage(s) of change is the patient exhibiting?",
+      "type": "repeater",
+      "required": false,
+      "breadcrumb": "stage_of_change",
+      "helpText": "When possible and appropriate, mirror the patient language...",
+      "repeater_fields": [
+        {
+          "id": "issue",
+          "label": "Issue",
+          "type": "text"
+        },
+        {
+          "id": "stage",
+          "label": "Stage",
+          "type": "single_choice",
+          "options": [
+            {
+              "value": "precontemplation",
+              "label": "Precontemplation"
+            },
+            {
+              "value": "contemplation",
+              "label": "Contemplation"
+            },
+            {
+              "value": "preparation",
+              "label": "Preparation"
+            },
+            {
+              "value": "action",
+              "label": "Action"
+            },
+            {
+              "value": "maintenance",
+              "label": "Maintenance"
+            }
+          ]
+        }
       ]
     },
     {
-      "id": "d04",
-      "text": "How does the patient respond to treatment recommendations?",
+      "id": "d4_04_stages_notes",
+      "text": "Notes",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "stages_notes"
+    },
+    {
+      "id": "d4_10_support",
+      "text": "How much do you feel they care about whether you quit or cut back?",
       "type": "single_choice",
       "required": true,
-      "breadcrumb": "treatment_response",
+      "breadcrumb": "support_care",
       "options": [
-        {"value": "eager", "label": "Eager and cooperative", "score": 1},
-        {"value": "willing", "label": "Willing but somewhat hesitant", "score": 2},
-        {"value": "reluctant", "label": "Reluctant but not oppositional", "score": 3},
-        {"value": "resistant", "label": "Resistant or oppositional", "score": 4}
+        {
+          "value": "0",
+          "label": "Not at all"
+        },
+        {
+          "value": "1",
+          "label": "A Little"
+        },
+        {
+          "value": "2",
+          "label": "Somewhat"
+        },
+        {
+          "value": "3",
+          "label": "Very"
+        },
+        {
+          "value": "4",
+          "label": "Extremely"
+        }
       ]
     },
     {
-      "id": "d05",
-      "text": "What stage of change is the patient currently in?",
+      "id": "d4_11_importance_change",
+      "text": "How important is it for you to make changes in your life at this time?",
       "type": "single_choice",
       "required": true,
-      "breadcrumb": "change_stage",
+      "breadcrumb": "importance_change",
       "options": [
-        {"value": "precontemplation", "label": "Precontemplation (not considering change)", "score": 4},
-        {"value": "contemplation", "label": "Contemplation (considering change)", "score": 3},
-        {"value": "preparation", "label": "Preparation (planning to change)", "score": 2},
-        {"value": "action", "label": "Action (actively making changes)", "score": 1}
+        {
+          "value": "0",
+          "label": "Not at all"
+        },
+        {
+          "value": "1",
+          "label": "A Little"
+        },
+        {
+          "value": "2",
+          "label": "Somewhat"
+        },
+        {
+          "value": "3",
+          "label": "Very"
+        },
+        {
+          "value": "4",
+          "label": "Extremely"
+        }
       ]
     },
     {
-      "id": "d06",
-      "text": "Rate the patient's insight into their condition (1-4 scale)",
+      "id": "d4_11_importance_describe",
+      "text": "Interviewer observations:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "importance_obs"
+    },
+    {
+      "id": "d4_12_importance_stop",
+      "text": "How important is it for you to stop your alcohol or other drug use?",
       "type": "single_choice",
       "required": true,
-      "breadcrumb": "insight_level",
+      "breadcrumb": "importance_stop",
       "options": [
-        {"value": "excellent", "label": "Excellent insight and understanding", "score": 1},
-        {"value": "good", "label": "Good insight with minor gaps", "score": 2},
-        {"value": "limited", "label": "Limited insight", "score": 3},
-        {"value": "poor", "label": "Poor or no insight", "score": 4}
+        {
+          "value": "0",
+          "label": "Not at all"
+        },
+        {
+          "value": "1",
+          "label": "A Little"
+        },
+        {
+          "value": "2",
+          "label": "Somewhat"
+        },
+        {
+          "value": "3",
+          "label": "Very"
+        },
+        {
+          "value": "4",
+          "label": "Extremely"
+        }
       ]
     },
     {
-      "id": "d07",
-      "text": "How committed is the patient to following treatment recommendations?",
+      "id": "d4_12_importance_describe",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "importance_stop_desc"
+    },
+    {
+      "id": "d4_13_readiness",
+      "text": "How ready are you to stop or reduce your alcohol or other drug use?",
       "type": "single_choice",
       "required": true,
-      "breadcrumb": "treatment_commitment",
+      "breadcrumb": "readiness",
       "options": [
-        {"value": "high", "label": "High commitment", "score": 1},
-        {"value": "moderate", "label": "Moderate commitment", "score": 2},
-        {"value": "low", "label": "Low commitment", "score": 3},
-        {"value": "none", "label": "No commitment", "score": 4}
+        {
+          "value": "0",
+          "label": "Not at all"
+        },
+        {
+          "value": "1",
+          "label": "A Little"
+        },
+        {
+          "value": "2",
+          "label": "Somewhat"
+        },
+        {
+          "value": "3",
+          "label": "Very"
+        },
+        {
+          "value": "4",
+          "label": "Extremely"
+        }
       ]
+    },
+    {
+      "id": "d4_13_readiness_describe",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "readiness_desc"
+    },
+    {
+      "id": "d4_13_readiness_obs",
+      "text": "Interviewer observations:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "readiness_obs"
+    },
+    {
+      "id": "d4_14_treatment_importance",
+      "text": "How important is it to you to get treatment for your alcohol or other drug use?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "treatment_importance",
+      "options": [
+        {
+          "value": "0",
+          "label": "Not at all"
+        },
+        {
+          "value": "1",
+          "label": "A Little"
+        },
+        {
+          "value": "2",
+          "label": "Somewhat"
+        },
+        {
+          "value": "3",
+          "label": "Very"
+        },
+        {
+          "value": "4",
+          "label": "Extremely"
+        }
+      ]
+    },
+    {
+      "id": "d4_15_problems",
+      "text": "Are there other things in your life that you would like to be different?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "problems",
+      "helpText": "Problem(s):"
+    },
+    {
+      "id": "d4_16_goals",
+      "text": "If things were better than they are now, what would that look like?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "goals",
+      "helpText": "Goal(s):"
+    },
+    {
+      "id": "d4_17_concerns",
+      "text": "What concerns do you have about changing your alcohol or other drug use?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "concerns",
+      "helpText": "Problem(s):"
     }
-  ]
+  ],
+  "severity_rating": {
+    "header": "Please circle the intensity and urgency of the patient CURRENT needs for services based on the information collected in Dimension 4:",
+    "guidance_link": "For guidance assessing Dimension 4, see The ASAM Criteria, 3rd Ed.",
+    "severity_cards": [
+      {
+        "rating": 0,
+        "title": "None",
+        "color": "#22c55e",
+        "border": "#16a34a",
+        "icon": "checkmark.circle.fill",
+        "bullets": [
+          "Proactive responsible participant in treatment",
+          "Committed to changing AOD use",
+          "Willing to enter treatment"
+        ],
+        "disposition": "Requires low intensity services for motivational enhancement"
+      },
+      {
+        "rating": 1,
+        "title": "Mild",
+        "color": "#65a30d",
+        "border": "#4d7c0f",
+        "icon": "exclamationmark.circle.fill",
+        "bullets": [
+          "Ambivalent to the need to change",
+          "Reluctant to agree to treatment",
+          "Low commitment to change AOD use"
+        ],
+        "disposition": "Requires moderate intensity services for motivational enhancement"
+      },
+      {
+        "rating": 2,
+        "title": "Moderate",
+        "color": "#eab308",
+        "border": "#ca8a04",
+        "icon": "exclamationmark.triangle.fill",
+        "bullets": [
+          "Variable adherence to treatment",
+          "Unaware of and not interested in the need to change",
+          "Unwilling or only partially able to follow through with treatment"
+        ],
+        "disposition": "Requires high intensity engagement and or motivational enhancement services"
+      },
+      {
+        "rating": 3,
+        "title": "Severe",
+        "color": "#f59e0b",
+        "border": "#d97706",
+        "icon": "exclamationmark.triangle.fill",
+        "bullets": [
+          "Passively compliant, goes through the motions in treatment"
+        ],
+        "disposition": "Secure placement for acute or imminently dangerous situations"
+      },
+      {
+        "rating": 4,
+        "title": "Very Severe",
+        "color": "#ef4444",
+        "border": "#dc2626",
+        "icon": "exclamationmark.octagon.fill",
+        "bullets": [
+          "Rejecting need to change",
+          "Engaging in potentially dangerous behavior",
+          "Unwilling or unable to follow through with treatment"
+        ],
+        "disposition": "Secure placement for acute or imminently dangerous situations"
+      }
+    ]
+  }
 }

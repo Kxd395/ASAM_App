@@ -28,7 +28,7 @@ struct SubstanceTemplate: Codable {
     let durationMonths: FieldDefinition?
     let frequency30Days: FieldDefinition
     let routes: FieldDefinition
-    
+
     enum CodingKeys: String, CodingKey {
         case neverUsed = "never_used"
         case lastUseDate = "last_use_date"
@@ -46,7 +46,7 @@ struct FieldDefinition: Codable {
     let disablesOtherFields: Bool?
     let validation: Validation?
     let options: [QuestionOption]?
-    
+
     enum CodingKeys: String, CodingKey {
         case type, label, validation, options
         case requiredIfUsed = "required_if_used"
@@ -58,7 +58,7 @@ struct SubstanceDefinition: Codable, Identifiable {
     let id: String
     let name: String
     let conditionalQuestions: [ConditionalQuestion]?
-    
+
     enum CodingKeys: String, CodingKey {
         case id, name
         case conditionalQuestions = "conditional_questions"
@@ -72,7 +72,7 @@ struct ConditionalQuestion: Codable, Identifiable {
     let visibleIf: ConditionalVisibility?
     let validation: Validation?
     let options: [QuestionOption]?
-    
+
     enum CodingKeys: String, CodingKey {
         case id, text, type, validation, options
         case visibleIf = "visible_if"
@@ -83,7 +83,7 @@ struct ConditionalVisibility: Codable {
     let globalCondition: String
     let `operator`: String
     let value: String
-    
+
     enum CodingKeys: String, CodingKey {
         case globalCondition = "global_condition"
         case `operator`
@@ -101,7 +101,7 @@ struct SubstanceAssessment: Codable, Hashable, Identifiable {
     let frequency30Days: String?
     let routes: Set<String>
     let conditionalAnswers: [String: QuestionValue]
-    
+
     enum CodingKeys: String, CodingKey {
         case id, substanceId, neverUsed, lastUseDate, durationYears, durationMonths, frequency30Days, routes, conditionalAnswers
     }
@@ -113,7 +113,7 @@ struct RepeaterField: Codable, Identifiable {
     let id: String
     let label: String
     let type: String
-    
+
     enum CodingKeys: String, CodingKey {
         case id, label, type
     }
@@ -121,7 +121,7 @@ struct RepeaterField: Codable, Identifiable {
 
 // MARK: - Severity Rating Structures
 
-struct SeverityCard: Codable, Identifiable {
+struct SeverityCardData: Codable, Identifiable {
     let rating: Int
     let title: String
     let color: String
@@ -129,9 +129,9 @@ struct SeverityCard: Codable, Identifiable {
     let icon: String
     let bullets: [String]
     let disposition: String
-    
+
     var id: Int { rating }
-    
+
     enum CodingKeys: String, CodingKey {
         case rating, title, color, border, icon, bullets, disposition
     }
@@ -141,7 +141,7 @@ struct SubstanceOption: Codable, Identifiable {
     let id: String
     let label: String
     let type: String  // "checkbox" or "text"
-    
+
     enum CodingKeys: String, CodingKey {
         case id, label, type
     }
@@ -151,18 +151,18 @@ struct SafetyRule: Codable {
     let condition: String  // e.g., "rating >= 3"
     let banner: String
     let severity: String   // "warning", "critical"
-    
+
     enum CodingKeys: String, CodingKey {
         case condition, banner, severity
     }
 }
 
 struct SeverityRatingMetadata: Codable {
-    let cards: [SeverityCard]
+    let cards: [SeverityCardData]
     let substanceOptions: [SubstanceOption]
     let safetyRules: [SafetyRule]
     let referencePages: [String: String]?  // e.g., ["alcohol": "147-154"]
-    
+
     enum CodingKeys: String, CodingKey {
         case cards = "severity_cards"
         case substanceOptions = "substance_options"
@@ -184,7 +184,7 @@ struct HealthIssueItem: Codable, Identifiable {
     let label: String
     let requiresNote: Bool
     let multiSelectOptions: [HealthIssueOption]?
-    
+
     enum CodingKeys: String, CodingKey {
         case id, label
         case requiresNote = "requires_note"
@@ -196,7 +196,7 @@ struct HealthIssueOption: Codable, Identifiable {
     let id: String
     let label: String
     let isOtherOption: Bool
-    
+
     enum CodingKeys: String, CodingKey {
         case id, label
         case isOtherOption = "is_other"
@@ -206,11 +206,47 @@ struct HealthIssueOption: Codable, Identifiable {
 struct CategorizedHealthIssuesMetadata: Codable {
     let categories: [HealthIssueCategory]
     let macros: [String]?  // e.g., ["none_of_the_above", "reviewed_unchanged"]
-    
+
     enum CodingKeys: String, CodingKey {
         case categories
         case macros
     }
+}
+
+// MARK: - Impact Grid Models (D4 Life Areas Assessment)
+
+struct ImpactGridMetadata: Codable {
+    let impactItems: [ImpactItem]
+    let scaleOptions: [ScaleOption]
+
+    enum CodingKeys: String, CodingKey {
+        case impactItems = "impact_items"
+        case scaleOptions = "scale_options"
+    }
+}
+
+struct ImpactItem: Codable, Identifiable {
+    let id: String
+    let label: String
+    let requiresNote: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case id, label
+        case requiresNote = "requires_note"
+    }
+}
+
+struct ScaleOption: Codable, Identifiable {
+    let value: String
+    let label: String
+    let score: Int
+
+    var id: String { value }
+}
+
+struct ImpactGridAnswer: Codable, Hashable {
+    let selections: [String: String]  // [itemId: scaleValue]
+    let notes: [String: String]  // [itemId: note text]
 }
 
 struct Question: Codable, Identifiable {
@@ -229,7 +265,8 @@ struct Question: Codable, Identifiable {
     let availableSubstances: [SubstanceDefinition]?
     let severityRating: SeverityRatingMetadata?  // For severity_rating type
     let categorizedHealthIssues: CategorizedHealthIssuesMetadata?  // For categorized_health_issues type
-    
+    let impactGrid: ImpactGridMetadata?  // For impact_grid type (D4)
+
     // Explicit initializer with default values for new optional parameters
     init(
         id: String,
@@ -246,7 +283,8 @@ struct Question: Codable, Identifiable {
         substanceTemplate: SubstanceTemplate? = nil,
         availableSubstances: [SubstanceDefinition]? = nil,
         severityRating: SeverityRatingMetadata? = nil,
-        categorizedHealthIssues: CategorizedHealthIssuesMetadata? = nil
+        categorizedHealthIssues: CategorizedHealthIssuesMetadata? = nil,
+        impactGrid: ImpactGridMetadata? = nil
     ) {
         self.id = id
         self.text = text
@@ -263,8 +301,9 @@ struct Question: Codable, Identifiable {
         self.availableSubstances = availableSubstances
         self.severityRating = severityRating
         self.categorizedHealthIssues = categorizedHealthIssues
+        self.impactGrid = impactGrid
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case id, text, type, required, breadcrumb, options, validation, description
         case helpText = "helpText"
@@ -274,6 +313,7 @@ struct Question: Codable, Identifiable {
         case availableSubstances = "available_substances"
         case severityRating = "severity_rating"
         case categorizedHealthIssues = "categorized_health_issues"
+        case impactGrid = "impact_grid"
     }
 }
 
@@ -289,13 +329,14 @@ enum QuestionType: String, Codable, CaseIterable {
     case dynamicSubstanceGrid = "dynamic_substance_grid"
     case severityRating = "severity_rating"  // D1 severity rating cards
     case categorizedHealthIssues = "categorized_health_issues"  // D2 compact searchable health issues
+    case impactGrid = "impact_grid"  // D4 life areas impact assessment
 }
 
 struct QuestionOption: Codable, Identifiable {
     let value: QuestionValue
     let label: String
     let score: Double?
-    
+
     var id: String {
         switch value {
         case .string(let str): return str
@@ -309,7 +350,7 @@ struct VisibilityCondition: Codable {
     let question: String
     let `operator`: ConditionOperator
     let value: QuestionValue
-    
+
     enum ConditionOperator: String, Codable {
         case equals
         case notEquals = "not_equals"
@@ -325,7 +366,7 @@ struct Validation: Codable {
     let pattern: String?
     let minLength: Int?
     let maxLength: Int?
-    
+
     enum CodingKeys: String, CodingKey {
         case min, max, pattern
         case minLength = "min_length"
@@ -339,10 +380,10 @@ enum QuestionValue: Codable, Hashable {
     case string(String)
     case number(Double)
     case bool(Bool)
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        
+
         if let stringValue = try? container.decode(String.self) {
             self = .string(stringValue)
         } else if let doubleValue = try? container.decode(Double.self) {
@@ -356,7 +397,7 @@ enum QuestionValue: Codable, Hashable {
             )
         }
     }
-    
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
@@ -377,16 +418,17 @@ enum AnswerValue: Codable, Hashable {
     case single(QuestionValue)
     case multi(Set<QuestionValue>)
     case substanceGrid([SubstanceAssessment])
+    case impactGrid(ImpactGridAnswer)
     case none
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        
+
         if container.decodeNil() {
             self = .none
             return
         }
-        
+
         if let stringValue = try? container.decode(String.self) {
             self = .text(stringValue)
         } else if let doubleValue = try? container.decode(Double.self) {
@@ -406,7 +448,7 @@ enum AnswerValue: Codable, Hashable {
             )
         }
     }
-    
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
@@ -422,6 +464,8 @@ enum AnswerValue: Codable, Hashable {
             try container.encode(Array(values))
         case .substanceGrid(let assessments):
             try container.encode(assessments)
+        case .impactGrid(let gridAnswer):
+            try container.encode(gridAnswer)
         case .none:
             try container.encodeNil()
         }
@@ -437,10 +481,10 @@ struct QuestionnaireResponse: Codable {
     let startedAt: Date
     let completedAt: Date?
     let isComplete: Bool
-    
+
     var progress: Double {
         guard !responses.isEmpty else { return 0.0 }
-        let answeredCount = responses.values.filter { 
+        let answeredCount = responses.values.filter {
             if case .none = $0 { return false }
             return true
         }.count
@@ -462,9 +506,9 @@ struct DomainSeverity: Codable {
 extension Question {
     func isVisible(given answers: [String: AnswerValue]) -> Bool {
         guard let condition = visibleIf else { return true }
-        
+
         guard let answer = answers[condition.question] else { return false }
-        
+
         let answerValue: QuestionValue
         switch answer {
         case .single(let value):
@@ -475,10 +519,10 @@ extension Question {
             answerValue = .number(num)
         case .bool(let bool):
             answerValue = .bool(bool)
-        case .multi, .none, .substanceGrid:
+        case .multi, .none, .substanceGrid, .impactGrid:
             return false
         }
-        
+
         switch condition.operator {
         case .equals:
             return answerValue == condition.value
@@ -504,7 +548,7 @@ extension Question {
             return false
         }
     }
-    
+
     func validateAnswer(_ answer: AnswerValue) -> Bool {
         // Check required
         if required {
@@ -522,10 +566,10 @@ extension Question {
                 break
             }
         }
-        
+
         // Type-specific validation
         guard let validation = validation else { return true }
-        
+
         switch (type, answer) {
         case (.text, .text(let text)):
             if let minLength = validation.minLength, text.count < minLength {
@@ -539,7 +583,7 @@ extension Question {
                 let range = NSRange(location: 0, length: text.utf16.count)
                 return regex?.firstMatch(in: text, options: [], range: range) != nil
             }
-            
+
         case (.number, .number(let num)):
             if let min = validation.min, num < min {
                 return false
@@ -547,11 +591,11 @@ extension Question {
             if let max = validation.max, num > max {
                 return false
             }
-            
+
         default:
             break
         }
-        
+
         return true
     }
 }
@@ -560,7 +604,7 @@ extension QuestionnaireResponse {
     func isValid(for questionnaire: Questionnaire) -> Bool {
         // Check all required questions are answered
         let requiredQuestions = questionnaire.questions.filter { $0.required }
-        
+
         for question in requiredQuestions {
             guard question.isVisible(given: responses),
                   let answer = responses[question.id],
@@ -568,16 +612,16 @@ extension QuestionnaireResponse {
                 return false
             }
         }
-        
+
         return true
     }
-    
+
     func validationErrors(for questionnaire: Questionnaire) -> [String] {
         var errors: [String] = []
-        
+
         for question in questionnaire.questions {
             guard question.isVisible(given: responses) else { continue }
-            
+
             if let answer = responses[question.id] {
                 if !question.validateAnswer(answer) {
                     errors.append("Invalid answer for question: \(question.text)")
@@ -586,7 +630,7 @@ extension QuestionnaireResponse {
                 errors.append("Missing required answer for: \(question.text)")
             }
         }
-        
+
         return errors
     }
 }

@@ -11,6 +11,8 @@ import SwiftUI
 struct SeverityRatingView: View {
     let question: Question
     @Binding var answer: AnswerValue
+    let dimensionNumber: Int  // Dynamic dimension number
+    let dimensionTitle: String  // Dynamic dimension title
     @EnvironmentObject private var assessmentStore: AssessmentStore
     
     @State private var selectedRating: Int?
@@ -154,29 +156,31 @@ struct SeverityRatingView: View {
                 
                 // Title
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Severity Rating - Dimension 1")
+                    Text("Severity Rating - Dimension \(dimensionNumber)")
                         .font(.system(.title3, design: .rounded))
                         .fontWeight(.bold)
                         .foregroundColor(.decisionBandText)
                     
-                    Text("Acute Intoxication and/or Withdrawal Potential")
+                    Text(dimensionTitle)
                         .font(.system(.caption, design: .rounded))
                         .foregroundColor(.decisionBandText.opacity(0.8))
                 }
                 
                 Spacer()
                 
-                // Decision Required Pill
-                Text("DECISION REQUIRED")
-                    .font(.system(.caption2, design: .rounded))
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background(
-                        Capsule()
-                            .fill(Color.decisionPillBackground)
-                    )
+                // Decision Required Pill - Only show if no selection made
+                if selectedRating == nil {
+                    Text("DECISION REQUIRED")
+                        .font(.system(.caption2, design: .rounded))
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(
+                            Capsule()
+                                .fill(Color.decisionPillBackground)
+                        )
+                }
             }
             
             // Purpose statement

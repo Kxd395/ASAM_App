@@ -906,7 +906,7 @@ struct DomainDetailView: View {
                     }) {
                         HStack(spacing: 8) {
                             Image(systemName: canMarkComplete ? "checkmark.circle.fill" : "checkmark.circle")
-                            Text(isDomainComplete ? "Save Changes" : "Mark Complete")
+                            Text("Mark Complete")
                                 .fontWeight(.semibold)
                         }
                         .padding(.horizontal, 20)

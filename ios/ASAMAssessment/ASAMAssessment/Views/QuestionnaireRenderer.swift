@@ -515,7 +515,9 @@ struct QuestionView: View {
         if question.severityRating != nil {
             SeverityRatingView(
                 question: question,
-                answer: $answer
+                answer: $answer,
+                dimensionNumber: questionnaire.domain,
+                dimensionTitle: getDimensionTitle(for: questionnaire.domain)
             )
         } else {
             Text("Error: Severity rating metadata missing")
@@ -616,6 +618,39 @@ struct QuestionView: View {
             boolInput = false
             singleSelection = nil
             multipleSelection.removeAll()
+        }
+    }
+    
+    // MARK: - Helper Functions
+    
+    /// Get dimension title based on domain number
+    private func getDimensionTitle(for domain: String) -> String {
+        // Extract numeric part from domain (e.g., "A" -> 1, "1" -> 1, "d1" -> 1)
+        let numericDomain: Int
+        if let number = Int(domain) {
+            numericDomain = number
+        } else if domain.lowercased().hasPrefix("d") {
+            numericDomain = Int(domain.dropFirst()) ?? 1
+        } else {
+            // Handle letter domains (A=1, B=2, etc.)
+            numericDomain = domain.uppercased().unicodeScalars.first.map { Int($0.value) - Int(UnicodeScalar("A").value) + 1 } ?? 1
+        }
+        
+        switch numericDomain {
+        case 1:
+            return "Acute Intoxication and/or Withdrawal Potential"
+        case 2:
+            return "Biomedical Conditions and Complications"
+        case 3:
+            return "Emotional, Behavioral, or Cognitive Conditions and Complications"
+        case 4:
+            return "Readiness to Change"
+        case 5:
+            return "Relapse, Continued Use, or Continued Problem Potential"
+        case 6:
+            return "Recovery/Living Environment"
+        default:
+            return "Severity Assessment"
         }
     }
 }

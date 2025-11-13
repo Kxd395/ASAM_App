@@ -1,0 +1,48 @@
+{
+  "version": "1.0.0",
+  "description": "Field path mapping for ASAM assessment form anchors",
+  "lastUpdated": "2025-11-13",
+  "mappings": {
+    "d1": {
+      "substances": {
+        "alcohol": "d1.substances.alcohol",
+        "heroin": "d1.substances.heroin",
+        "cocaine": "d1.substances.cocaine"
+      },
+      "withdrawalBother": "d1.withdrawalBother",
+      "currentWithdrawal": "d1.currentWithdrawal",
+      "usedLast48h": "d1.usedLast48h",
+      "observation": "d1.observation"
+    },
+    "d2": {
+      "medicalConditions": "d2.medicalConditions",
+      "medications": "d2.medications",
+      "pregnancy": "d2.pregnancy"
+    },
+    "d3": {
+      "mentalHealth": "d3.mentalHealth",
+      "psychMeds": "d3.psychMeds",
+      "suicidalIdeation": "d3.suicidalIdeation",
+      "suicideAttempt": "d3.suicideAttempt",
+      "homicidalIdeation": "d3.homicidalIdeation"
+    },
+    "d4": {
+      "problemRecognition": "d4.problemRecognition",
+      "desireToChange": "d4.desireToChange",
+      "confidenceInChange": "d4.confidenceInChange",
+      "pastTreatment": "d4.pastTreatment"
+    },
+    "d5": {
+      "triggers": "d5.triggers",
+      "highRiskEnv": "d5.highRiskEnv",
+      "copingSkills": "d5.copingSkills",
+      "relapsePattern": "d5.relapsePattern"
+    },
+    "d6": {
+      "livingSituation": "d6.livingSituation",
+      "safety": "d6.safety",
+      "socialSupport": "d6.socialSupport",
+      "recoveryResources": "d6.recoveryResources"
+    }
+  }
+}

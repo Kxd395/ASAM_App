@@ -53,7 +53,9 @@ struct QuestionnaireRenderer: View {
                                     onAnswersChanged(answers)
                                 }
                             ),
-                            validationError: validationErrors[question.id]
+                            validationError: validationErrors[question.id],
+                            dimensionNumber: getDimensionNumber(for: questionnaire.domain),
+                            dimensionTitle: getDimensionTitle(for: questionnaire.domain)
                         )
                     }
                 }
@@ -158,6 +160,8 @@ struct QuestionView: View {
     let question: Question
     @Binding var answer: AnswerValue
     let validationError: String?
+    let dimensionNumber: Int  // NEW: For dynamic severity rating headers
+    let dimensionTitle: String  // NEW: For dynamic severity rating titles
 
     @Environment(\.colorScheme) var colorScheme
     @State private var textInput: String = ""
@@ -516,8 +520,8 @@ struct QuestionView: View {
             SeverityRatingView(
                 question: question,
                 answer: $answer,
-                dimensionNumber: questionnaire.domain,
-                dimensionTitle: getDimensionTitle(for: questionnaire.domain)
+                dimensionNumber: dimensionNumber,
+                dimensionTitle: dimensionTitle
             )
         } else {
             Text("Error: Severity rating metadata missing")
@@ -623,18 +627,22 @@ struct QuestionView: View {
     
     // MARK: - Helper Functions
     
-    /// Get dimension title based on domain number
-    private func getDimensionTitle(for domain: String) -> String {
+    /// Get numeric dimension number from domain string
+    private func getDimensionNumber(for domain: String) -> Int {
         // Extract numeric part from domain (e.g., "A" -> 1, "1" -> 1, "d1" -> 1)
-        let numericDomain: Int
         if let number = Int(domain) {
-            numericDomain = number
+            return number
         } else if domain.lowercased().hasPrefix("d") {
-            numericDomain = Int(domain.dropFirst()) ?? 1
+            return Int(domain.dropFirst()) ?? 1
         } else {
             // Handle letter domains (A=1, B=2, etc.)
-            numericDomain = domain.uppercased().unicodeScalars.first.map { Int($0.value) - Int(UnicodeScalar("A").value) + 1 } ?? 1
+            return domain.uppercased().unicodeScalars.first.map { Int($0.value) - Int(UnicodeScalar("A").value) + 1 } ?? 1
         }
+    }
+    
+    /// Get dimension title based on domain number
+    private func getDimensionTitle(for domain: String) -> String {
+        let numericDomain = getDimensionNumber(for: domain)
         
         switch numericDomain {
         case 1:

@@ -25,7 +25,7 @@ struct SeverityRatingView: View {
         question.severityRating
     }
     
-    private var cards: [SeverityCard] {
+    private var cards: [SeverityCardData] {
         metadata?.cards ?? []
     }
     
@@ -427,7 +427,7 @@ struct SeverityRatingView: View {
         .accessibilityLabel("Severity rating selection")
     }
     
-    private func severityCard(_ card: SeverityCard) -> some View {
+    private func severityCard(_ card: SeverityCardData) -> some View {
         let isSelected = selectedRating == card.rating
         let bgColor = Color.severityCardBackground(colorHex: card.color)
         let borderColor = Color.severityCardBorder(colorHex: card.border)

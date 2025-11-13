@@ -1,101 +1,353 @@
 {
-  "id": "e5_relapse_neutral",
-  "title": "Domain E: Relapse, Continued Use, or Continued Problem Potential",
-  "domain": "E",
+  "id": "d5_relapse_neutral",
+  "title": "Dimension 5: Relapse, Continued Use, or Continued Problem Potential",
+  "domain": "5",
   "version": "1.0.0",
-  "description": "Assessment of factors that may contribute to relapse or continued use",
+  "description": "Assessment of relapse potential and continued use risk factors",
   "questions": [
     {
-      "id": "e01",
-      "text": "What is the patient's history of relapse?",
-      "type": "single_choice",
-      "required": true,
-      "breadcrumb": "relapse_history",
-      "options": [
-        {"value": "no_history", "label": "No previous relapse history", "score": 1},
-        {"value": "rare", "label": "Rare relapses with long periods of abstinence", "score": 2},
-        {"value": "occasional", "label": "Occasional relapses", "score": 3},
-        {"value": "frequent", "label": "Frequent relapses or inability to maintain abstinence", "score": 4}
-      ]
-    },
-    {
-      "id": "e02",
-      "text": "How strong are the patient's cravings currently?",
-      "type": "single_choice",
-      "required": true,
-      "breadcrumb": "current_cravings",
-      "options": [
-        {"value": "none", "label": "No cravings", "score": 1},
-        {"value": "mild", "label": "Mild, manageable cravings", "score": 2},
-        {"value": "moderate", "label": "Moderate cravings, some difficulty managing", "score": 3},
-        {"value": "severe", "label": "Severe, overwhelming cravings", "score": 4}
-      ]
-    },
-    {
-      "id": "e03",
-      "text": "What triggers or high-risk situations has the patient identified?",
-      "type": "multiple_choice",
-      "required": true,
-      "breadcrumb": "relapse_triggers",
-      "options": [
-        {"value": "none_identified", "label": "No triggers identified", "score": 3},
-        {"value": "stress", "label": "Stress or emotional distress", "score": 2},
-        {"value": "social", "label": "Social situations or peer pressure", "score": 2},
-        {"value": "environmental", "label": "Environmental cues or locations", "score": 2},
-        {"value": "medical", "label": "Physical pain or medical issues", "score": 3},
-        {"value": "psychiatric", "label": "Psychiatric symptoms", "score": 3},
-        {"value": "financial", "label": "Financial problems", "score": 2}
-      ]
-    },
-    {
-      "id": "e04",
-      "text": "How does the patient typically cope with stress?",
-      "type": "single_choice",
-      "required": true,
-      "breadcrumb": "stress_coping",
-      "options": [
-        {"value": "healthy", "label": "Uses healthy coping strategies", "score": 1},
-        {"value": "mixed", "label": "Mix of healthy and unhealthy strategies", "score": 2},
-        {"value": "unhealthy", "label": "Primarily unhealthy coping strategies", "score": 3},
-        {"value": "substance_use", "label": "Primarily uses substances to cope", "score": 4}
-      ]
-    },
-    {
-      "id": "e05",
-      "text": "Rate the patient's confidence in maintaining sobriety (0-10 scale)",
+      "id": "d5_1_longest_abstinent_value",
+      "text": "What is the longest period of abstinence or sobriety?",
       "type": "number",
-      "required": true,
-      "breadcrumb": "sobriety_confidence",
+      "required": false,
+      "breadcrumb": "longest_abstinent",
+      "helpText": "Value",
       "validation": {
         "min": 0,
-        "max": 10
+        "max": 36500
       }
     },
     {
-      "id": "e06",
-      "text": "How much time does the patient spend thinking about substance use?",
+      "id": "d5_1_longest_abstinent_unit",
+      "text": "Time unit",
       "type": "single_choice",
-      "required": true,
-      "breadcrumb": "substance_preoccupation",
+      "required": false,
+      "breadcrumb": "longest_unit",
       "options": [
-        {"value": "rarely", "label": "Rarely or never", "score": 1},
-        {"value": "occasionally", "label": "Occasionally", "score": 2},
-        {"value": "frequently", "label": "Frequently throughout the day", "score": 3},
-        {"value": "constantly", "label": "Constantly preoccupied", "score": 4}
+        {"value": "days", "label": "Days"},
+        {"value": "weeks", "label": "Weeks"},
+        {"value": "months", "label": "Months"},
+        {"value": "years", "label": "Years"}
       ]
     },
     {
-      "id": "e07",
-      "text": "What is the patient's plan for maintaining sobriety?",
+      "id": "d5_1_never_in_recovery",
+      "text": "Patient has never been in recovery",
+      "type": "boolean",
+      "required": false,
+      "breadcrumb": "never_recovery"
+    },
+    {
+      "id": "d5_1_last_ended_value",
+      "text": "When did the last period of abstinence end?",
+      "type": "number",
+      "required": false,
+      "breadcrumb": "last_ended",
+      "helpText": "Value",
+      "validation": {
+        "min": 0,
+        "max": 36500
+      }
+    },
+    {
+      "id": "d5_1_last_ended_unit",
+      "text": "Time unit",
       "type": "single_choice",
-      "required": true,
-      "breadcrumb": "sobriety_plan",
+      "required": false,
+      "breadcrumb": "last_ended_unit",
       "options": [
-        {"value": "detailed", "label": "Detailed, realistic plan", "score": 1},
-        {"value": "basic", "label": "Basic plan with some specifics", "score": 2},
-        {"value": "vague", "label": "Vague or unrealistic plan", "score": 3},
-        {"value": "none", "label": "No plan for maintaining sobriety", "score": 4}
+        {"value": "days", "label": "Days ago"},
+        {"value": "weeks", "label": "Weeks ago"},
+        {"value": "months", "label": "Months ago"},
+        {"value": "years", "label": "Years ago"}
       ]
+    },
+    {
+      "id": "d5_2_helped_factors",
+      "text": "What helped during that period of abstinence?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "helped_factors"
+    },
+    {
+      "id": "d5_3_relapse_contributors",
+      "text": "What contributed to the relapse or return to use?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "relapse_contributors"
+    },
+    {
+      "id": "d5_4_plan_to_quit",
+      "text": "Does the patient have a plan to quit or cut back on substance use?",
+      "type": "multiple_choice",
+      "required": false,
+      "breadcrumb": "plan_quit",
+      "options": [
+        {"value": "attend_treatment", "label": "Attend treatment program"},
+        {"value": "support_groups", "label": "Join support groups"},
+        {"value": "therapy", "label": "Individual therapy"},
+        {"value": "medication", "label": "Medication-assisted treatment"},
+        {"value": "lifestyle_changes", "label": "Lifestyle changes"},
+        {"value": "avoid_triggers", "label": "Avoid triggers"},
+        {"value": "family_support", "label": "Family support"},
+        {"value": "other", "label": "Other"}
+      ]
+    },
+    {
+      "id": "d5_4_plan_notes",
+      "text": "Additional notes about the plan:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "plan_notes"
+    },
+    {
+      "id": "d5_5_consequences",
+      "text": "What are the likely consequences if the patient does not receive help?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "consequences"
+    },
+    {
+      "id": "d5_6_imminence",
+      "text": "Interviewer observation: Severity and imminence of relapse risk",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "imminence",
+      "options": [
+        {"value": "few_or_mild_not_imminent", "label": "Few or mild risk factors, relapse not imminent"},
+        {"value": "some_not_severe_weeks_months", "label": "Some risk factors, not severe, likely within weeks to months"},
+        {"value": "many_and_severe_imminent_hours_days", "label": "Many and severe risk factors, imminent within hours to days"}
+      ]
+    },
+    {
+      "id": "d5_6_imminence_notes",
+      "text": "Interviewer notes on imminence:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "imminence_notes"
+    },
+    {
+      "id": "d5_7_craving",
+      "text": "How strong are your cravings or urges to use?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "craving",
+      "options": [
+        {"value": "0", "label": "Not at all"},
+        {"value": "1", "label": "A little"},
+        {"value": "2", "label": "Somewhat"},
+        {"value": "3", "label": "Very"},
+        {"value": "4", "label": "Extremely"}
+      ]
+    },
+    {
+      "id": "d5_8_social_pressure",
+      "text": "How much social pressure do you feel to use substances?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "social_pressure",
+      "options": [
+        {"value": "0", "label": "Not at all"},
+        {"value": "1", "label": "A little"},
+        {"value": "2", "label": "Somewhat"},
+        {"value": "3", "label": "Very"},
+        {"value": "4", "label": "Extremely"}
+      ]
+    },
+    {
+      "id": "d5_9_emotions",
+      "text": "How much do difficult emotions make you want to use?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "emotions",
+      "options": [
+        {"value": "0", "label": "Not at all"},
+        {"value": "1", "label": "A little"},
+        {"value": "2", "label": "Somewhat"},
+        {"value": "3", "label": "Very"},
+        {"value": "4", "label": "Extremely"}
+      ]
+    },
+    {
+      "id": "d5_10_financial",
+      "text": "How much do financial problems contribute to your substance use?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "financial",
+      "options": [
+        {"value": "0", "label": "Not at all"},
+        {"value": "1", "label": "A little"},
+        {"value": "2", "label": "Somewhat"},
+        {"value": "3", "label": "Very"},
+        {"value": "4", "label": "Extremely"}
+      ]
+    },
+    {
+      "id": "d5_11_physical",
+      "text": "How much do physical discomfort or pain contribute to your substance use?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "physical",
+      "options": [
+        {"value": "0", "label": "Not at all"},
+        {"value": "1", "label": "A little"},
+        {"value": "2", "label": "Somewhat"},
+        {"value": "3", "label": "Very"},
+        {"value": "4", "label": "Extremely"}
+      ]
+    },
+    {
+      "id": "d5_12_relapse_likelihood",
+      "text": "How likely do you think you are to relapse or return to use?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "relapse_likelihood",
+      "options": [
+        {"value": "0", "label": "Not at all"},
+        {"value": "1", "label": "A little"},
+        {"value": "2", "label": "Somewhat"},
+        {"value": "3", "label": "Very"},
+        {"value": "4", "label": "Extremely"}
+      ]
+    },
+    {
+      "id": "d5_13_triggers",
+      "text": "What are your main triggers for substance use?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "triggers"
+    },
+    {
+      "id": "d5_14_coping",
+      "text": "What coping strategies do you currently use?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "coping"
+    },
+    {
+      "id": "d5_15_plan_ability",
+      "text": "How able are you to follow through with your recovery plan?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "plan_ability"
+    },
+    {
+      "id": "d5_16_insight",
+      "text": "Patient's insight into their relapse risk:",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "insight",
+      "options": [
+        {"value": "good", "label": "Good - Recognizes risk factors and has realistic awareness"},
+        {"value": "some", "label": "Some - Partial awareness of risk factors"},
+        {"value": "limited", "label": "Limited - Minimal awareness or denial of risk"},
+        {"value": "dangerously_low", "label": "Dangerously low - No awareness, high denial"}
+      ]
+    },
+    {
+      "id": "d5_16_insight_notes",
+      "text": "Notes on patient insight:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "insight_notes"
+    },
+    {
+      "id": "d5_17_problems",
+      "text": "What other problems in your life might lead to relapse?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "problems"
+    },
+    {
+      "id": "d5_18_goals",
+      "text": "What are your goals for maintaining recovery?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "goals"
+    },
+    {
+      "id": "d5_severity_rating",
+      "text": "SEVERITY RATING - DIMENSION 5 (Relapse, Continued Use, or Continued Problem Potential)",
+      "type": "severity_rating",
+      "required": true,
+      "breadcrumb": "d5_severity_rating",
+      "helpText": "Please circle the intensity and urgency of the patient's CURRENT needs for services based on the information collected in Dimension 5",
+      "severity_rating": {
+        "severity_cards": [
+          {
+            "rating": 0,
+            "title": "0 None",
+            "color": "#69F0AE",
+            "border": "#4CAF50",
+            "icon": "checkmark.circle",
+            "bullets": [
+              "Good understanding of relapse triggers and skills",
+              "Strong motivation and commitment to recovery",
+              "Effective coping strategies in place"
+            ],
+            "disposition": ""
+          },
+          {
+            "rating": 1,
+            "title": "1 Mild",
+            "color": "#AED581",
+            "border": "#8BC34A",
+            "icon": "info.circle",
+            "bullets": [
+              "Some recognition of relapse risk",
+              "Moderate motivation for recovery",
+              "Basic coping skills present but inconsistent"
+            ],
+            "disposition": "Early intervention services to strengthen recovery skills"
+          },
+          {
+            "rating": 2,
+            "title": "2 Moderate",
+            "color": "#FFD54F",
+            "border": "#FFC107",
+            "icon": "exclamationmark.triangle",
+            "bullets": [
+              "Limited awareness of relapse triggers",
+              "Ambivalent about recovery",
+              "Minimal or ineffective coping strategies",
+              "Recent relapse or high-risk situations"
+            ],
+            "disposition": "Moderate intensity relapse prevention services and ongoing support"
+          },
+          {
+            "rating": 3,
+            "title": "3 Severe",
+            "color": "#FFB74D",
+            "border": "#FF9800",
+            "icon": "exclamationmark.triangle.fill",
+            "bullets": [
+              "Poor insight into relapse potential",
+              "Active ambivalence or resistance to treatment",
+              "Inadequate coping skills",
+              "High-risk situations or recent relapse",
+              "Significant environmental or social triggers"
+            ],
+            "disposition": "High intensity relapse prevention and close monitoring to prevent continued use or deterioration"
+          },
+          {
+            "rating": 4,
+            "title": "4 Very Severe",
+            "color": "#EF9A9A",
+            "border": "#E57373",
+            "icon": "xmark.circle.fill",
+            "bullets": [
+              "No recognition of relapse risk or denial",
+              "Unable or unwilling to avoid high-risk situations",
+              "Imminent danger of relapse",
+              "Continued use despite severe consequences",
+              "No effective coping strategies"
+            ],
+            "disposition": "Intensive services with 24-hour support to prevent imminent relapse or manage continued use"
+          }
+        ],
+        "substance_options": [],
+        "safety_rules": []
+      }
     }
   ]
 }

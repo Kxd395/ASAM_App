@@ -429,9 +429,8 @@ struct SeverityRatingView: View {
         let borderColor = Color.severityCardBorder(colorHex: card.border)
         
         return Button(action: {
-            withAnimation(.easeInOut(duration: 0.2)) {
-                selectedRating = card.rating
-            }
+            // Direct assignment without animation to prevent lockup
+            selectedRating = card.rating
         }) {
             VStack(alignment: .leading, spacing: 10) {
                 // Title with color swatch

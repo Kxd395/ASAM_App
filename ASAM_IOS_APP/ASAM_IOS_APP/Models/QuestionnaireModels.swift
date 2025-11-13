@@ -19,36 +19,6 @@ struct Questionnaire: Codable, Identifiable {
     let questions: [Question]
 }
 
-struct Question: Codable, Identifiable {
-    let id: String
-    let text: String
-    let type: QuestionType
-    let required: Bool
-    let breadcrumb: String?
-    let visibleIf: VisibilityCondition?
-    let options: [QuestionOption]?
-    let validation: Validation?
-    let description: String?
-    let substanceTemplate: SubstanceTemplate?
-    let availableSubstances: [SubstanceDefinition]?
-    
-    enum CodingKeys: String, CodingKey {
-        case id, text, type, required, breadcrumb, options, validation, description
-        case visibleIf = "visible_if"
-        case substanceTemplate = "substance_template"
-        case availableSubstances = "available_substances"
-    }
-}
-
-enum QuestionType: String, Codable, CaseIterable {
-    case singleChoice = "single_choice"
-    case multipleChoice = "multiple_choice"
-    case text = "text"
-    case number = "number"
-    case boolean = "boolean"
-    case dynamicSubstanceGrid = "dynamic_substance_grid"
-}
-
 // MARK: - Substance Assessment Models
 
 struct SubstanceTemplate: Codable {
@@ -137,6 +107,231 @@ struct SubstanceAssessment: Codable, Hashable, Identifiable {
     }
 }
 
+// MARK: - Repeater Field Definition
+
+struct RepeaterField: Codable, Identifiable {
+    let id: String
+    let label: String
+    let type: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id, label, type
+    }
+}
+
+// MARK: - Severity Rating Structures
+
+struct SeverityCard: Codable, Identifiable {
+    let rating: Int
+    let title: String
+    let color: String
+    let border: String
+    let icon: String
+    let bullets: [String]
+    let disposition: String
+    
+    var id: Int { rating }
+    
+    enum CodingKeys: String, CodingKey {
+        case rating, title, color, border, icon, bullets, disposition
+    }
+}
+
+struct SubstanceOption: Codable, Identifiable {
+    let id: String
+    let label: String
+    let type: String  // "checkbox" or "text"
+    
+    enum CodingKeys: String, CodingKey {
+        case id, label, type
+    }
+}
+
+struct SafetyRule: Codable {
+    let condition: String  // e.g., "rating >= 3"
+    let banner: String
+    let severity: String   // "warning", "critical"
+    
+    enum CodingKeys: String, CodingKey {
+        case condition, banner, severity
+    }
+}
+
+struct SeverityRatingMetadata: Codable {
+    let cards: [SeverityCard]
+    let substanceOptions: [SubstanceOption]
+    let safetyRules: [SafetyRule]
+    let referencePages: [String: String]?  // e.g., ["alcohol": "147-154"]
+    
+    enum CodingKeys: String, CodingKey {
+        case cards = "severity_cards"
+        case substanceOptions = "substance_options"
+        case safetyRules = "safety_rules"
+        case referencePages = "reference_pages"
+    }
+}
+
+// MARK: - Categorized Health Issues (D2)
+
+struct HealthIssueCategory: Codable, Identifiable {
+    let id: String
+    let title: String
+    let items: [HealthIssueItem]
+}
+
+struct HealthIssueItem: Codable, Identifiable {
+    let id: String
+    let label: String
+    let requiresNote: Bool
+    let multiSelectOptions: [HealthIssueOption]?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, label
+        case requiresNote = "requires_note"
+        case multiSelectOptions = "multi_select_options"
+    }
+}
+
+struct HealthIssueOption: Codable, Identifiable {
+    let id: String
+    let label: String
+    let isOtherOption: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case id, label
+        case isOtherOption = "is_other"
+    }
+}
+
+struct CategorizedHealthIssuesMetadata: Codable {
+    let categories: [HealthIssueCategory]
+    let macros: [String]?  // e.g., ["none_of_the_above", "reviewed_unchanged"]
+    
+    enum CodingKeys: String, CodingKey {
+        case categories
+        case macros
+    }
+}
+
+// MARK: - Impact Grid Models (D4 Life Areas Assessment)
+
+struct ImpactGridMetadata: Codable {
+    let impactItems: [ImpactItem]
+    let scaleOptions: [ScaleOption]
+    
+    enum CodingKeys: String, CodingKey {
+        case impactItems = "impact_items"
+        case scaleOptions = "scale_options"
+    }
+}
+
+struct ImpactItem: Codable, Identifiable {
+    let id: String
+    let label: String
+    let requiresNote: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case id, label
+        case requiresNote = "requires_note"
+    }
+}
+
+struct ScaleOption: Codable, Identifiable {
+    let value: String
+    let label: String
+    let score: Int
+    
+    var id: String { value }
+}
+
+struct ImpactGridAnswer: Codable, Hashable {
+    let selections: [String: String]  // [itemId: scaleValue]
+    let notes: [String: String]  // [itemId: note text]
+}
+
+struct Question: Codable, Identifiable {
+    let id: String
+    let text: String
+    let type: QuestionType
+    let required: Bool
+    let breadcrumb: String?
+    let visibleIf: VisibilityCondition?
+    let options: [QuestionOption]?
+    let validation: Validation?
+    let description: String?
+    let helpText: String?  // Support both description and helpText
+    let repeaterFields: [RepeaterField]?  // For repeater type questions
+    let substanceTemplate: SubstanceTemplate?
+    let availableSubstances: [SubstanceDefinition]?
+    let severityRating: SeverityRatingMetadata?  // For severity_rating type
+    let categorizedHealthIssues: CategorizedHealthIssuesMetadata?  // For categorized_health_issues type
+    let impactGrid: ImpactGridMetadata?  // For impact_grid type (D4)
+    
+    // Explicit initializer with default values for new optional parameters
+    init(
+        id: String,
+        text: String,
+        type: QuestionType,
+        required: Bool,
+        breadcrumb: String? = nil,
+        visibleIf: VisibilityCondition? = nil,
+        options: [QuestionOption]? = nil,
+        validation: Validation? = nil,
+        description: String? = nil,
+        helpText: String? = nil,
+        repeaterFields: [RepeaterField]? = nil,
+        substanceTemplate: SubstanceTemplate? = nil,
+        availableSubstances: [SubstanceDefinition]? = nil,
+        severityRating: SeverityRatingMetadata? = nil,
+        categorizedHealthIssues: CategorizedHealthIssuesMetadata? = nil,
+        impactGrid: ImpactGridMetadata? = nil
+    ) {
+        self.id = id
+        self.text = text
+        self.type = type
+        self.required = required
+        self.breadcrumb = breadcrumb
+        self.visibleIf = visibleIf
+        self.options = options
+        self.validation = validation
+        self.description = description
+        self.helpText = helpText
+        self.repeaterFields = repeaterFields
+        self.substanceTemplate = substanceTemplate
+        self.availableSubstances = availableSubstances
+        self.severityRating = severityRating
+        self.categorizedHealthIssues = categorizedHealthIssues
+        self.impactGrid = impactGrid
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id, text, type, required, breadcrumb, options, validation, description
+        case helpText = "helpText"
+        case visibleIf = "visible_if"
+        case repeaterFields = "repeater_fields"
+        case substanceTemplate = "substance_template"
+        case availableSubstances = "available_substances"
+        case severityRating = "severity_rating"
+        case categorizedHealthIssues = "categorized_health_issues"
+        case impactGrid = "impact_grid"
+    }
+}
+
+enum QuestionType: String, Codable, CaseIterable {
+    case singleChoice = "single_choice"
+    case multipleChoice = "multiple_choice"
+    case text = "text"
+    case textarea = "textarea"
+    case number = "number"
+    case boolean = "boolean"
+    case repeater = "repeater"
+    case monthYear = "month_year"
+    case dynamicSubstanceGrid = "dynamic_substance_grid"
+    case severityRating = "severity_rating"  // D1 severity rating cards
+    case categorizedHealthIssues = "categorized_health_issues"  // D2 compact searchable health issues
+    case impactGrid = "impact_grid"  // D4 life areas impact assessment
+}
+
 struct QuestionOption: Codable, Identifiable {
     let value: QuestionValue
     let label: String
@@ -223,6 +418,7 @@ enum AnswerValue: Codable, Hashable {
     case single(QuestionValue)
     case multi(Set<QuestionValue>)
     case substanceGrid([SubstanceAssessment])
+    case impactGrid(ImpactGridAnswer)
     case none
     
     init(from decoder: Decoder) throws {
@@ -268,6 +464,8 @@ enum AnswerValue: Codable, Hashable {
             try container.encode(Array(values))
         case .substanceGrid(let assessments):
             try container.encode(assessments)
+        case .impactGrid(let gridAnswer):
+            try container.encode(gridAnswer)
         case .none:
             try container.encodeNil()
         }
@@ -321,7 +519,7 @@ extension Question {
             answerValue = .number(num)
         case .bool(let bool):
             answerValue = .bool(bool)
-        case .multi, .none, .substanceGrid:
+        case .multi, .none, .substanceGrid, .impactGrid:
             return false
         }
         

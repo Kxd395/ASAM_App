@@ -1,0 +1,544 @@
+{
+  "id": "d2_biomedical_complete",
+  "title": "Dimension 2: Biomedical Conditions and Complications",
+  "domain": "2",
+  "version": "3.0.0",
+  "description": "Comprehensive assessment of medical/physical health conditions and their impact on treatment",
+  "questions": [
+    {
+      "id": "d2_01",
+      "text": "Do you have a primary care clinician who manages your medical concerns?",
+      "helpText": "Healthcare providers should be identified for collaboration and releases of information obtained.",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "primary_care_provider",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d2_01a_provider_name",
+      "text": "Provider name:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "provider_name",
+      "visible_if": {
+        "question": "d2_01",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d2_01b_provider_contact",
+      "text": "Provider contact:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "provider_contact",
+      "visible_if": {
+        "question": "d2_01",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d2_02_medications",
+      "text": "Are you currently taking any medications? List all known medications for medical/physical health condition(s), including over the counter medications (Mental health medications will be discussed in the next section)",
+      "type": "repeater",
+      "required": true,
+      "breadcrumb": "medications_list",
+      "repeater_fields": [
+        {"id": "medication", "label": "MEDICATION(S)", "type": "text"},
+        {"id": "dose", "label": "DOSE (if known)", "type": "text"},
+        {"id": "frequency", "label": "FREQUENCY e.g., 1, 2, 3, 4 x/day", "type": "text"},
+        {"id": "purpose", "label": "PURPOSE (to treat what symptom/illness)", "type": "text"},
+        {"id": "notes", "label": "NOTES", "type": "text"}
+      ]
+    },
+    {
+      "id": "d2_02b_marijuana",
+      "text": "Do you use marijuana or marijuana-related products (including CBD [cannabidiol] or other extracts) as medicine?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "medicinal_marijuana",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d2_02b1_marijuana_type",
+      "text": "Specify type:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "marijuana_type",
+      "visible_if": {
+        "question": "d2_02b_marijuana",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d2_02b2_marijuana_frequency",
+      "text": "Frequency:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "marijuana_frequency",
+      "visible_if": {
+        "question": "d2_02b_marijuana",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d2_02b3_marijuana_purpose",
+      "text": "Purpose (physical health symptom/illness):",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "marijuana_purpose",
+      "visible_if": {
+        "question": "d2_02b_marijuana",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d2_02c_contraception",
+      "text": "Are you currently using contraception?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "contraception_use",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no_na", "label": "No/N/A"}
+      ]
+    },
+    {
+      "id": "d2_02c1_contraception_type",
+      "text": "Specify type:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "contraception_type",
+      "visible_if": {
+        "question": "d2_02c_contraception",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d2_03",
+      "text": "Do you have any concerns about a medical/physical health problem or disability at this time?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "medical_concerns",
+      "options": [
+        {"value": "yes_or_unknown", "label": "Yes (or don't know)"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d2_03a_concerns_description",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "concerns_description",
+      "visible_if": {
+        "question": "d2_03",
+        "operator": "equals",
+        "value": "yes_or_unknown"
+      }
+    },
+    {
+      "id": "d2_04a_last_visit",
+      "text": "Approximately, when is the last time you saw a doctor or other healthcare clinician? (Month and year if known):",
+      "type": "month_year",
+      "required": true,
+      "breadcrumb": "last_healthcare_visit"
+    },
+    {
+      "id": "d2_04b_visit_reason",
+      "text": "What did you see them for (if known)?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "visit_reason"
+    },
+    {
+      "id": "d2_05",
+      "text": "I am going to read you a list of physical health issues. Do you currently have, or have you been diagnosed with, any of the following?",
+      "type": "multiple_choice",
+      "required": true,
+      "breadcrumb": "physical_health_issues",
+      "options": [
+        {"value": "heart_problems", "label": "Heart problems"},
+        {"value": "high_bp", "label": "High Blood Pressure"},
+        {"value": "high_cholesterol", "label": "High Cholesterol"},
+        {"value": "blood_disorder", "label": "Blood Disorder"},
+        {"value": "hiv", "label": "HIV"},
+        {"value": "stomach_intestinal", "label": "Stomach/Intestinal Problems"},
+        {"value": "seizure_neuro", "label": "Seizure/Neurological Problems"},
+        {"value": "thyroid", "label": "Thyroid Problems"},
+        {"value": "kidney", "label": "Kidney Problems"},
+        {"value": "liver", "label": "Liver Problems"},
+        {"value": "viral_hepatitis", "label": "Viral Hepatitis (A, B, or C)"},
+        {"value": "asthma_lung", "label": "Asthma/Lung Problems"},
+        {"value": "muscle_joint", "label": "Muscle/Joint problems"},
+        {"value": "vision", "label": "Vision Problems"},
+        {"value": "hearing", "label": "Hearing Problems"},
+        {"value": "dental", "label": "Dental Problems"},
+        {"value": "tuberculosis", "label": "Tuberculosis (TB)"},
+        {"value": "diabetes", "label": "Diabetes"},
+        {"value": "sleep", "label": "Sleep Problems"},
+        {"value": "chronic_pain", "label": "Chronic Pain"},
+        {"value": "acute_pain", "label": "Acute Pain"},
+        {"value": "cancer", "label": "Cancer (specify type(s)):"},
+        {"value": "std", "label": "Sexually Transmitted Disease(s):"},
+        {"value": "infections", "label": "Infection(s):"},
+        {"value": "allergies", "label": "Allergies:"},
+        {"value": "other", "label": "Other:"}
+      ]
+    },
+    {
+      "id": "d2_05a_cancer_type",
+      "text": "Cancer type(s):",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "cancer_types",
+      "visible_if": {
+        "question": "d2_05",
+        "operator": "contains",
+        "value": "cancer"
+      }
+    },
+    {
+      "id": "d2_05b_std_type",
+      "text": "Sexually Transmitted Disease(s):",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "std_types",
+      "visible_if": {
+        "question": "d2_05",
+        "operator": "contains",
+        "value": "std"
+      }
+    },
+    {
+      "id": "d2_05c_infections_type",
+      "text": "Infection(s):",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "infection_types",
+      "visible_if": {
+        "question": "d2_05",
+        "operator": "contains",
+        "value": "infections"
+      }
+    },
+    {
+      "id": "d2_05d_allergies_type",
+      "text": "Allergies:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "allergy_types",
+      "visible_if": {
+        "question": "d2_05",
+        "operator": "contains",
+        "value": "allergies"
+      }
+    },
+    {
+      "id": "d2_05e_other_type",
+      "text": "Other:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "other_health_issues",
+      "visible_if": {
+        "question": "d2_05",
+        "operator": "contains",
+        "value": "other"
+      }
+    },
+    {
+      "id": "d2_06",
+      "text": "Interviewer observation: are any of these medical/physical health issues potentially infectious to other staff or patients? (Seek medical or nursing consultation if unsure)",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "infectious_to_others",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d2_06a_infectious_description",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "infectious_description",
+      "visible_if": {
+        "question": "d2_06",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d2_07",
+      "text": "(Confirm, ask if not known) Are all of these medical/physical health problems in good control or stable with current treatment?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "stability_of_problems",
+      "options": [
+        {"value": "not_sure", "label": "Not sure"},
+        {"value": "unstable", "label": "Unstable/uncontrolled"},
+        {"value": "stable_with_treatment", "label": "Stable w/ treatment"},
+        {"value": "stable_without_treatment", "label": "Stable w/out treatment"},
+        {"value": "na", "label": "N/A"}
+      ]
+    },
+    {
+      "id": "d2_07a_stability_description",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "stability_description"
+    },
+    {
+      "id": "d2_08",
+      "text": "Do you need additional treatment for new, worsening or more severe symptoms/problems?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "need_additional_treatment",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"},
+        {"value": "dont_know", "label": "Don't know"}
+      ]
+    },
+    {
+      "id": "d2_08a_treatment_description",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "treatment_description"
+    },
+    {
+      "id": "d2_09",
+      "text": "Are these medical/physical health issues (listed in the table above) either caused or made worse by alcohol or other drug use? (e.g., cause you to neglect treatment, make medical/physical health problem worse, cause injection injuries?)",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "aod_impact_on_health",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"},
+        {"value": "dont_know", "label": "Don't know"}
+      ]
+    },
+    {
+      "id": "d2_09a_aod_impact_description",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "aod_impact_description"
+    },
+    {
+      "id": "d2_10",
+      "text": "Are you up to date on your vaccines? (COVID, Tdap, Flu, HepA, HepB, MMR, Tetanus, VAR, other)",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "vaccines_current",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"},
+        {"value": "dont_know", "label": "Don't know"}
+      ]
+    },
+    {
+      "id": "d2_11",
+      "text": "If female sex at birth, are you, or do you think you could be, pregnant?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "pregnancy_status",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no_na", "label": "No/N/A"},
+        {"value": "not_sure", "label": "Not sure"}
+      ]
+    },
+    {
+      "id": "d2_11a_trimester",
+      "text": "If yes, how many weeks/which trimester?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "pregnancy_trimester",
+      "visible_if": {
+        "question": "d2_11",
+        "operator": "equals",
+        "value": "yes"
+      },
+      "options": [
+        {"value": "1st", "label": "1st, weeks 0-13"},
+        {"value": "2nd", "label": "2nd, weeks 14-27"},
+        {"value": "3rd", "label": "3rd, weeks 28+"}
+      ]
+    },
+    {
+      "id": "d2_11b_pregnancy_care",
+      "text": "If yes, have you seen a clinician for pregnancy care?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "pregnancy_care",
+      "visible_if": {
+        "question": "d2_11",
+        "operator": "equals",
+        "value": "yes"
+      },
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no_na", "label": "No/N/A"}
+      ]
+    },
+    {
+      "id": "d2_12",
+      "text": "Additional comments on medical/physical health conditions, prior hospitalizations (include dates and reasons):",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "additional_comments"
+    },
+    {
+      "id": "d2_13",
+      "text": "For the next questions, the response options are 'Not at all,' 'A Little,' 'Somewhat,' 'Very,' or 'Extremely.' How much do any of these health issues (above) make it harder for you to take care of yourself? (e.g., hygiene, grooming, dressing, eating, housework, living independently, etc.)",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "impact_on_self_care",
+      "options": [
+        {"value": "1", "label": "Not at all", "score": 1},
+        {"value": "2", "label": "A Little", "score": 2},
+        {"value": "3", "label": "Somewhat", "score": 3},
+        {"value": "4", "label": "Very", "score": 4},
+        {"value": "5", "label": "Extremely", "score": 5}
+      ]
+    },
+    {
+      "id": "d2_13a_self_care_description",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "self_care_description"
+    },
+    {
+      "id": "d2_14",
+      "text": "How much do any of these health issues make it harder for you to go to school, work, socialize or engage in hobbies or other interests?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "impact_on_activities",
+      "options": [
+        {"value": "1", "label": "Not at all", "score": 1},
+        {"value": "2", "label": "A Little", "score": 2},
+        {"value": "3", "label": "Somewhat", "score": 3},
+        {"value": "4", "label": "Very", "score": 4},
+        {"value": "5", "label": "Extremely", "score": 5}
+      ]
+    },
+    {
+      "id": "d2_14a_activities_description",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "activities_description"
+    },
+    {
+      "id": "d2_15",
+      "text": "How much do these health issues make it harder for you to go to SUD treatment or stay in SUD treatment?",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "impact_on_sud_treatment",
+      "options": [
+        {"value": "1", "label": "Not at all", "score": 1},
+        {"value": "2", "label": "A Little", "score": 2},
+        {"value": "3", "label": "Somewhat", "score": 3},
+        {"value": "4", "label": "Very", "score": 4},
+        {"value": "5", "label": "Extremely", "score": 5},
+        {"value": "na", "label": "Not applicable", "score": 0}
+      ]
+    },
+    {
+      "id": "d2_15a_sud_treatment_description",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "sud_treatment_description"
+    },
+    {
+      "id": "d2_16",
+      "text": "Do you have someone who can support you with these health issues? (Probe, even if they 'don't need help' do they have a support person?)",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "health_support_person",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "maybe", "label": "Maybe"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d2_16a_support_description",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "support_description"
+    },
+    {
+      "id": "d2_17",
+      "text": "What concerns do you have about your physical health and/or medical conditions?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "patient_concerns"
+    },
+    {
+      "id": "d2_18",
+      "text": "What goals do you have for your physical health and/or medical conditions?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "patient_goals"
+    },
+    {
+      "id": "d2_19",
+      "text": "Question to be answered by interviewer: Does the patient report medical/physical health symptoms that would be considered life threatening or require immediate medical attention?",
+      "helpText": "*If yes, consider immediate referral to ED or call 911",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "life_threatening_symptoms",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d2_19a_life_threatening_notes",
+      "text": "Notes:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "life_threatening_notes"
+    },
+    {
+      "id": "d2_severity_rating",
+      "text": "Please circle the intensity and urgency of the patient's CURRENT needs for services based on the information collected in Dimension 2: Severity Rating - Dimension 2 (Biomedical Conditions and Complications)",
+      "type": "single_choice",
+      "required": true,
+      "breadcrumb": "severity_rating",
+      "options": [
+        {"value": "0", "label": "0 - None", "score": 0},
+        {"value": "1", "label": "1 - Mild", "score": 1},
+        {"value": "2", "label": "2 - Moderate", "score": 2},
+        {"value": "3", "label": "3 - Severe", "score": 3},
+        {"value": "4", "label": "4 - Very Severe", "score": 4}
+      ]
+    },
+    {
+      "id": "d2_severity_rationale",
+      "text": "Rationale for severity rating:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "severity_rationale"
+    }
+  ]
+}

@@ -59,33 +59,33 @@ struct Assessment: Identifiable, Codable, Hashable {
         self.acutePsych = false
         self.validationGates = ValidationGate.allGates()
     }
-
+    
     // MARK: - Progress Tracking (Fix for field removal issue)
-
+    
     /// Calculate overall assessment progress
     /// Returns value between 0.0 and 1.0
     func calculateOverallProgress() -> Double {
         guard !domains.isEmpty else { return 0.0 }
-
+        
         let domainProgresses = domains.map { $0.calculateProgress() }
         let totalProgress = domainProgresses.reduce(0, +) / Double(domains.count)
-
+        
         print("📊 Overall assessment progress: \(String(format: "%.0f%%", totalProgress * 100))")
         print("📊 Domain breakdown: \(domains.map { "D\($0.number): \($0.completionPercentage)%" }.joined(separator: ", "))")
-
+        
         return totalProgress
     }
-
+    
     /// Get completion percentage (0-100)
     var completionPercentage: Int {
         Int(calculateOverallProgress() * 100)
     }
-
+    
     /// Get number of completed domains
     var completedDomainsCount: Int {
         domains.filter { $0.isComplete }.count
     }
-
+    
     /// Get number of domains with any answers
     var startedDomainsCount: Int {
         domains.filter { !$0.answers.isEmpty }.count
@@ -141,14 +141,14 @@ struct Domain: Identifiable, Codable, Hashable {
             Domain(id: UUID(), number: 6, title: "Recovery Environment", severity: 0, notes: "", isComplete: false, answers: [:])
         ]
     }
-
+    
     // MARK: - Progress Tracking (Fix for field removal issue)
-
+    
     /// Calculate completion progress for this domain
     /// Returns value between 0.0 and 1.0
     func calculateProgress() -> Double {
         guard !answers.isEmpty else { return 0.0 }
-
+        
         // Count non-empty answers
         let validAnswers = answers.filter { _, value in
             switch value {
@@ -160,16 +160,16 @@ struct Domain: Identifiable, Codable, Hashable {
                 return true
             }
         }
-
+        
         // For now, use a simple ratio
         // TODO: Integrate with questionnaire to get total required questions
         let progress = Double(validAnswers.count) / Double(max(answers.count, 1))
-
+        
         print("📊 Domain \(number) progress: \(validAnswers.count)/\(answers.count) = \(String(format: "%.0f%%", progress * 100))")
-
+        
         return progress
     }
-
+    
     /// Calculate completion percentage (0-100)
     var completionPercentage: Int {
         Int(calculateProgress() * 100)

@@ -49,7 +49,7 @@ struct ContentView: View {
                     ToolbarItem(placement: .topBarLeading) {
                         networkStatusIndicator
                     }
-
+                    
                     // NEW: Settings button
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
@@ -180,7 +180,7 @@ struct ContentView: View {
 
     private func sectionNavigationView(for assessment: Assessment) -> some View {
         ExpandableSidebarView(
-            assessment: assessment,
+            assessment: assessment, 
             selectedSection: $selectedSection,
             selectedDomain: $selectedDomain,  // Pass selectedDomain binding
             directDomainNavigation: $directDomainNavigation,  // Pass directDomainNavigation binding
@@ -223,7 +223,7 @@ struct ContentView: View {
         let assessment = assessmentStore.createAssessment()
         selectedAssessment = assessment
         selectedSection = .overview
-
+        
         // Ensure currentAssessment is set immediately
         assessmentStore.currentAssessment = assessment
 
@@ -368,7 +368,7 @@ struct DomainsListView: View {
     let assessment: Assessment
     @EnvironmentObject private var assessmentStore: AssessmentStore
     @State private var path: [Int] = []  // Navigation path by domain number
-
+    
     var body: some View {
         NavigationStack(path: $path) {
             List {
@@ -381,7 +381,7 @@ struct DomainsListView: View {
                                 Text("Severity: \(domain.severity)")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
-
+                                
                                 // Show answer count for debugging
                                 if !domain.answers.isEmpty {
                                     Text("Answers: \(domain.answers.count)")
@@ -429,17 +429,17 @@ struct DomainDetailView: View {
     @State private var isEditMode = false  // Track if domain is in edit mode
     @State private var showCompletionAlert = false  // Show confirmation when completing
     @State private var isSaving = false  // NEW: Flag to prevent infinite save loop
-
+    
     // Get current domain state from store
     private var currentDomainFromStore: Domain? {
         assessmentStore.currentAssessment?.domains.first(where: { $0.id == domain.id })
     }
-
+    
     // Check if domain is complete
     private var isDomainComplete: Bool {
         currentDomainFromStore?.isComplete ?? false
     }
-
+    
     // Check if all required questions are answered
     private var allRequiredQuestionsAnswered: Bool {
         guard let questionnaire = questionnaire else { return false }
@@ -452,22 +452,22 @@ struct DomainDetailView: View {
         }
         return answeredRequired.count == requiredQuestions.count
     }
-
+    
     // Check if domain can be marked complete (either all questions OR severity set)
     private var canMarkComplete: Bool {
         // Option 1: All required questions answered
         if allRequiredQuestionsAnswered {
             return true
         }
-
+        
         // Option 2: Severity rating is set (override completion)
         if let currentDomain = currentDomainFromStore {
             return currentDomain.severity > 0
         }
-
+        
         return false
     }
-
+    
     // Helper text for completion requirements
     private var completionRequirementText: String {
         if allRequiredQuestionsAnswered {
@@ -478,9 +478,9 @@ struct DomainDetailView: View {
             return "Complete all questions OR set severity rating"
         }
     }
-
+    
     // MARK: - Main Content (extracted to avoid compiler timeout)
-
+    
     @ViewBuilder
     private var mainScrollContent: some View {
         if isLoading {
@@ -493,7 +493,7 @@ struct DomainDetailView: View {
             noDataView
         }
     }
-
+    
     private var loadingView: some View {
         VStack(spacing: 16) {
             ProgressView()
@@ -503,7 +503,7 @@ struct DomainDetailView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-
+    
     private func errorView(message: String) -> some View {
         VStack(spacing: 16) {
             Image(systemName: "exclamationmark.triangle")
@@ -515,7 +515,7 @@ struct DomainDetailView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
-
+            
             Button("Retry") {
                 loadQuestionnaire()
             }
@@ -523,7 +523,7 @@ struct DomainDetailView: View {
         }
         .padding()
     }
-
+    
     private func questionnaireContent(questionnaire: Questionnaire) -> some View {
         ZStack {
             QuestionnaireRenderer(
@@ -540,7 +540,7 @@ struct DomainDetailView: View {
             }
             .disabled(isDomainComplete && !isEditMode)
             .opacity(isDomainComplete && !isEditMode ? 0.6 : 1.0)
-
+            
             if isDomainComplete && !isEditMode {
                 completionOverlay
             }
@@ -550,7 +550,7 @@ struct DomainDetailView: View {
                 print("⏸️  Skipping answer refresh during save operation")
                 return
             }
-
+            
             if let newAssessment = newCurrentAssessment,
                let updatedDomain = newAssessment.domains.first(where: { $0.id == domain.id }) {
                 answers = updatedDomain.answers
@@ -558,17 +558,17 @@ struct DomainDetailView: View {
             }
         }
     }
-
+    
     private var completionOverlay: some View {
         VStack(spacing: 20) {
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 60))
                 .foregroundColor(.green)
-
+            
             Text("Domain Complete")
                 .font(.title2)
                 .fontWeight(.semibold)
-
+            
             Text("This domain has been marked as complete.\nTap 'Edit' in the toolbar to make changes.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
@@ -579,13 +579,13 @@ struct DomainDetailView: View {
         .cornerRadius(20)
         .shadow(radius: 10)
     }
-
+    
     private var noDataView: some View {
         VStack(spacing: 16) {
             Text("No questionnaire data available")
                 .font(.headline)
                 .foregroundStyle(.secondary)
-
+            
             Button("Load Questionnaire") {
                 loadQuestionnaire()
             }
@@ -593,19 +593,19 @@ struct DomainDetailView: View {
         }
         .padding()
     }
-
+    
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(spacing: 0) {
                     mainScrollContent
-
+                    
                     if questionnaire != nil {
                         severityPickerSection
                     }
                 }
             }
-
+            
             if questionnaire != nil {
                 domainActionBar
             }
@@ -659,9 +659,9 @@ struct DomainDetailView: View {
             }
         }
     }
-
+    
     // MARK: - Domain Action Bar
-
+    
     @ViewBuilder
     private var severityPickerSection: some View {
         // Domain 2 uses rich card interface
@@ -671,7 +671,7 @@ struct DomainDetailView: View {
             // Other domains use simple circular buttons
             VStack(spacing: 0) {
                 Divider()
-
+                
                 HStack(spacing: 16) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Severity Rating")
@@ -681,9 +681,9 @@ struct DomainDetailView: View {
                             .font(.caption2)
                             .foregroundStyle(.tertiary)
                     }
-
+                    
                     Spacer()
-
+                    
                     // Severity Picker (0-4)
                     HStack(spacing: 8) {
                         ForEach(0...4, id: \.self) { severity in
@@ -694,7 +694,7 @@ struct DomainDetailView: View {
                                     Circle()
                                         .fill(currentDomainFromStore?.severity == severity ? severityColor(severity) : Color.gray.opacity(0.2))
                                         .frame(width: 40, height: 40)
-
+                                    
                                     Text("\(severity)")
                                         .font(.callout)
                                         .fontWeight(.semibold)
@@ -711,34 +711,34 @@ struct DomainDetailView: View {
             }
         }
     }
-
+    
     // Rich severity picker for Domain 2 - Full card-based interface
     @ViewBuilder
     private var d2RichSeverityPicker: some View {
         VStack(spacing: 16) {
             Divider()
-
+            
             VStack(alignment: .leading, spacing: 6) {
                 Text("Select Severity Rating:")
                     .font(.headline)
                     .fontWeight(.semibold)
-
+                
                 Text("Keyboard shortcuts: press 0 to 4 to select rating")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 20)
-
+            
             ScrollView {
                 d2RichCardGrid
             }
             .frame(maxHeight: 400)
-
+            
             if currentDomainFromStore?.severity == 4 {
                 d2EmergencyBanner
             }
-
+            
             // Invisible buttons for keyboard shortcuts (Domain 2 only)
             if domain.number == 2 {
                 HStack(spacing: 0) {
@@ -755,7 +755,7 @@ struct DomainDetailView: View {
         .background(Color(.systemBackground))
         .opacity(isDomainComplete && !isEditMode ? 0.6 : 1.0)
     }
-
+    
     @ViewBuilder
     private var d2RichCardGrid: some View {
         LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
@@ -767,7 +767,7 @@ struct DomainDetailView: View {
         }
         .padding(.horizontal, 20)
     }
-
+    
     @ViewBuilder
     private var d2EmergencyBanner: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -783,11 +783,11 @@ struct DomainDetailView: View {
         .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.red, lineWidth: 2))
         .padding(.horizontal, 20)
     }
-
+    
     @ViewBuilder
     private func d2Card(value: Int, title: String, color: Color, bullet1: String, bullet2: String) -> some View {
         let isSelected = currentDomainFromStore?.severity == value
-
+        
         Button(action: {
             withAnimation(.spring(response: 0.3)) {
                 updateSeverity(value)
@@ -799,7 +799,7 @@ struct DomainDetailView: View {
                     Text(title).font(.subheadline).fontWeight(.semibold)
                     Spacer()
                 }
-
+                
                 VStack(alignment: .leading, spacing: 4) {
                     if !bullet1.isEmpty {
                         HStack(alignment: .top, spacing: 6) {
@@ -825,7 +825,7 @@ struct DomainDetailView: View {
         .buttonStyle(PlainButtonStyle())
         .disabled(isDomainComplete && !isEditMode)
     }
-
+    
     @ViewBuilder
     private func severityColor(_ severity: Int) -> Color {
         switch severity {
@@ -837,51 +837,51 @@ struct DomainDetailView: View {
         default: return .gray
         }
     }
-
+    
     private func updateSeverity(_ severity: Int) {
         guard let currentAssessment = assessmentStore.currentAssessment,
               let domainIndex = currentAssessment.domains.firstIndex(where: { $0.id == domain.id }) else {
             return
         }
-
+        
         var updatedAssessment = currentAssessment
         updatedAssessment.domains[domainIndex].severity = severity
-
+        
         assessmentStore.updateAssessment(updatedAssessment)
-
+        
         print("✅ Domain \(domain.number) severity updated to \(severity)")
-
+        
         // Haptic feedback
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.impactOccurred()
     }
-
+    
     @ViewBuilder
     private var domainActionBar: some View {
         VStack(spacing: 0) {
             Divider()
-
+            
             HStack(spacing: 16) {
                 // Progress indicator
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Progress")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-
+                    
                     HStack(spacing: 8) {
                         ProgressView(value: currentDomainFromStore?.calculateProgress() ?? 0)
                             .progressViewStyle(.linear)
                             .frame(width: 120)
-
+                        
                         Text("\(Int((currentDomainFromStore?.calculateProgress() ?? 0) * 100))%")
                             .font(.caption)
                             .fontWeight(.medium)
                             .foregroundStyle(.secondary)
                     }
                 }
-
+                
                 Spacer()
-
+                
                 // Action buttons
                 if isDomainComplete && !isEditMode {
                     // Already complete - show status
@@ -916,7 +916,7 @@ struct DomainDetailView: View {
                         .cornerRadius(10)
                     }
                     .disabled(!canMarkComplete)
-
+                    
                     // Show helper text
                     if !canMarkComplete {
                         Text(completionRequirementText)
@@ -931,49 +931,49 @@ struct DomainDetailView: View {
             .background(Color(.systemBackground))
         }
     }
-
+    
     // MARK: - Helper Methods
-
+    
     private func markDomainComplete() {
         guard let currentAssessment = assessmentStore.currentAssessment,
               let domainIndex = currentAssessment.domains.firstIndex(where: { $0.id == domain.id }) else {
             return
         }
-
+        
         var updatedAssessment = currentAssessment
         updatedAssessment.domains[domainIndex].isComplete = true
-
+        
         // Save to store
         assessmentStore.updateAssessment(updatedAssessment)
-
+        
         // Exit edit mode
         isEditMode = false
-
+        
         print("✅ Domain \(domain.number) marked as complete")
-
+        
         // Provide haptic feedback
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
     }
-
+    
     private func loadQuestionnaire() {
         isLoading = true
         errorMessage = nil
         questionnaire = nil
-
+        
         Task {
             do {
                 let domainIdentifier = "\(domain.number)" // Pass domain number as string
                 let jsonData = try questionsService.loadQuestionnaireData(forDomain: domainIdentifier)
-
+                
                 // Parse JSON data into Questionnaire object
                 let decoder = JSONDecoder()
                 let parsedQuestionnaire = try decoder.decode(Questionnaire.self, from: jsonData)
-
+                
                 await MainActor.run {
                     self.questionnaire = parsedQuestionnaire
                     self.isLoading = false
-
+                    
                     // CRITICAL FIX: Load saved answers from current assessment in store, not from stale domain parameter
                     if let currentAssessment = assessmentStore.currentAssessment,
                        let currentDomain = currentAssessment.domains.first(where: { $0.id == domain.id }) {
@@ -994,54 +994,54 @@ struct DomainDetailView: View {
             }
         }
     }
-
+    
     private func saveDomainAnswers(_ newAnswers: [String: AnswerValue]) {
         // Set flag to prevent infinite loop
         isSaving = true
-        defer {
+        defer { 
             // Reset flag after a short delay to ensure all onChange handlers complete
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 isSaving = false
             }
         }
-
+        
         // Always get the current assessment from the store to ensure we have the latest version
         guard let currentAssessment = assessmentStore.currentAssessment else {
             print("❌ No current assessment available for saving answers")
             return
         }
-
+        
         var updatedAssessment = currentAssessment
-
+        
         print("💾 Saving answers for Domain \(domain.number) - Current Assessment: \(String(currentAssessment.id.uuidString.prefix(8)))")
-
+        
         // Update the domain with new answers
         if let domainIndex = updatedAssessment.domains.firstIndex(where: { $0.id == domain.id }) {
             // Store previous answers for comparison - CRITICAL FOR TRACKING FIELD REMOVAL
             let previousAnswers = updatedAssessment.domains[domainIndex].answers
             let oldCount = previousAnswers.count
-
+            
             // Update with new answers (this handles BOTH additions and removals)
             updatedAssessment.domains[domainIndex].answers = newAnswers
-
+            
             let newCount = newAnswers.count
             let delta = newCount - oldCount
-
+            
             // ENHANCED LOGGING for field addition/removal tracking
             print("💾 New answers: \(newCount) questions answered")
             print("📊 Answer count changed: \(oldCount) → \(newCount) (Δ\(delta > 0 ? "+" : "")\(delta))")
-
+            
             if delta < 0 {
                 print("⬇️  Field removal detected: \(abs(delta)) answer(s) removed")
             } else if delta > 0 {
                 print("⬆️  Field addition detected: \(delta) answer(s) added")
             }
-
+            
             // Calculate severity score based on new answers
             do {
                 let severityScoring = try SeverityScoring()
                 let domainIdentifier = String(UnicodeScalar(64 + domain.number)!) // 1→A, 2→B, etc.
-
+                
                 // Convert AnswerValue to scoring-compatible format
                 var scoringAnswers: [String: Any] = [:]
                 for (questionId, answerValue) in newAnswers {
@@ -1071,16 +1071,16 @@ struct DomainDetailView: View {
                         break
                     }
                 }
-
+                
                 let domainSeverity = severityScoring.computeSeverity(forDomain: domainIdentifier, answers: scoringAnswers)
                 updatedAssessment.domains[domainIndex].severity = domainSeverity.severity
-
+                
                 print("🧮 Calculated severity for Domain \(domain.number): \(domainSeverity.severity) (score: \(String(format: "%.2f", domainSeverity.score)))")
-
+                
             } catch {
                 print("⚠️ Failed to calculate severity for Domain \(domain.number): \(error)")
             }
-
+            
             // Check if domain is complete based on required questions
             let questionnaireCopy = questionnaire
             let requiredQuestions = questionnaireCopy?.questions.filter { $0.required } ?? []
@@ -1091,14 +1091,14 @@ struct DomainDetailView: View {
                 return newAnswers[question.id] != nil
             }
             updatedAssessment.domains[domainIndex].isComplete = (answeredRequiredQuestions.count == requiredQuestions.count)
-
+            
             // Save the updated assessment - this will handle currentAssessment sync internally
             assessmentStore.updateAssessment(updatedAssessment)
-
+            
             // ENHANCED LOGGING: Calculate and log progress after save
             let domainProgress = updatedAssessment.domains[domainIndex].calculateProgress()
             let overallProgress = updatedAssessment.calculateOverallProgress()
-
+            
             print("✅ Successfully saved \(newAnswers.count) answers for Domain \(domain.number)")
             print("📊 Domain \(domain.number) progress: \(String(format: "%.0f%%", domainProgress * 100))")
             print("📊 Overall assessment progress: \(String(format: "%.0f%%", overallProgress * 100))")
@@ -1150,11 +1150,11 @@ struct ExportView: View {
     let assessment: Assessment
     @EnvironmentObject var rulesService: RulesServiceWrapper
     @EnvironmentObject var auditService: AuditService
-
+    
     @State private var selectedTemplate: ComplianceMode = .internal_neutral
     @State private var showingExportSheet = false
     @State private var exportedURL: URL?
-
+    
     var body: some View {
         Form {
             Section {
@@ -1169,7 +1169,7 @@ struct ExportView: View {
                 Text("Internal/Neutral mode for unlicensed use. Licensed mode requires ASAM license.")
                     .font(.caption)
             }
-
+            
             Section {
                 ExportButton(
                     assessment: assessment,
@@ -1188,7 +1188,7 @@ struct ExportView: View {
                         .foregroundStyle(.red)
                 }
             }
-
+            
             Section {
                 if let checksum = rulesService.checksum {
                     LabeledContent("Rules Version", value: checksum.version)
@@ -1206,12 +1206,12 @@ struct ExportView: View {
             }
         }
     }
-
+    
     private func performExport() {
         // TODO: Implement actual PDF export
         // This is a placeholder for the export action
         print("🔄 Exporting assessment \(assessment.id) with template \(selectedTemplate)")
-
+        
         auditService.logEvent(
             .pdfExported,
             actor: "assessor",
@@ -1225,11 +1225,11 @@ struct ExportView: View {
 // Share sheet for iOS
 struct ShareSheet: UIViewControllerRepresentable {
     let activityItems: [Any]
-
+    
     func makeUIViewController(context: Context) -> UIActivityViewController {
         UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
     }
-
+    
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
@@ -1306,12 +1306,12 @@ struct ExpandableSidebarView: View {
     let onSafetyReview: () -> Void
     let onRulesDiagnostics: () -> Void
     let onGenerateLOC: () -> Void
-
+    
     @EnvironmentObject private var rulesService: RulesServiceWrapper
     @EnvironmentObject private var uploadQueue: UploadQueue
-
+    
     @State private var expandedSections: Set<String> = ["Assessment"] // Default expanded
-
+    
     var body: some View {
         List(selection: $selectedSection) {
             // Main Assessment Sections
@@ -1338,7 +1338,7 @@ struct ExpandableSidebarView: View {
                     }
                 }
                 .accessibilityLabel("Overview, Assessment summary")
-
+                
                 // Problems
                 NavigationLink(value: NavigationSection.problems) {
                     Label {
@@ -1355,7 +1355,7 @@ struct ExpandableSidebarView: View {
                     }
                 }
                 .accessibilityLabel("Problems, Clinical problems")
-
+                
                 // LOC Recommendation
                 NavigationLink(value: NavigationSection.locRecommendation) {
                     Label {
@@ -1372,7 +1372,7 @@ struct ExpandableSidebarView: View {
                     }
                 }
                 .accessibilityLabel("LOC Recommendation, Level of care")
-
+                
                 // Validation
                 NavigationLink(value: NavigationSection.validation) {
                     Label {
@@ -1389,7 +1389,7 @@ struct ExpandableSidebarView: View {
                     }
                 }
                 .accessibilityLabel("Validation, Completeness check")
-
+                
                 // Export
                 NavigationLink(value: NavigationSection.export) {
                     Label {
@@ -1407,7 +1407,7 @@ struct ExpandableSidebarView: View {
                 }
                 .accessibilityLabel("Export, Generate PDF")
             }
-
+            
             // Clinical Domains Section
             ExpandableSection(
                 title: "Clinical Domains",
@@ -1437,7 +1437,7 @@ struct ExpandableSidebarView: View {
                     selectedDomain = nil
                 })
                 .accessibilityLabel("All Domains, Overview of all 6 domains")
-
+                
                 ForEach(assessment.domains) { domain in
                     DomainNavigationRow(
                         domain: domain,
@@ -1446,10 +1446,10 @@ struct ExpandableSidebarView: View {
                     .onTapGesture {
                         print("🔵 Domain clicked: \(domain.number) - \(domain.title)")
                         print("🔵 Before state update - selectedSection: \(String(describing: selectedSection)), selectedDomain: \(String(describing: selectedDomain?.number))")
-
+                        
                         // Update domain first
                         selectedDomain = domain
-
+                        
                         // Force section change to trigger List update
                         // If already on domains, briefly set to nil then back
                         if selectedSection == .domains {
@@ -1463,12 +1463,12 @@ struct ExpandableSidebarView: View {
                             selectedSection = .domains
                             directDomainNavigation = true
                         }
-
+                        
                         print("🔵 After state update - selectedSection: \(String(describing: selectedSection)), selectedDomain: \(String(describing: selectedDomain?.number))")
                     }
                 }
             }
-
+            
             // Actions Section
             ExpandableSection(
                 title: "Actions",
@@ -1495,7 +1495,7 @@ struct ExpandableSidebarView: View {
                     }
                 }
                 .accessibilityLabel("Review safety criteria")
-
+                
                 // Calculate LOC
                 Button {
                     onGenerateLOC()
@@ -1516,7 +1516,7 @@ struct ExpandableSidebarView: View {
                 .disabled(!assessment.isComplete)
                 .accessibilityLabel("Calculate level of care recommendation")
                 .accessibilityHint(assessment.isComplete ? "Generate recommendation" : "Complete all domains first")
-
+                
                 // Rules Diagnostics
                 Button {
                     onRulesDiagnostics()
@@ -1535,7 +1535,7 @@ struct ExpandableSidebarView: View {
                     }
                 }
                 .accessibilityLabel("View rules engine diagnostics")
-
+                
                 // Upload Queue Status
                 if !uploadQueue.jobs.isEmpty {
                     HStack {
@@ -1555,7 +1555,7 @@ struct ExpandableSidebarView: View {
         }
         .listStyle(SidebarListStyle())
     }
-
+    
     private func toggleSection(_ section: String) {
         if expandedSections.contains(section) {
             expandedSections.remove(section)
@@ -1573,7 +1573,7 @@ struct ExpandableSection<Content: View>: View {
     let isExpanded: Bool
     let toggleAction: () -> Void
     @ViewBuilder let content: Content
-
+    
     var body: some View {
         Section {
             if isExpanded {
@@ -1590,9 +1590,9 @@ struct ExpandableSection<Content: View>: View {
                         Image(systemName: icon)
                             .foregroundStyle(.blue)  // Use .blue instead of .accent
                     }
-
+                    
                     Spacer()
-
+                    
                     Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -1611,27 +1611,27 @@ struct DomainNavigationRow: View {
     let domain: Domain
     let isSelected: Bool
     @EnvironmentObject private var assessmentStore: AssessmentStore
-
+    
     // Get the live domain state from the store
     private var currentDomain: Domain {
         assessmentStore.currentAssessment?.domains.first(where: { $0.id == domain.id }) ?? domain
     }
-
+    
     var body: some View {
         let _ = print("🟢 DomainNavigationRow rendering - Domain \(domain.number): isSelected = \(isSelected), isComplete = \(currentDomain.isComplete)")
-
+        
         HStack {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Domain \(domain.number)")
                         .font(.subheadline)
                         .fontWeight(.medium)
-
+                    
                     Text(currentDomain.title)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
-
+                    
                     HStack {
                         // Completion Status - Use currentDomain to get live state
                         Label {
@@ -1641,9 +1641,9 @@ struct DomainNavigationRow: View {
                             Image(systemName: currentDomain.isComplete ? "checkmark.circle.fill" : "circle.dotted")
                         }
                         .foregroundStyle(currentDomain.isComplete ? .green : .orange)
-
+                        
                         Spacer()
-
+                        
                         // Answer Count Indicator - Use currentDomain
                         if !currentDomain.answers.isEmpty {
                             Text("\(currentDomain.answers.count)")
@@ -1654,14 +1654,14 @@ struct DomainNavigationRow: View {
                                 .background(Color.blue.opacity(0.1))
                                 .cornerRadius(4)
                         }
-
+                        
                         // Severity Indicator with Color - Use currentDomain
                         if currentDomain.severity > 0 {
                             HStack(spacing: 4) {
                                 Circle()
                                     .fill(severityColorForSidebar(currentDomain.severity))
                                     .frame(width: 8, height: 8)
-
+                                
                                 Text("\(currentDomain.severity)")
                                     .font(.caption2)
                                     .fontWeight(.bold)
@@ -1674,9 +1674,9 @@ struct DomainNavigationRow: View {
                         }
                     }
                 }
-
+                
                 Spacer()
-
+                
                 if isSelected {
                     Image(systemName: "checkmark")
                         .foregroundStyle(.blue)  // Use .blue instead of .accent
@@ -1691,7 +1691,7 @@ struct DomainNavigationRow: View {
                 .fill(isSelected ? Color.blue.opacity(0.1) : Color.clear)  // Use .blue instead of .accent
         )
     }
-
+    
     private func severityColorForSidebar(_ severity: Int) -> Color {
         switch severity {
         case 0: return .gray

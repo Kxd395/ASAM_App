@@ -1,99 +1,478 @@
 {
-  "id": "c3_emotional_neutral",
-  "title": "Domain C: Emotional, Behavioral, or Cognitive Conditions",
-  "domain": "C",
-  "version": "1.0.0",
-  "description": "Assessment of psychological and psychiatric conditions",
+  "id": "d3_emotional_neutral",
+  "title": "Dimension 3: Emotional, Behavioral, or Cognitive Conditions and Complications",
+  "domain": "3",
+  "version": "2.0.0",
+  "description": "Assessment of mental health, emotional, behavioral, and cognitive conditions",
   "questions": [
     {
-      "id": "c01",
-      "text": "How would you rate the patient's current mood?",
+      "id": "d3_01",
+      "text": "Interviewer observation: Is the patient disoriented? Does the patient endorse, or do you suspect cognitive or memory issues?",
       "type": "single_choice",
-      "required": true,
-      "breadcrumb": "current_mood",
+      "required": false,
+      "breadcrumb": "disorientation",
       "options": [
-        {"value": "stable", "label": "Stable and appropriate", "score": 1},
-        {"value": "mildly_depressed", "label": "Mildly depressed or anxious", "score": 2},
-        {"value": "moderately_depressed", "label": "Moderately depressed or anxious", "score": 3},
-        {"value": "severely_depressed", "label": "Severely depressed, suicidal thoughts", "score": 4}
-      ]
-    },
-    {
-      "id": "c02",
-      "text": "Is the patient currently experiencing any suicidal or homicidal ideation?",
-      "type": "single_choice",
-      "required": true,
-      "breadcrumb": "suicidal_ideation",
-      "options": [
-        {"value": "none", "label": "No suicidal or homicidal thoughts", "score": 1},
-        {"value": "passive", "label": "Passive thoughts, no plan", "score": 2},
-        {"value": "active_no_plan", "label": "Active thoughts, no specific plan", "score": 3},
-        {"value": "active_with_plan", "label": "Active thoughts with plan or intent", "score": 4}
-      ]
-    },
-    {
-      "id": "c03",
-      "text": "Does the patient have a history of mental health treatment?",
-      "type": "single_choice",
-      "required": true,
-      "breadcrumb": "mental_health_history",
-      "options": [
-        {"value": "none", "label": "No prior mental health treatment", "score": 1},
-        {"value": "outpatient", "label": "Previous outpatient counseling", "score": 2},
-        {"value": "inpatient", "label": "Previous psychiatric hospitalization", "score": 3},
-        {"value": "multiple", "label": "Multiple psychiatric hospitalizations", "score": 4}
-      ]
-    },
-    {
-      "id": "c04",
-      "text": "Is the patient currently taking psychiatric medications?",
-      "type": "single_choice",
-      "required": true,
-      "breadcrumb": "psychiatric_medications",
-      "options": [
-        {"value": "none", "label": "No psychiatric medications", "score": 1},
-        {"value": "stable", "label": "Stable on current medications", "score": 2},
-        {"value": "adjusting", "label": "Recently started or adjusting medications", "score": 3},
-        {"value": "non_compliant", "label": "Non-compliant with medications", "score": 4}
-      ]
-    },
-    {
-      "id": "c05",
-      "text": "How is the patient's cognitive functioning?",
-      "type": "single_choice",
-      "required": true,
-      "breadcrumb": "cognitive_functioning",
-      "options": [
-        {"value": "normal", "label": "Normal cognitive function", "score": 1},
-        {"value": "mild_impairment", "label": "Mild cognitive impairment", "score": 2},
-        {"value": "moderate_impairment", "label": "Moderate cognitive impairment", "score": 3},
-        {"value": "severe_impairment", "label": "Severe cognitive impairment", "score": 4}
-      ]
-    },
-    {
-      "id": "c06",
-      "text": "Rate the patient's anxiety level (0-10 scale)",
-      "type": "number",
-      "required": true,
-      "breadcrumb": "anxiety_score",
-      "validation": {
-        "min": 0,
-        "max": 10
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ],
+      "conditional": {
+        "when": "yes",
+        "show": ["d3_01_notes"]
       }
     },
     {
-      "id": "c07",
-      "text": "Does the patient exhibit any behavioral concerns?",
-      "type": "multiple_choice",
-      "required": true,
-      "breadcrumb": "behavioral_concerns",
+      "id": "d3_01_notes",
+      "text": "Please describe:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "disorientation_notes",
+      "visible_if": {
+        "question": "d3_01",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d3_02",
+      "text": "Have you ever been told by a physical or mental health clinician that you have a mental health problem or brain injury?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "dx_history",
       "options": [
-        {"value": "none", "label": "No behavioral concerns", "score": 1},
-        {"value": "agitation", "label": "Agitation or restlessness", "score": 2},
-        {"value": "aggression", "label": "Verbal or physical aggression", "score": 3},
-        {"value": "self_harm", "label": "Self-harming behaviors", "score": 4},
-        {"value": "psychosis", "label": "Psychotic symptoms", "score": 4}
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ],
+      "conditional": {
+        "when": "yes",
+        "show": ["d3_02_notes"]
+      }
+    },
+    {
+      "id": "d3_02_notes",
+      "text": "Please describe: (e.g., diagnosis, date, and type of injury, if known)",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "dx_history_notes",
+      "visible_if": {
+        "question": "d3_02",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d3_03",
+      "text": "Are you currently in treatment, or have you previously received treatment, for mental health or emotional problems?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "treatment_history",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ],
+      "conditional": {
+        "when": "yes",
+        "show": ["d3_03_notes"]
+      }
+    },
+    {
+      "id": "d3_03_notes",
+      "text": "Please describe: (e.g., treatment setting, hospitalizations, duration of treatment)",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "treatment_history_notes",
+      "visible_if": {
+        "question": "d3_03",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d3_04",
+      "text": "If yes: Have your mental health symptoms been stable (check all that apply)",
+      "type": "multiple_choice",
+      "required": false,
+      "breadcrumb": "symptom_stability",
+      "visible_if": {
+        "question": "d3_02",
+        "operator": "equals",
+        "value": "yes"
+      },
+      "options": [
+        {"value": "stable_with", "label": "Stable with treatment/meds"},
+        {"value": "stable_without", "label": "Stable without treatment/meds"},
+        {"value": "unstable", "label": "Unstable"},
+        {"value": "not_sure", "label": "Not sure"},
+        {"value": "na", "label": "N/A"}
       ]
+    },
+    {
+      "id": "d3_05",
+      "text": "This next question can be sensitive, and you can choose to skip the question or respond with just a yes or no if you prefer. Have you ever experienced any abuse (this can include physical, emotional, or sexual abuse) or any other traumatic events?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "trauma_history",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"},
+        {"value": "skipped", "label": "Skipped"}
+      ]
+    },
+    {
+      "id": "d3_06",
+      "text": "Do you have a mental health care provider?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "mh_provider",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"},
+        {"value": "na", "label": "N/A"}
+      ]
+    },
+    {
+      "id": "d3_06_name",
+      "text": "Provider name:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "mh_provider_name",
+      "visible_if": {
+        "question": "d3_06",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d3_06_contact",
+      "text": "Provider contact:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "mh_provider_contact",
+      "visible_if": {
+        "question": "d3_06",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d3_07",
+      "text": "Do you use marijuana or marijuana-related products (including CBD [cannabidiol] or other extracts) as medicine for any psychiatric condition(s)?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "mj_for_psych",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d3_07_type",
+      "text": "Specify type:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "mj_type",
+      "visible_if": {
+        "question": "d3_07",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d3_07_frequency",
+      "text": "Frequency:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "mj_frequency",
+      "visible_if": {
+        "question": "d3_07",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d3_07_purpose",
+      "text": "Purpose:",
+      "type": "text",
+      "required": false,
+      "breadcrumb": "mj_purpose",
+      "visible_if": {
+        "question": "d3_07",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d3_08_psych_meds",
+      "text": "List all current medication(s) for psychiatric condition(s):",
+      "type": "repeater",
+      "required": false,
+      "breadcrumb": "psych_medications",
+      "repeater_fields": [
+        {"id": "medication", "label": "MEDICATION(S)", "type": "text"},
+        {"id": "dose", "label": "DOSE (if known)", "type": "text"},
+        {"id": "frequency", "label": "FREQUENCY e.g., 1, 2, 3, 4 x/day", "type": "text"},
+        {"id": "purpose", "label": "PURPOSE (to treat what symptom/illness)", "type": "text"}
+      ]
+    },
+    {
+      "id": "d3_09_symptoms",
+      "text": "I am going to read you a list of mental health symptoms and behaviors that might be concerning to some people. Can you tell me if any of these have been bothering you in the last 30 days? Also, if you have these symptoms, please let me know if they happen only when using or withdrawing from alcohol or other drug use. (Please include symptoms observed by interviewer, even if patient is not aware)",
+      "type": "categorized_health_issues",
+      "required": false,
+      "breadcrumb": "mh_symptoms",
+      "categorized_health_issues": {
+        "categories": [
+          {
+            "id": "mood",
+            "title": "Mood",
+            "items": [
+              {"id": "depression", "label": "Depression/Sadness", "requires_note": false},
+              {"id": "loss_pleasure", "label": "Loss of pleasure/interest", "requires_note": false},
+              {"id": "hopelessness", "label": "Hopelessness", "requires_note": false},
+              {"id": "irritability", "label": "Irritability/Anger", "requires_note": false},
+              {"id": "impulsivity", "label": "Impulsivity", "requires_note": false},
+              {"id": "pressured_speech", "label": "Interviewer observation: Pressured speech", "requires_note": false},
+              {"id": "grandiosity", "label": "Feeling unusually important/Grandiosity", "requires_note": false},
+              {"id": "racing_thoughts", "label": "Racing thoughts", "requires_note": false}
+            ]
+          },
+          {
+            "id": "anxiety",
+            "title": "Anxiety",
+            "items": [
+              {"id": "anxiety", "label": "Anxiety", "requires_note": false},
+              {"id": "excessive_worry", "label": "Anxiety/Excessive worry", "requires_note": false}
+            ]
+          },
+          {
+            "id": "obsessions_compulsions",
+            "title": "Obsessions/Compulsions",
+            "items": [
+              {"id": "obsessive_thoughts", "label": "Thoughts that you cannot stop if you want to/Obsessive thoughts", "requires_note": false},
+              {"id": "compulsive_behaviors", "label": "Behaviors that you cannot stop if you want to/Compulsive behaviors", "requires_note": false}
+            ]
+          },
+          {
+            "id": "trauma",
+            "title": "Trauma related",
+            "items": [
+              {"id": "flashbacks", "label": "Flashbacks", "requires_note": false}
+            ]
+          },
+          {
+            "id": "psychosis",
+            "title": "Psychosis",
+            "items": [
+              {"id": "psychosis_observed", "label": "Psychosis — Include interviewer observation", "requires_note": false},
+              {"id": "paranoia", "label": "Paranoia", "requires_note": false},
+              {"id": "delusions", "label": "Delusions, feeling you were especially important in some way, or that you were receiving special messages, or that people were out to harm you", "requires_note": false}
+            ]
+          },
+          {
+            "id": "other_symptoms",
+            "title": "Other",
+            "items": [
+              {"id": "sleep_problems", "label": "Sleep problems", "requires_note": false},
+              {"id": "memory_concentration", "label": "Memory/Concentration", "requires_note": false},
+              {"id": "gambling", "label": "Gambling", "requires_note": false},
+              {"id": "risky_sex", "label": "Risky sex behaviors", "requires_note": false},
+              {"id": "physical_aggression", "label": "Physical aggression towards people or property", "requires_note": true},
+              {"id": "other", "label": "Other", "requires_note": true}
+            ]
+          }
+        ],
+        "macros": ["none_of_the_above"]
+      }
+    },
+    {
+      "id": "d3_10_aod_worsen",
+      "text": "Are these issues (listed in the table above) either caused or made worse by alcohol and/or other drug use?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "aod_worsen",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"},
+        {"value": "not_sure", "label": "Not sure"}
+      ]
+    },
+    {
+      "id": "d3_10_aod_notes",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "aod_worsen_notes"
+    },
+    {
+      "id": "d3_11_hallucinations",
+      "text": "Do you ever see or hear things that other people say they do not see or hear (e.g., hearing voices. Probe, does this occur only while using or withdrawing from alcohol or other drugs)?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "hallucinations",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d3_11_hallucinations_notes",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "hallucinations_notes"
+    },
+    {
+      "id": "d3_12_si",
+      "text": "Have you had thoughts of hurting yourself?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "si_thoughts",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d3_12_si_notes",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "si_notes",
+      "visible_if": {
+        "question": "d3_12_si",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d3_12_si_today",
+      "text": "Are you having these thoughts today?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "si_today",
+      "visible_if": {
+        "question": "d3_12_si",
+        "operator": "equals",
+        "value": "yes"
+      },
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d3_12_si_acted",
+      "text": "Have you ever acted on these feelings to hurt yourself?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "si_acted",
+      "visible_if": {
+        "question": "d3_12_si",
+        "operator": "equals",
+        "value": "yes"
+      },
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d3_13_hi",
+      "text": "Have you had thoughts of harming others?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "hi_thoughts",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d3_13_hi_notes",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "hi_notes",
+      "visible_if": {
+        "question": "d3_13_hi",
+        "operator": "equals",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "d3_13_hi_today",
+      "text": "Are you having these thoughts today?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "hi_today",
+      "visible_if": {
+        "question": "d3_13_hi",
+        "operator": "equals",
+        "value": "yes"
+      },
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d3_13_hi_acted",
+      "text": "Have you ever acted on these feelings to harm others?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "hi_acted",
+      "visible_if": {
+        "question": "d3_13_hi",
+        "operator": "equals",
+        "value": "yes"
+      },
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d3_14_problems",
+      "text": "What major problems (if any) have been caused by these mental health or emotional symptoms? Problem: is there one issue or symptom that is the worst for you?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "problem_statements"
+    },
+    {
+      "id": "d3_15_treatment_concerns",
+      "text": "What concerns or worries do you have about getting treatment for your mental health or emotional symptoms or issues?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "treatment_concerns"
+    },
+    {
+      "id": "d3_16_goals",
+      "text": "What goals do you have for your mental and emotional health?",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "goals"
+    },
+    {
+      "id": "d3_17_further_assessment",
+      "text": "Interviewer observation: Is further assessment of mental health needed?",
+      "type": "single_choice",
+      "required": false,
+      "breadcrumb": "further_assessment",
+      "options": [
+        {"value": "yes", "label": "Yes"},
+        {"value": "no", "label": "No"}
+      ]
+    },
+    {
+      "id": "d3_17_further_notes",
+      "text": "Please describe:",
+      "type": "textarea",
+      "required": false,
+      "breadcrumb": "further_assessment_notes",
+      "visible_if": {
+        "question": "d3_17_further_assessment",
+        "operator": "equals",
+        "value": "yes"
+      }
     }
   ]
 }

@@ -560,10 +560,6 @@
             "severity": "critical",
             "message": "If 3 or 4 is selected, urgent mental health assessment and safety protocols required"
           }
-        ],
-        "interviewer_instructions": [
-          "Take into account cognitive impairments.",
-          "Choose the score that is closest to your overall impression. Patients may not exhibit every symptom within a severity rating. The patient's historical functioning does NOT override the status. Current level of functioning DOES override historical functioning (see ASAM Criteria, 3rd Ed. page 56)."
         ]
       }
     }

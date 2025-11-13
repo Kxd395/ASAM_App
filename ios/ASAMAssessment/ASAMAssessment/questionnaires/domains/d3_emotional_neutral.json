@@ -473,6 +473,99 @@
         "operator": "equals",
         "value": "yes"
       }
+    },
+    {
+      "id": "d3_18",
+      "text": "SEVERITY RATING - DIMENSION 3 (Emotional, Behavioral, or Cognitive Conditions and Complications)",
+      "type": "severity_rating",
+      "required": true,
+      "breadcrumb": "d3_severity_rating",
+      "helpText": "Please circle the intensity and urgency of the patient's CURRENT needs for services based on the information collected in Dimension 3:",
+      "severity_rating": {
+        "severity_cards": [
+          {
+            "rating": 0,
+            "title": "0 None",
+            "color": "#E8F5E9",
+            "border": "#2E7D32",
+            "icon": "checkmark.circle",
+            "bullets": [
+              "No dangerous symptoms",
+              "Good social functioning",
+              "Good self-care",
+              "No symptoms interfering with recovery"
+            ],
+            "disposition": ""
+          },
+          {
+            "rating": 1,
+            "title": "1 Mild",
+            "color": "#F1F8E9",
+            "border": "#558B2F",
+            "icon": "info.circle",
+            "bullets": [
+              "Possible diagnosis of emotional, behavioral, cognitive condition",
+              "Requires monitoring for stable mental health condition",
+              "Symptoms do not interfere with recovery",
+              "Some relationship impairments"
+            ],
+            "disposition": "Further assessment and referral or follow-up with existing mental health (MH) provider"
+          },
+          {
+            "rating": 2,
+            "title": "2 Moderate",
+            "color": "#FFF8E1",
+            "border": "#F9A825",
+            "icon": "exclamationmark.triangle",
+            "bullets": [
+              "Symptoms distract from recovery",
+              "Requires treatment and management of mental health condition",
+              "No immediate threat to self/others",
+              "Symptoms do not prevent independent functioning"
+            ],
+            "disposition": "Prioritize follow up or new evaluation with MH provider for new/uncontrolled conditions"
+          },
+          {
+            "rating": 3,
+            "title": "3 Severe",
+            "color": "#FBE9E7",
+            "border": "#E64A19",
+            "icon": "exclamationmark.triangle.fill",
+            "bullets": [
+              "Inability to care for self at home",
+              "May include dangerous impulse to harm self/others",
+              "Does require 24-hr support",
+              "At risk of becoming a 4/Very Severe without treatment"
+            ],
+            "disposition": "Urgent assessment and treatment for unstable signs and symptoms"
+          },
+          {
+            "rating": 4,
+            "title": "4 Very Severe",
+            "color": "#FFEBEE",
+            "border": "#C62828",
+            "icon": "xmark.circle.fill",
+            "bullets": [
+              "Life-threatening symptoms including active suicidal ideation",
+              "Psychosis",
+              "Imminent danger to self/others"
+            ],
+            "disposition": "Emergency Department-immediate assessment"
+          }
+        ],
+        "substance_options": [],
+        "safety_rules": [
+          {
+            "condition": "rating >= 3",
+            "severity": "critical",
+            "message": "If 3 or 4 is selected, urgent mental health assessment and safety protocols required"
+          }
+        ],
+        "interviewer_instructions": [
+          "Take into account cognitive impairments.",
+          "Choose the score that is closest to your overall impression. Patients may not exhibit every symptom within a severity rating. The patient's historical functioning does NOT override the status. Current level of functioning DOES override historical functioning (see ASAM Criteria, 3rd Ed. page 56)."
+        ]
+      }
     }
   ]
 }

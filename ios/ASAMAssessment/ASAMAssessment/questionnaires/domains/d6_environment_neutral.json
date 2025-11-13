@@ -109,6 +109,98 @@
         {"value": "minimally_supportive", "label": "Minimally supportive", "score": 3},
         {"value": "not_supportive", "label": "Not supportive or actively hindering", "score": 4}
       ]
+    },
+    {
+      "id": "d6_severity_rating",
+      "type": "severity_rating",
+      "required": true,
+      "breadcrumb": "d6_severity_rating",
+      "helpText": "Please circle the intensity and urgency of the patient's CURRENT needs for services in Domain 6: Recovery/Living Environment",
+      "severity_rating": {
+        "severity_cards": [
+          {
+            "rating": 0,
+            "title": "0 None",
+            "color": "#E8F5E9",
+            "border": "#2E7D32",
+            "icon": "checkmark.circle",
+            "bullets": [
+              "Stable, supportive living environment with no substance-related triggers",
+              "Strong recovery-oriented social support network present",
+              "No environmental barriers to treatment or recovery",
+              "Adequate resources for basic needs (housing, employment, transportation)"
+            ],
+            "disposition": ""
+          },
+          {
+            "rating": 1,
+            "title": "1 Mild",
+            "color": "#F1F8E9",
+            "border": "#558B2F",
+            "icon": "info.circle",
+            "bullets": [
+              "Generally supportive environment with minor recovery challenges",
+              "Some exposure to substance use but manageable with current supports",
+              "Stable housing but may have minor issues (location, roommates)",
+              "Basic needs met with minimal environmental stressors"
+            ],
+            "disposition": "Minimal environmental support services; strengthen existing recovery resources"
+          },
+          {
+            "rating": 2,
+            "title": "2 Moderate",
+            "color": "#FFF8E1",
+            "border": "#F9A825",
+            "icon": "exclamationmark.triangle",
+            "bullets": [
+              "Moderate environmental barriers requiring active intervention",
+              "Regular exposure to substance use or high-risk situations",
+              "Housing instability or unsupportive living arrangements",
+              "Social network includes active users or limited recovery support",
+              "Employment, financial, or legal issues affecting stability"
+            ],
+            "disposition": "Moderate intensity environmental support and case management to address barriers"
+          },
+          {
+            "rating": 3,
+            "title": "3 Severe",
+            "color": "#FBE9E7",
+            "border": "#E64A19",
+            "icon": "exclamationmark.triangle.fill",
+            "bullets": [
+              "Significant environmental threats to recovery requiring urgent intervention",
+              "Imminent housing loss or homelessness",
+              "Predominant social network actively using substances",
+              "High-risk living environment with constant substance availability",
+              "Serious legal, financial, or safety issues threatening stability"
+            ],
+            "disposition": "Intensive case management and immediate environmental stabilization services"
+          },
+          {
+            "rating": 4,
+            "title": "4 Very Severe",
+            "color": "#FFEBEE",
+            "border": "#C62828",
+            "icon": "xmark.circle.fill",
+            "bullets": [
+              "Crisis-level environmental situation requiring emergency intervention",
+              "Homelessness or immediate eviction",
+              "Living in active substance use environment with no safe alternative",
+              "Unsafe living conditions posing immediate danger",
+              "Complete absence of recovery-supportive resources or relationships"
+            ],
+            "disposition": "Emergency housing placement and comprehensive crisis intervention required"
+          }
+        ],
+        "substance_options": [],
+        "safety_rules": [
+          {
+            "condition": "rating >= 3",
+            "banner": "If 3 or 4 is selected, immediate environmental stabilization and safety planning are required. Consider emergency housing resources and intensive case management.",
+            "severity": "critical"
+          }
+        ]
+      }
     }
   ]
 }

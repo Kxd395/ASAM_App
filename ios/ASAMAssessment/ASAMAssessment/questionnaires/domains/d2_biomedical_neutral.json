@@ -599,17 +599,100 @@
     },
     {
       "id": "d2_severity_rating",
-      "text": "Please circle the intensity and urgency of the patient's CURRENT needs for services based on the information collected in Dimension 2: Severity Rating - Dimension 2 (Biomedical Conditions and Complications)",
-      "type": "single_choice",
+      "type": "severity_rating",
       "required": true,
-      "breadcrumb": "severity_rating",
-      "options": [
-        {"value": "0", "label": "0 - None", "score": 0},
-        {"value": "1", "label": "1 - Mild", "score": 1},
-        {"value": "2", "label": "2 - Moderate", "score": 2},
-        {"value": "3", "label": "3 - Severe", "score": 3},
-        {"value": "4", "label": "4 - Very Severe", "score": 4}
-      ]
+      "breadcrumb": "d2_severity_rating",
+      "helpText": "Please circle the intensity and urgency of the patient's CURRENT needs for services based on the information collected in Dimension 2: Biomedical Conditions and Complications",
+      "severity_rating": {
+        "severity_cards": [
+          {
+            "rating": 0,
+            "title": "0 None",
+            "color": "#E8F5E9",
+            "border": "#2E7D32",
+            "icon": "checkmark.circle",
+            "bullets": [
+              "No significant biomedical conditions requiring attention",
+              "Stable chronic conditions well-managed with current treatment",
+              "No acute medical issues interfering with recovery",
+              "Patient able to participate fully in treatment activities"
+            ],
+            "disposition": ""
+          },
+          {
+            "rating": 1,
+            "title": "1 Mild",
+            "color": "#F1F8E9",
+            "border": "#558B2F",
+            "icon": "info.circle",
+            "bullets": [
+              "Minor biomedical conditions present but stable",
+              "Chronic conditions controlled with routine medical care",
+              "Minimal impact on daily functioning or treatment participation",
+              "Standard medical monitoring recommended"
+            ],
+            "disposition": "Coordinate with primary care provider for routine follow-up"
+          },
+          {
+            "rating": 2,
+            "title": "2 Moderate",
+            "color": "#FFF8E1",
+            "border": "#F9A825",
+            "icon": "exclamationmark.triangle",
+            "bullets": [
+              "Active biomedical conditions requiring regular medical attention",
+              "Chronic conditions with occasional instability or complications",
+              "Medical issues causing some interference with treatment participation",
+              "May require medication adjustments or specialized care coordination",
+              "Pain management or physical limitations present"
+            ],
+            "disposition": "Active medical management and coordination with healthcare providers required"
+          },
+          {
+            "rating": 3,
+            "title": "3 Severe",
+            "color": "#FBE9E7",
+            "border": "#E64A19",
+            "icon": "exclamationmark.triangle.fill",
+            "bullets": [
+              "Serious biomedical conditions requiring urgent medical intervention",
+              "Unstable chronic conditions with significant complications",
+              "Medical issues substantially interfering with treatment participation",
+              "High-risk conditions requiring close medical monitoring",
+              "Potential need for hospitalization or intensive medical care"
+            ],
+            "disposition": "Urgent medical evaluation and intensive care coordination required"
+          },
+          {
+            "rating": 4,
+            "title": "4 Very Severe",
+            "color": "#FFEBEE",
+            "border": "#C62828",
+            "icon": "xmark.circle.fill",
+            "bullets": [
+              "Life-threatening biomedical conditions requiring immediate intervention",
+              "Severe acute medical crisis or decompensated chronic conditions",
+              "Medical conditions preventing safe participation in standard treatment",
+              "Requires emergency medical care or hospitalization",
+              "Imminent risk to physical health without immediate intervention"
+            ],
+            "disposition": "Emergency Department referral - immediate medical stabilization required"
+          }
+        ],
+        "substance_options": [],
+        "safety_rules": [
+          {
+            "condition": "rating >= 3",
+            "banner": "If 3 or 4 is selected, urgent medical evaluation and coordination of care are required. Consider immediate medical consultation or emergency referral.",
+            "severity": "critical"
+          },
+          {
+            "condition": "rating >= 2",
+            "banner": "Active medical management and care coordination needed. Ensure regular medical follow-up is scheduled.",
+            "severity": "warning"
+          }
+        ]
+      }
     },
     {
       "id": "d2_severity_rationale",

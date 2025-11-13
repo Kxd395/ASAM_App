@@ -9,7 +9,9 @@
 
 ## 🚨 P0 BLOCKERS (Must Fix Before Demo)
 
-> **🔒 CRITICAL**: See [SECURITY_PRIVACY_HARDENING.md](SECURITY_PRIVACY_HARDENING.md) for production-ready security scaffolds that MUST be implemented alongside these P0 blockers. This includes encryption, audit logging, ruleset versioning, and compliance requirements.
+> **🔒 CRITICAL**: See [SECURITY_PRIVACY_HARDENING.md](SECURITY_PRIVACY_HARDENING.md) for production-ready security scaffolds that MUST be implemented alongside these P0 blockers. This includes:
+> - Encryption, audit logging, ruleset versioning, and compliance requirements
+> - **Severity Auto-Calculation + Clinician Override** (Section 11): Auto-calculate severity (0-4) from questionnaire answers for all dimensions (D1-D6), with clinician override capability, audit trail, and emergency floor constraints. Required for clinical consistency and HIPAA compliance.
 
 ### 1. Intake Header (Before D1 Access)
 **Status**: ❌ Not Implemented  
@@ -477,40 +479,73 @@ xcodebuild test -scheme ASAMAssessment -only-testing:ASAMAssessmentTests/Storage
 
 ---
 
-### Day 1: Foundations (P0 Blockers)
-**8 hours**
+### Day 1: Foundations (P0 Blockers + Severity)
+**12 hours** _(extended from 8h to include severity system)_
 
-**Morning (4h)**:
+**Morning (6h)**:
 1. Intake Header Implementation (2h)
    - Create IntakeHeaderView.swift
    - Create IntakeHeader model
    - Wire gating logic to ContentView
    - Test: Block D1 until header complete
 
-2. Validation Matrix Core (2h)
+2. **Severity Auto-Calculation (3h)** _(NEW)_
+   - Create `SeverityCalculator.swift` with all D1-D6 logic
+   - Add `DomainState` and `AssessmentSeverity` structs to Assessment model
+   - Implement dimension-specific calculations:
+     - D1: withdrawal severity + recent use → emergency
+     - D2: life-threatening conditions, pregnancy, DDI
+     - D3: suicide (plan + intent), homicidal (target), psychosis
+     - D4: Stages of Change calculation, barriers
+     - D5: imminent relapse, high-risk environment
+     - D6: homelessness, domestic violence
+   - Integrate into Domain answer changes (auto-recalc on update)
+   - Test: All dimension calculations with test fixtures
+
+3. Validation Matrix Core (1h)
    - Create ValidationMatrix.swift skeleton
    - Implement rule evaluation engine
    - Add first 5 rules (D1 + D2 critical)
    - Unit tests for basic rules
 
 **Afternoon (4h)**:
-3. Emergency Banner Registry (3h)
+4. Emergency Banner Registry (2h)
    - Create EmergencyBanner.swift
    - Create EmergencyBannerView.swift (UI)
    - Implement condition evaluator
    - Wire to D1, D2, D3 (highest risk)
-   - Test: D3 suicidal triggers banner
+   - **Hook emergency triggers into severity minFloor calculation**
+   - Test: D3 suicidal triggers banner AND sets minFloor = 3
 
-4. Storage Export Foundation (1h)
+5. **Severity Override System (2h)** _(NEW)_
+   - Add `SeverityOverride` struct to models
+   - Create `SeverityOverrideManager` with validation (floor, reason, emergency ack)
+   - Create `SeverityOverrideSheet` SwiftUI view
+   - Create `SeverityChip` component (color-coded 0-4)
+   - Add override button to each domain summary
+   - Test: Floor constraints work, acknowledgement required, audit logged
+
+**Evening (2h)**:
+6. Storage Export Foundation (1h)
    - Create StorageExporter.swift skeleton
    - Implement basic directory structure
    - Test: Create assessments/<id>/ folder
+
+7. AppSettings + Patient Header (1h)
+   - Paste `AppSettings.swift` from security guide
+   - Paste `CompactPatientHeader.swift` from security guide
+   - Wire patient header to all dimension forms (sticky)
+   - Test: Settings persist, header always visible
 
 **Deliverables**:
 - ✅ Intake header blocks D1 access
 - ✅ 5 validation rules working
 - ✅ Emergency banner shows for D3 suicidal
+- ✅ **All severity calculations working (D1-D6)**
+- ✅ **Override system with audit trail**
+- ✅ **Emergency floors enforced in override**
 - ✅ Export creates correct folder structure
+- ✅ Settings + patient header complete
 
 ---
 

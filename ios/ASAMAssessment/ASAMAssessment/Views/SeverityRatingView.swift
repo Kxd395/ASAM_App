@@ -18,8 +18,13 @@ struct SeverityRatingView: View {
     @State private var selectedSubstances: Set<String> = []
     @State private var substanceText: [String: String] = [:]  // For text inputs
     @State private var additionalComments: String = ""
-    @State private var showRationaleError: Bool = false
     @State private var isSaving: Bool = false  // Prevent save loops
+    
+    // Computed property to check if rationale error should show
+    private var showRationaleError: Bool {
+        guard let rating = selectedRating, rating >= 3 else { return false }
+        return rationale.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
     
     private var metadata: SeverityRatingMetadata? {
         question.severityRating
@@ -122,18 +127,9 @@ struct SeverityRatingView: View {
         }
         .onChange(of: selectedRating) { oldValue, newValue in
             saveAnswer()
-            // Require rationale for high severity
-            if let rating = newValue, rating >= 3 {
-                showRationaleError = rationale.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            } else {
-                showRationaleError = false
-            }
         }
         .onChange(of: rationale) { _, _ in
             saveAnswer()
-            if let rating = selectedRating, rating >= 3 {
-                showRationaleError = rationale.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            }
         }
         .onChange(of: selectedSubstances) { _, _ in
             saveAnswer()
